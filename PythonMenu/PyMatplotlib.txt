@@ -1,0 +1,848 @@
+; PythonのMatplotlibの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+matplotlibのインポート（rcParams）| `{Append-EnterKey}`
+	[/]import matplotlib.pyplot as plt
+	[/]
+	[/]plt.rcParams[&1]'font.family'[&2] = 'IPAexGothic'
+	[/]plt.rcParams[&1]'figure.figsize'[&2] = (8, 6)
+	[/]plt.rcParams[&1]'axes.grid'[&2] = True
+	[/]plt.rcParams[&1]'grid.linestyle'[&2] = ':'
+	[/]%matplotlib inline
+/E
+matplotlibのインポート（japanize_matplotlib）| `{Append-EnterKey}`
+	[/]import matplotlib.pyplot as plt
+	[/]import japanize_matplotlib
+	[/]
+	[/]plt.rcParams[&1]'figure.figsize'[&2] = (8, 6)
+	[/]plt.rcParams[&1]'axes.grid'[&2] = True
+	[/]plt.rcParams[&1]'grid.linestyle'[&2] = ':'
+	[/]%matplotlib inline
+/E
+-
++基本的な項目
+	【サンプル】sin(x)とcos(x)のグラフを描画 | `{Append-EnterKey}`
+		[/]x = np.linspace(0, 10, 100)
+		[/]
+		[/]fig = plt.figure(figsize=(8, 6))
+		[/]plt.plot(x, np.sin(x), label='$\sin(x)$')
+		[/]plt.plot(x, np.cos(x), label='$\cos(x)$')
+		[/]
+		[/]plt.axis([0, 10, -1.2, 1.2]) # xmin, xmax, ymin, ymax
+		[/]plt.xlabel('x')
+		[/]plt.ylabel('y')
+		[/]plt.title('三角関数のグラフ')
+		[/]plt.legend(loc='best')
+		[/]plt.grid(ls='--')
+	/E
+	-
+	グラフをファイルに保存 | fig.savefig('file_name.png')
+	保存可能なファイル形式の一覧を表示 |
+		[/]plt.figure().canvas.get_supported_filetypes()
+	/E
+	-
+	スタイルの設定 | plt.style.use('')
+	スタイルブロックの設定（with文） | with plt.style.context(''):
+	*スタイルの一覧
+		bmh
+		classic
+		dark_background
+		fast
+		fivethirtyeight
+		ggplot
+		grayscale
+		-
+		seaborn-bright
+		seaborn-colorblind
+		seaborn-dark-palette
+		seaborn-dark
+		seaborn-darkgrid
+		seaborn-deep
+		seaborn-muted
+		seaborn-notebook
+		seaborn-paper
+		seaborn-pastel
+		seaborn-poster
+		seaborn-talk
+		seaborn-ticks
+		seaborn-white
+		seaborn-whitegrid
+		seaborn
+		-
+		Solarize_Light2
+		tableau-colorblind10
+	..
+	スタイルの一覧を表示するコマンド | plt.style.available
+	-
+	日本語フォントの設定（plt.rcParams） |
+		[/]plt.rcParams[&1]'font.family'[&2] = 'IPAexGothic'
+	/E
+	グリッドの設定（plt.rcParams） |
+		[/]plt.rcParams[&1]'axes.grid'[&2] = True
+		[/]plt.rcParams[&1]'grid.linestyle'[&2] = ':'
+	/E
+..
+-
++Pyplotスタイル（plt.xxx）の書式
+	現在の図（figure）の取得   | plt.gcf()
+	現在の座標軸（axes）の取得 | plt.gca()
+	-
+	１つのグラフを作成 |
+		[/]plt.figure(figsize=(8, 6), constrained_layout=True)
+	/E
+	複数のグラフをタイル状に作成 | `{Append-EnterKey}`
+		[/]plt.figure(figsize=(8, 6), constrained_layout=True)
+		[/]plt.subplot(2, 3, 1) # nrows, ncols, target index
+		[/]plt.plot(x, y, ...) `{Skip}`
+	/E
+	-
+	+各種のグラフを描画
+		#plotメソッド...
+			［メソッド名］plt.plot( | plt.plot(
+			［引数］x：線グラフのX座標のリスト | x,[$ ]
+			［引数］y：線グラフのY座標のリスト | y,[$ ]
+			［引数］fmt：各線の色やスタイルを指定 |
+				[/]fmt='[&1]marker[&2][&1]linestyle[&2][&1]color[&2]',[$ ]
+			/E
+			［引数］label：各線のラベルを指定（凡例に使用） | label='',[$ ]
+			［引数］linewidth：各線の線幅 | linewidth=,[$ ]
+			［閉じカッコ］) | )
+		..
+		#scatterメソッド...
+			［メソッド名］plt.scatter( | plt.scatter(
+			［引数］x：散布図のX座標のリスト | x=,[$ ]
+			［引数］y：散布図のY座標のリスト | y=,[$ ]
+			［引数］s：各マーカーのサイズ（のリスト） | s=,[$ ]
+			［引数］c：各マーカーの色（のリスト） | c=,[$ ]
+			［引数］marker：マーカーの種類を指定 | marker='o',[$ ]
+			［引数］cmap：カラーマップを指定 | cmap='viridis',[$ ]
+			［引数］vmin：カラーマップの最小値に割り当てる色（c）の値 | vmin=,[$ ]
+			［引数］vmax：カラーマップの最大値に割り当てる色（c）の値 | vmax=,[$ ]
+			［引数］alpha：各マーカーの透明度を指定 | alpha=,[$ ]
+			［引数］linewidths：マーカーエッジの幅 | linewidths=,[$ ]
+			［引数］linecolors：マーカーエッジの色 | linecolors=,[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		#barメソッド...
+			［メソッド名］plt.bar( | plt.bar(
+			［引数］x：縦棒ブラフのX座標のリスト | x=,[$ ]
+			［引数］height：縦棒ブラフのY座標（高さ）のリスト | height=,[$ ]
+			［引数］width：各バーの幅 | width=,[$ ]
+			［引数］bottom：各バーの基底（下端）となるY座標 | bottom=,[$ ]
+			［引数］align：各バーのアラインメント | align='center, edge',[$ ]
+			［引数］color：各バーの色を指定 | color=,[$ ]
+			［引数］edgecolor：各バーの枠線の色を指定 | edgecolor=,[$ ]
+			［引数］linewidth：各バーの枠線の幅を指定 | linewidth=,[$ ]
+			［引数］tick_label：各バーの目盛りを指定 | tick_label=None,[$ ]
+			［閉じカッコ］) | )
+		..
+		#barhメソッド...
+			［メソッド名］plt.barh( | plt.barh(
+			［引数］y：横棒ブラフのY座標のリスト | y=,[$ ]
+			［引数］width：横棒ブラフのX座標（長さ）のリスト | width=,[$ ]
+			［引数］height：各バーの幅 | height=,[$ ]
+			［引数］left：各バーの基底（左端）となるX座標 | left=,[$ ]
+			［引数］align：各バーのアラインメント | align='center, edge',[$ ]
+			［引数］color：各バーの色を指定 | color=,[$ ]
+			［引数］edgecolor：各バーの枠線の色を指定 | edgecolor=,[$ ]
+			［引数］linewidth：各バーの枠線の幅を指定 | linewidth=,[$ ]
+			［引数］tick_label：各バーの目盛りを指定 | tick_label=None,[$ ]
+			［閉じカッコ］) | )
+		..
+		#histメソッド...
+			［メソッド名］plt.hist( | plt.hist(
+			［引数］x：ヒストグラムのデータリスト | x=,[$ ]
+			［引数］bins：ビンの個数、またはエッジのリストを指定 | bins=None,[$ ]
+			［引数］range：ビンの範囲を指定 | range=(0, 100),[$ ]
+			［引数］density：各ビンを相対度数密度で表示 | density=False,[$ ]
+			［引数］cumulative：累積ヒストグラムを表示 | cumulative=False,[$ ]
+			［引数］bottom：各バーの基底となる位置（のリスト）を指定 | bottom=None,[$ ]
+			［引数］histtype：ヒストグラムの種類を指定 |
+				[/]histtype='bar, barstacked, step, stepfilled',[$ ]
+			/E
+			［引数］align：各バーのアラインメント | align='left, mid, right',[$ ]
+			［引数］orientation：ヒストグラムの向きを指定 |
+				[/]orientation='vertical, horizontal',[$ ]
+			/E
+			［引数］rwidth：各ビンの幅を指定 | rwidth=None,[$ ]
+			［引数］color：各ビンの色を指定 | color=None,[$ ]
+			［引数］label：ラベルを指定（凡例で使用） | label=None,[$ ]
+			［引数］stacked：複数の系列を積み上げて表示 | stacked=False,[$ ]
+			［閉じカッコ］) | )
+		..
+		#hist2dメソッド...
+			［メソッド名］plt.hist2d( | plt.hist2d(
+			［引数］x：ヒストグラムのデータリスト（X軸） | x=,[$ ]
+			［引数］y：ヒストグラムのデータリスト（Y軸） | y=,[$ ]
+			［引数］bins：ビンの個数（のリスト）を指定 | bins=None,[$ ]
+			［引数］range：ビンの範囲（のリスト）を指定 |
+				[/]range=((0, 100), (0, 50)),[$ ]
+			/E
+			［引数］density：相対度数密度で表示 | density=False,[$ ]
+			［引数］cmin：これより小さい値のビンは表示しない | cmin=None,[$ ]
+			［引数］cmax：これより大きい値のビンは表示しない | cmax=None,[$ ]
+			［引数］cmap：カラーマップを指定 | cmap='',[$ ]
+			［引数］alpha：透明度を指定 | alpha=None,[$ ]
+			［閉じカッコ］) | )
+			［カラーバーを追加］|
+				[/][!K "ENTER"]plt.colorbar()
+			/E
+		..
+		-
+		#pieメソッド...
+			［メソッド名］plt.pie( | plt.pie(
+			［引数］x：パイチャートのデータリスト | x=,[$ ]
+			［引数］explode：xの各要素を中心から分離する割合のリスト |
+				[/]explode=[&1]0, 0.3, 0, 0, 0[&2],[$ ]
+			/E
+			［引数］labels：各要素のラベルのリスト |
+				[/]labels=[&1]'', '', '', '', ''[&2],[$ ]
+			/E
+			［引数］colors：各要素のラベルのリスト |
+				[/]colors=[&1]'', '', '', '', ''[&2],[$ ]
+			/E
+			［引数］autopct：各要素の割合をパーセント表示 | autopct='%1.1f%%',[$ ]
+			［引数］pctdistance：autopctの表示位置を指定 | pctdistance=0.6,[$ ]
+			［引数］shadow：パイチャートに影を付ける | shadow=False,[$ ]
+			［引数］labeldistance：ラベルの表示位置を指定 | labeldistance=1.1,[$ ]
+			［引数］startangle：最初の要素の表示位置（角度） | startangle=0,[$ ]
+			［引数］radius：円の半径を指定 | radius=1,[$ ]
+			［引数］counterclock：各要素を反時計回りに表示 | counterclock=True,[$ ]
+			［引数］wedgeprops：各要素のスタイルを指定 |
+				[/]wedgeprops={'linewidth': 3, 'edgecolor': 'white'},[$ ]
+			/E
+			［引数］textprops：各要素のスタイルを指定 |
+				[/]textprops={'color': 'white', 'weight': 'bold'},[$ ]
+			/E
+			［閉じカッコ］) | )
+		..
+		#contourメソッド...
+			［メソッド名］cs = plt.contour( | cs = plt.contour(
+			［引数］X：X座標の2Dリスト（np.meshgridなどで作成） | X=,[$ ]
+			［引数］Y：Y座標の2Dリスト（np.meshgridなどで作成） | Y=,[$ ]
+			［引数］Z：Z座標の2Dリスト | Z=,[$ ]
+			［引数］levels：等高線の本数／レベル値のリスト | levels=,[$ ]
+			［引数］colors：等高線の色（のリスト）を指定 | colors=,[$ ]
+			［引数］alpha：等高線の透明度を指定 | alpha=,[$ ]
+			［引数］cmap：等高線のカラーマップを指定 | cmap='',[$ ]
+			［引数］linewidths：等高線の幅（のリスト）を指定 | linewidths=,[$ ]
+			［引数］linestyles：等高線のスタイル（のリスト）を指定 |
+				[/]linestyles='solid, dashed, dashdot, dotted' or None,[$ ]
+			/E
+			［閉じカッコ］) | )
+			［等高線ラベルの表示］plt.clabel() |
+				[/][!K "ENTER"]plt.clabel(cs)
+			/E
+		..
+		-
+		#imshowメソッド...
+			［メソッド名］plt.imshow( | plt.imshow(
+			［引数］X：表示する画像のリスト（2D, 3D） | X=,[$ ]
+			［引数］cmap：画像に適用するカラーマップを指定 | cmap='',[$ ]
+			［引数］aspect：画像のアスペクト比を指定 | aspect='equal, auto',[$ ]
+			［引数］alpha：画像の透明度を指定 | alpha=,[$ ]
+			［引数］origin：画像の起点を指定 | origin='upper, lower',[$ ]
+			［引数］vmin, vmax：値の範囲を指定 | vmin=0, vmax=255,[$ ]
+			［閉じカッコ］) | )
+			［目盛りを非表示］plt.axis('off') |
+				[/][!K "ENTER"]plt.axis('off')
+			/E
+		..
+		imshowメソッド（グレイスケール画像）|
+			[/]ax.imshow(img, cmap="gray", vmin=0, vmax=255)
+		/E
+	..
+	+補助線（水平、垂直）を描画
+		垂直線の描画 | plt.axvline(x=0, ls='-', lw=1.5, c='k')
+		水平線の描画 | plt.axhline(y=0, ls='-', lw=1.5, c='k')
+		-
+		垂直帯の描画 | plt.axvspan(xmin=1, xmax=2, facecolor='g', alpha=0.5)
+		水平帯の描画 | plt.axhspan(ymin=1, ymax=2, facecolor='g', alpha=0.5)
+	..
+	-
+	+座標軸の範囲の設定
+		座標軸の範囲の設定（X軸） | plt.xlim(0, 5) # min, max
+		座標軸の範囲の設定（Y軸） | plt.ylim(0, 5) # min, max
+		座標軸の範囲の設定（X-Y軸） |
+			[/]plt.axis([&1]0, 5, 0, 5[&2]) # xmin, xmax, ymin, ymax
+		/E
+	..
+	+目盛りとラベルの設定
+		目盛りとラベルの設定（X軸） |
+			[/]# 非表示にする場合は空リストを渡す[!K "ENTER"]
+			[/]plt.xticks(ticks=np.arange(3), labels=[&1]'zero', 'one', 'two'[&2])
+		/E
+		目盛りとラベルの設定（Y軸） |
+			[/]# 非表示にする場合は空リストを渡す[!K "ENTER"]
+			[/]plt.yticks(ticks=np.arange(3), labels=[&1]'zero', 'one', 'two'[&2])
+		/E
+		目盛りとラベルを非表示にする | plt.axis('off')
+		-
+		目盛りの間隔（X軸） |
+			[/]plt.gca().xaxis.set_major_locator(plt.MultipleLocator(5))
+		/E
+		目盛りの間隔（時系列：X軸、手動） | `{Append-EnterKey}`
+			[/]import matplotlib.dates as mdates
+			[/]
+			[/]plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
+			[/]xloc = mdates.MonthLocator(interval=10)
+			[/]# xloc = mdates.DayLocator(interval=10)
+			[/]plt.gca().xaxis.set_major_locator(xloc)
+		/E
+		目盛りの間隔（時系列：X軸、自動） |
+			[/]plt.gcf().autofmt_xdate()
+		/E
+		目盛りの間隔（Y軸） |
+			[/]plt.gca().yaxis.set_major_locator(plt.MultipleLocator(5))
+		/E
+		-
+		目盛りの最大個数（X軸） |
+			[/]plt.gca().xaxis.set_major_locator(plt.MaxNLocator(5))
+		/E
+		目盛りの最大個数（Y軸） |
+			[/]plt.gca().yaxis.set_major_locator(plt.MaxNLocator(5))
+		/E
+	..
+	座標軸の設定（tight） | plt.axis('tight')
+	座標軸の設定（equal） | plt.axis('equal')
+	-
+	フィギュアのタイトルの設定 | plt.suptitle('', y=1.0, fontsize=12)
+	グラフのタイトルの設定     | plt.title('')
+	X軸のラベルの設定 | plt.xlabel('')
+	Y軸のラベルの設定 | plt.ylabel('')
+	-
+	凡例の設定（枠内の位置） | plt.legend(loc='best')
+	凡例の設定 （任意の位置）| 
+		[/]plt.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
+	/E
+	グリッドの設定 | plt.grid(axis='both x y', ls=':') # '-', '--', '-.', ':'
+	-
+	各座標軸の間隔を自動調節 | plt.tight_layout()
+	各座標軸の間隔を設定 | plt.subplots_adjust(wspace=None, hspace=None)
+	-
+	テキストと注釈 | `{Append-EnterKey}`
+		[/]# ha='center', va='top', alpha=0.8, transform=ax.transAxes, 
+		[/]style = dict(size=12, c='gray')
+		[/]plt.text(x, y, 'sample text', **style) `{Skip}`
+	/E
+	矢印と注釈 | `{Append-EnterKey}`
+		[/]# arrowstyle: '-', '->', '-[&1]', '|-|', '-|>',
+		[/]# '<-', '<->', '<|-', '<|-|>', 'fancy', 'simple', 'wedge'
+		[/]props = dict(arrowstyle='->', color='k')
+		[/]plt.annotate('sample text', xy=(, ), xytext=(, ), size=14, color='r',
+		[/]# bbox=dict(boxstyle='round', fc='none', ec='k'), 
+		[/]arrowprops=props) `{Skip}`
+	/E
+..
++オブジェクト指向（ax.xxx）の書式
+	１つのグラフを作成 | 
+		[/]fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+	/E
+	複数のグラフをタイル状に作成（同じサイズ） | `{Append-EnterKey}`
+		[/]fig, ax = plt.subplots(2, 3, figsize=(8, 6), sharex=False, sharey=False,
+		[/]constrained_layout=True)
+		[/]ax[&1]0, 0[&2].plot()
+	/E
+	複数のグラフをタイル状に作成（異なるサイズ） | `{Append-EnterKey}`
+		[/]gs_kw = {'width_ratios': [1, 1], 'height_ratios': [3, 1]}
+		[/]fig, ax = plt.subplots(2, 3, figsize=(8, 6), sharex=False, sharey=False,
+		[/]gridspec_kw=gs_kw, constrained_layout=True)
+		[/]ax[&1]0, 0[&2].plot()
+	/E
+	figに複数のグラフを１つずつ追加（同じサイズ） | `{Append-EnterKey}`
+		[/]fig = plt.figure(figsize=(8, 6), constrained_layout=True)
+		[/]ax = fig.add_subplot(2, 2, 1) # 行、列、追加する位置
+	/E
+	figに複数のグラフを１つずつ追加（異なるサイズ） | `{Append-EnterKey}`
+		[/]fig = plt.figure(figsize=(8, 6), constrained_layout=True)
+		[/]gs = fig.add_gridspec(2, 2, width_ratios=[1, 1], height_ratios=[1, 1])
+		[/]ax = fig.add_subplot(gs[0, 0]) # GridSpecで領域を指定
+	/E
+	-
+	+各種のグラフを描画
+		#plotメソッド...
+			［メソッド名］ax.plot( | ax.plot(
+			［引数］x：線グラフのX座標のリスト | x,[$ ]
+			［引数］y：線グラフのY座標のリスト | y,[$ ]
+			［引数］fmt：各線の色やスタイルを指定 |
+				[/]fmt='[&1]marker[&2][&1]linestyle[&2][&1]color[&2]',[$ ]
+			/E
+			［引数］label：各線のラベルを指定（凡例に使用） | label='',[$ ]
+			［引数］linewidth：各線の線幅 | linewidth=,[$ ]
+			［閉じカッコ］) | )
+		..
+		#scatterメソッド...
+			［メソッド名］ax.scatter( | ax.scatter(
+			［引数］x：散布図のX座標のリスト | x=,[$ ]
+			［引数］y：散布図のY座標のリスト | y=,[$ ]
+			［引数］s：各マーカーのサイズ（のリスト） | s=,[$ ]
+			［引数］c：各マーカーの色（のリスト） | c=,[$ ]
+			［引数］marker：マーカーの種類を指定 | marker='o',[$ ]
+			［引数］cmap：カラーマップを指定 | cmap='viridis',[$ ]
+			［引数］vmin：カラーマップの最小値に割り当てる色（c）の値 | vmin=,[$ ]
+			［引数］vmax：カラーマップの最大値に割り当てる色（c）の値 | vmax=,[$ ]
+			［引数］alpha：各マーカーの透明度を指定 | alpha=,[$ ]
+			［引数］linewidths：マーカーエッジの幅 | linewidths=,[$ ]
+			［引数］linecolors：マーカーエッジの色 | linecolors=,[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		#barメソッド...
+			［メソッド名］ax.bar( | ax.bar(
+			［引数］x：縦棒ブラフのX座標のリスト | x=,[$ ]
+			［引数］height：縦棒ブラフのY座標（高さ）のリスト | height=,[$ ]
+			［引数］width：各バーの幅 | width=,[$ ]
+			［引数］bottom：各バーの基底（下端）となるY座標 | bottom=,[$ ]
+			［引数］align：各バーのアラインメント | align='center, edge',[$ ]
+			［引数］color：各バーの色を指定 | color=,[$ ]
+			［引数］edgecolor：各バーの枠線の色を指定 | edgecolor=,[$ ]
+			［引数］linewidth：各バーの枠線の幅を指定 | linewidth=,[$ ]
+			［引数］tick_label：各バーの目盛りを指定 | tick_label=None,[$ ]
+			［閉じカッコ］) | )
+		..
+		#barhメソッド...
+			［メソッド名］ax.barh( | ax.barh(
+			［引数］y：横棒ブラフのY座標のリスト | y=,[$ ]
+			［引数］width：横棒ブラフのX座標（長さ）のリスト | width=,[$ ]
+			［引数］height：各バーの幅 | height=,[$ ]
+			［引数］left：各バーの基底（左端）となるX座標 | left=,[$ ]
+			［引数］align：各バーのアラインメント | align='center, edge',[$ ]
+			［引数］color：各バーの色を指定 | color=,[$ ]
+			［引数］edgecolor：各バーの枠線の色を指定 | edgecolor=,[$ ]
+			［引数］linewidth：各バーの枠線の幅を指定 | linewidth=,[$ ]
+			［引数］tick_label：各バーの目盛りを指定 | tick_label=None,[$ ]
+			［閉じカッコ］) | )
+		..
+		#histメソッド...
+			［メソッド名］ax.hist( | ax.hist(
+			［引数］x：ヒストグラムのデータリスト | x=,[$ ]
+			［引数］bins：ビンの個数、またはエッジのリストを指定 | bins=None,[$ ]
+			［引数］range：ビンの範囲を指定 | range=(0, 100),[$ ]
+			［引数］density：各ビンを相対度数密度で表示 | density=False,[$ ]
+			［引数］cumulative：累積ヒストグラムを表示 | cumulative=False,[$ ]
+			［引数］bottom：各バーの基底となる位置（のリスト）を指定 | bottom=None,[$ ]
+			［引数］histtype：ヒストグラムの種類を指定 |
+				[/]histtype='bar, barstacked, step, stepfilled',[$ ]
+			/E
+			［引数］align：各バーのアラインメント | align='left, mid, right',[$ ]
+			［引数］orientation：ヒストグラムの向きを指定 |
+				[/]orientation='vertical, horizontal',[$ ]
+			/E
+			［引数］rwidth：各ビンの幅を指定 | rwidth=None,[$ ]
+			［引数］color：各ビンの色を指定 | color=None,[$ ]
+			［引数］label：ラベルを指定（凡例で使用） | label=None,[$ ]
+			［引数］stacked：複数の系列を積み上げて表示 | stacked=False,[$ ]
+			［閉じカッコ］) | )
+		..
+		#hist2dメソッド...
+			［メソッド名］ret = ax.hist2d( | ret = ax.hist2d(
+			［引数］x：ヒストグラムのデータリスト（X軸） | x=,[$ ]
+			［引数］y：ヒストグラムのデータリスト（Y軸） | y=,[$ ]
+			［引数］bins：ビンの個数（のリスト）を指定 | bins=None,[$ ]
+			［引数］range：ビンの範囲（のリスト）を指定 |
+				[/]range=((0, 100), (0, 50)),[$ ]
+			/E
+			［引数］density：相対度数密度で表示 | density=False,[$ ]
+			［引数］cmin：これより小さい値のビンは表示しない | cmin=None,[$ ]
+			［引数］cmax：これより大きい値のビンは表示しない | cmax=None,[$ ]
+			［引数］cmap：カラーマップを指定 | cmap='',[$ ]
+			［引数］alpha：透明度を指定 | alpha=None,[$ ]
+			［閉じカッコ］) | )
+			［カラーバーを追加］) |
+				[/][!K "ENTER"]fig.colorbar(ret[&1]3[&2], ax=ax)
+			/E
+		..
+		-
+		#pieメソッド...
+			［メソッド名］ax.pie( | ax.pie(
+			［引数］x：パイチャートのデータリスト | x=,[$ ]
+			［引数］explode：xの各要素を中心から分離する割合のリスト |
+				[/]explode=[&1]0, 0.3, 0, 0, 0[&2],[$ ]
+			/E
+			［引数］labels：各要素のラベルのリスト |
+				[/]labels=[&1]'', '', '', '', ''[&2],[$ ]
+			/E
+			［引数］colors：各要素のラベルのリスト |
+				[/]colors=[&1]'', '', '', '', ''[&2],[$ ]
+			/E
+			［引数］autopct：各要素の割合をパーセント表示 | autopct='%1.1f%%',[$ ]
+			［引数］pctdistance：autopctの表示位置を指定 | pctdistance=0.6,[$ ]
+			［引数］shadow：パイチャートに影を付ける | shadow=False,[$ ]
+			［引数］labeldistance：ラベルの表示位置を指定 | labeldistance=1.1,[$ ]
+			［引数］startangle：最初の要素の表示位置（角度） | startangle=0,[$ ]
+			［引数］radius：円の半径を指定 | radius=1,[$ ]
+			［引数］counterclock：各要素を反時計回りに表示 | counterclock=True,[$ ]
+			［引数］wedgeprops：各要素のスタイルを指定 |
+				[/]wedgeprops={'linewidth': 3, 'edgecolor': 'white'},[$ ]
+			/E
+			［引数］textprops：各要素のスタイルを指定 |
+				[/]textprops={'color': 'white', 'weight': 'bold'},[$ ]
+			/E
+			［閉じカッコ］) | )
+		..
+		-
+		#contourメソッド...
+			［メソッド名］cs = ax.contour( | cs = ax.contour(
+			［引数］X：X座標の2Dリスト（np.meshgridなどで作成） | X=,[$ ]
+			［引数］Y：Y座標の2Dリスト（np.meshgridなどで作成） | Y=,[$ ]
+			［引数］Z：Z座標の2Dリスト | Z=,[$ ]
+			［引数］levels：等高線の本数／レベル値のリスト | levels=,[$ ]
+			［引数］colors：等高線の色（のリスト）を指定 | colors=,[$ ]
+			［引数］alpha：等高線の透明度を指定 | alpha=,[$ ]
+			［引数］cmap：等高線のカラーマップを指定 | cmap='',[$ ]
+			［引数］linewidths：等高線の幅（のリスト）を指定 | linewidths=,[$ ]
+			［引数］linestyles：等高線のスタイル（のリスト）を指定 |
+				[/]linestyles='solid, dashed, dashdot, dotted' or None,[$ ]
+			/E
+			［閉じカッコ］) | )
+			［等高線ラベルの表示］plt.clabel() |
+				[/][!K "ENTER"]ax.clabel(cs)
+			/E
+		..
+		#imshowメソッド...
+			［メソッド名］ax.imshow( | ax.imshow(
+			［引数］X：表示する画像のリスト（2D, 3D） | X=,[$ ]
+			［引数］cmap：画像に適用するカラーマップを指定 | cmap='',[$ ]
+			［引数］aspect：画像のアスペクト比を指定 | aspect='equal, auto',[$ ]
+			［引数］alpha：画像の透明度を指定 | alpha=,[$ ]
+			［引数］origin：画像の起点を指定 | origin='upper, lower',[$ ]
+			［引数］vmin, vmax：値の範囲を指定 | vmin=0, vmax=255,[$ ]
+			［閉じカッコ］) | )
+			［目盛りを非表示］ax.set_axis_off() |
+				[/][!K "ENTER"]ax.set_axis_off()
+			/E
+		..
+		imshowメソッド（グレイスケール画像）|
+			[/]ax.imshow(img, cmap="gray", vmin=0, vmax=255)
+		/E
+	..
+	+補助線（水平、垂直）を描画
+		垂直線の描画 | ax.axvline(x=0, ls='-', lw=1.5, c='k')
+		水平線の描画 | ax.axhline(y=0, ls='-', lw=1.5, c='k')
+		-
+		垂直帯の描画 | ax.axvspan(xmin=1, xmax=2, facecolor='g', alpha=0.5)
+		水平帯の描画 | ax.axhspan(ymin=1, ymax=2, facecolor='g', alpha=0.5)
+	..
+	-
+	+座標軸の範囲の設定
+		座標軸の設定（範囲、ラベル、タイトル） |
+			[/]ax.set(xlim=(, ), ylim=(, ), xlabel='', ylabel='', title='')
+		/E
+		-
+		座標軸の範囲の設定（X軸）   | ax.set_xlim(0, 5) # min, max
+		座標軸の範囲の設定（Y軸）   | ax.set_ylim(0, 5) # min, max
+		座標軸の範囲の設定（X-Y軸） | ax.axis([&1]0, 5, 0, 5[&2]) # xmin, xmax, ymin, ymax
+	..
+	+目盛りとラベルの設定
+		目盛りとラベルの設定（X軸） | `{Append-EnterKey}`
+			[/]# 非表示にする場合は空リストを渡す
+			[/]ax.set_xticks(ticks=np.arange(3))
+			[/]ax.set_xticklabels([&1]'zero', 'one', 'two'[&2]) `{Skip}`
+		/E
+		目盛りとラベルの設定（Y軸） | `{Append-EnterKey}`
+			[/]# 非表示にする場合は空リストを渡す
+			[/]ax.set_yticks(ticks=np.arange(3))
+			[/]ax.set_yticklabels([&1]'zero', 'one', 'two'[&2]) `{Skip}`
+		/E
+		目盛りとラベルを非表示にする | ax.set_axis_off()
+		-
+		目盛りの間隔（X軸） |
+			[/]ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+		/E
+		目盛りの間隔（時系列：X軸、手動） | `{Append-EnterKey}`
+			[/]import matplotlib.dates as mdates
+			[/]
+			[/]ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+			[/]xloc = mdates.MonthLocator(interval=10)
+			[/]# xloc = mdates.DayLocator(interval=10)
+			[/]ax.xaxis.set_major_locator(xloc)
+		/E
+		目盛りの間隔（時系列：X軸、自動） |
+			[/]fig.autofmt_xdate()
+		/E
+		目盛りの間隔（Y軸） |
+			[/]ax.yaxis.set_major_locator(plt.MultipleLocator(5))
+		/E
+		-
+		目盛りの最大個数（X軸） |
+			[/]ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+		/E
+		目盛りの最大個数（Y軸） |
+			[/]ax.yaxis.set_major_locator(plt.MaxNLocator(5))
+		/E
+	..
+	-
+	フィギュアのタイトルの設定 | fig.suptitle('', y=1.0, fontsize=12)
+	グラフのタイトルの設定     | ax.set_title('')
+	X軸のラベルの設定 | ax.set_xlabel('')
+	Y軸のラベルの設定 | ax.set_ylabel('')
+	-
+	凡例の設定（枠内の位置） | ax.legend(loc='best')
+	凡例の設定 （任意の位置）| 
+		[/]ax.legend(loc='upper left', bbox_to_anchor=(1.05, 1))
+	/E
+	グリッドの設定 | ax.grid(axis='both x y', ls=':') # '-', '--', '-.', ':'
+	-
+	各座標軸の間隔を自動調節 | fig.tight_layout()
+	各座標軸の間隔を設定 | fig.subplots_adjust(wspace=None, hspace=None)
+	-
+	テキストと注釈 | `{Append-EnterKey}`
+		[/]# ha='center', va='top', alpha=0.8, transform=ax.transAxes, 
+		[/]style = dict(size=12, c='gray')
+		[/]ax.text(x, y, 'sample text', **style) `{Skip}`
+	/E
+	矢印と注釈 | `{Append-EnterKey}`
+		[/]# arrowstyle: '-', '->', '-[&1]', '|-|', '-|>',
+		[/]# '<-', '<->', '<|-', '<|-|>', 'fancy', 'simple', 'wedge'
+		[/]props = dict(arrowstyle='->', color='k')
+		[/]ax.annotate('sample text', xy=(, ), xytext=(, ), size=14, color='r',
+		[/]# bbox=dict(boxstyle='round', fc='none', ec='k'), 
+		[/]arrowprops=props) `{Skip}`
+	/E
+..
+-
++スタイル（マーカー、線種、色）の一覧
+	#一括入力...
+		【マーカー】point | .
+		【マーカー】pixel | ,
+		【マーカー】circle | o
+		【マーカー】triangle_down | v
+		【マーカー】triangle_up | ^
+		【マーカー】triangle_left | <
+		【マーカー】triangle_right | >
+		【マーカー】tri_down | 1
+		【マーカー】tri_up | 2
+		【マーカー】tri_left | 3
+		【マーカー】tri_right | 4
+		【マーカー】square | s
+		【マーカー】pentagon | p
+		【マーカー】star | *
+		【マーカー】hexagon1 | h
+		【マーカー】hexagon2 | H
+		【マーカー】plus | +
+		【マーカー】x | x
+		【マーカー】diamond | D
+		【マーカー】thin_diamond | d
+		【マーカー】vline | |
+		【マーカー】hline | _
+		------------------------- | [$]
+		【線種】solid | -
+		【線種】dashed | --
+		【線種】dash-dot | -.
+		【線種】dotted | :
+		---------------------------------- | [$]
+		【axes.prop_cycle：10色】blue | C0
+		【axes.prop_cycle：10色】orange | C1
+		【axes.prop_cycle：10色】green | C2
+		【axes.prop_cycle：10色】red | C3
+		【axes.prop_cycle：10色】purple | C4
+		【axes.prop_cycle：10色】brown | C5
+		【axes.prop_cycle：10色】pink | C6
+		【axes.prop_cycle：10色】gray | C7
+		【axes.prop_cycle：10色】olive | C8
+		【axes.prop_cycle：10色】cyan | C9
+		---------------------------------- | [$]
+		【BASE_COLORS：8色】blue | b
+		【BASE_COLORS：8色】green | g
+		【BASE_COLORS：8色】red | r
+		【BASE_COLORS：8色】cyan | c
+		【BASE_COLORS：8色】magenta | m
+		【BASE_COLORS：8色】yellow | y
+		【BASE_COLORS：8色】black | k
+		【BASE_COLORS：8色】white | w
+	..
+	-
+	+マーカーの一覧
+		point | .
+		pixel | ,
+		circle | o
+		-
+		triangle_down | v
+		triangle_up | ^
+		triangle_left | <
+		triangle_right | >
+		tri_down | 1
+		tri_up | 2
+		tri_left | 3
+		tri_right | 4
+		-
+		square | s
+		pentagon | p
+		star | *
+		hexagon1 | h
+		hexagon2 | H
+		plus | +
+		x | x
+		-
+		diamond | D
+		thin_diamond | d
+		-
+		vline | |
+		hline | _
+	..
+	+線種の一覧
+		solid | -
+		dashed | --
+		dash-dot | -.
+		dotted | :
+	..
+	+色の一覧（BASE_COLORS：8色）
+		blue | b
+		green | g
+		red | r
+		cyan | c
+		magenta | m
+		yellow | y
+		black | k
+		white | w
+	..
+	+色の一覧（axes.prop_cycle：10色）
+		blue | C0
+		orange | C1
+		green | C2
+		red | C3
+		purple | C4
+		brown | C5
+		pink | C6
+		gray | C7
+		olive | C8
+		cyan | C9
+	..
+..
++カラーマップの一覧（ジャンル別）
+	*Perceptually Uniform Sequential
+		viridis
+		plasma
+		inferno
+		magma
+		cividis
+	..
+	*Sequential (1)
+		Greys
+		Purples
+		Blues
+		Greens
+		Oranges
+		Reds
+		YlOrBr
+		YlOrRd
+		OrRd
+		PuRd
+		RdPu
+		BuPu
+		GnBu
+		PuBu
+		YlGnBu
+		PuBuGn
+		BuGn
+		YlGn
+	..
+	*Sequential (2)
+		binary
+		gist_yarg
+		gist_gray
+		gray
+		bone
+		pink
+		spring
+		summer
+		autumn
+		winter
+		cool
+		Wistia
+		hot
+		afmhot
+		gist_heat
+		copper
+	..
+	*Diverging
+		PiYG
+		PRGn
+		BrBG
+		PuOr
+		RdGy
+		RdBu
+		RdYlBu
+		RdYlGn
+		Spectral
+		coolwarm
+		bwr
+		seismi
+	..
+	*Cyclic
+		twilight
+		twilight_shifted
+		hsv
+	..
+	*Qualitative
+		Pastel1
+		Pastel2
+		Paired
+		Accent
+		Dark2
+		Set1
+		Set2
+		Set3
+		tab10
+		tab20
+		tab20b
+		tab20c
+	..
+	*Miscellaneous
+		flag
+		prism
+		ocean
+		gist_earth
+		terrain
+		gist_stern
+		gnuplot
+		gnuplot2
+		CMRmap
+		cubehelix
+		brg
+		gist_r
+		rainbow
+		jet
+		turbo
+		nipy_spect
+		gist_ncar
+	..
+..
++カラーマップの取得／表示
+	既存のカラーマップの取得               | cm = plt.get_cmap('')
+	既存のカラーマップの取得（色数を指定） | cm = plt.get_cmap('', 10)
+	-
+	カラーマップから任意の色を取得（整数） | `{Append-EnterKey}`
+		[/]# 0 <= x < cm.N
+		[/]cm(10) # xはカラーマップ上のインデックス番号
+	/E
+	カラーマップから任意の色を取得（小数） | `{Append-EnterKey}`
+		[/]# 0.0 <= x <= 1.0
+		[/]cm(0.5) # xはカラーマップ上の位置
+	/E
+	-
+	カラーマップを表示する... | `{Append-EnterKey}`
+		[/][#|カラーマップの名前を入力] `{Skip}`
+		[/]fig = plt.figure(figsize=(7, 5))
+		[/]ax = fig.add_axes((0.0,0.0,1.0,0.07))
+		[/]cm = plt.get_cmap('[#1]') # <-- カラーマップの名前
+		[/]print('{} colors'.format(cm.N))
+		[/]
+		[/]gradient = np.linspace(0, 1, cm.N)
+		[/]gradient = np.vstack((gradient, gradient))
+		[/]
+		[/]ax.imshow(gradient, aspect='auto', cmap=cm)
+		[/]ax.set_axis_off()
+	/E
+..
+-
+matplotlibのバージョン確認 | `{Append-EnterKey}`
+	[/]import matplotlib as mpl
+	[/]print(mpl.__version__)
+/E

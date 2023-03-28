@@ -1,0 +1,622 @@
+; Pythonのscikit-learnの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+#scikit-learnのインポート...
+	［上部の選択肢は「普通の改行」にチェックを入れてください］ | [$]
+
+	【データセットのロード】 アヤメの計測データ（load_iris） |
+		[/]from sklearn.datasets import load_iris
+	/E
+	【データセットのロード】 ボストン市の住宅価格（load_boston） |
+		[/]from sklearn.datasets import load_boston
+	/E
+	【データセットのロード】 手書き数字（load_digits） |
+		[/]from sklearn.datasets import load_digits
+	/E
+	【データセットのロード】 ワインのデータ（load_wine） |
+		[/]from sklearn.datasets import load_wine
+	/E
+	【データセットのロード】 糖尿病患者のデータ（load_diabetes） |
+		[/]from sklearn.datasets import load_diabetes
+	/E
+	【データセットのロード】 著名人の顔画像（fetch_lfw_people） |
+		[/]from sklearn.datasets import fetch_lfw_people
+	/E
+	【データセットの生成】 分類データセットの生成（make_blobs） | 
+		[/]from sklearn.datasets import make_blobs
+	/E
+	【データセットの生成】 分類データセットの生成（make_classification） | 
+		[/]from sklearn.datasets import make_classification
+	/E
+	【データセットの生成】 回帰データセットの生成（make_regression） | 
+		[/]from sklearn.datasets import make_regression
+	/E
+	【データセットの生成】 同心円データセットの生成（make_gaussian_quantiles） | 
+		[/]from sklearn.datasets import make_gaussian_quantiles
+	/E
+	【データセットの生成】 同心円データセットの生成（make_circles） | 
+		[/]from sklearn.datasets import make_circles
+	/E
+	【データセットの生成】 半円データセットの生成（make_moons） | 
+		[/]from sklearn.datasets import make_moons
+	/E
+	--------------------------------------------------------------- | [$]
+	パイプラインの生成（make_pipeline） | 
+		[/]from sklearn.pipeline import make_pipeline
+	/E
+	--------------------------------------------------------------- | [$]
+	【model_selection】 データの分割（train_test_split） | 
+		[/]from sklearn.model_selection import train_test_split
+	/E
+	【model_selection】 交差検証１（cross_val_score） | 
+		[/]from sklearn.model_selection import cross_val_score
+	/E
+	【model_selection】 交差検証２（cross_validate） | 
+		[/]from sklearn.model_selection import cross_validate
+	/E
+	【model_selection】 KFold（KFold） | 
+		[/]from sklearn.model_selection import KFold
+	/E
+	【model_selection】 １つ抜き交差検証（LeaveOneOut） | 
+		[/]from sklearn.model_selection import LeaveOneOut
+	/E
+	【model_selection】 シャッフル分割交差検証（ShuffleSplit） | 
+		[/]from sklearn.model_selection import ShuffleSplit
+	/E
+	-
+	【model_selection】 グリッドサーチ（GridSearchCV） | 
+		[/]from sklearn.model_selection import GridSearchCV
+	/E
+	--------------------------------------------------------------- | [$]
+	【preprocessing】 多項式回帰（PolynomialFeatures） | 
+		[/]from sklearn.preprocessing import PolynomialFeatures
+	/E
+	【preprocessing】 データの標準化（StandardScaler） | 
+		[/]from sklearn.preprocessing import StandardScaler
+	/E
+	【preprocessing】 データの正則化（MinMaxScaler） | 
+		[/]from sklearn.preprocessing import MinMaxScaler
+	/E
+	【preprocessing】 ラベルエンコーダー（LabelEncoder） | 
+		[/]from sklearn.preprocessing import LabelEncoder
+	/E
+	--------------------------------------------------------------- | [$]
+	【metrics】 ［回帰］平均二乗誤差（mean_squared_error） | 
+		[/]from sklearn.metrics import mean_squared_error
+	/E
+	【metrics】 ［回帰］平均絶対誤差（mean_absolute_error） | 
+		[/]from sklearn.metrics import mean_absolute_error
+	/E
+	【metrics】 ［回帰］決定係数（r2_score） | 
+		[/]from sklearn.metrics import r2_score
+	/E
+	【metrics】 ［分類］正解率（accuracy_score） | 
+		[/]from sklearn.metrics import accuracy_score
+	/E
+	【metrics】 ［分類］適合率（precision_score） | 
+		[/]from sklearn.metrics import precision_score
+	/E
+	【metrics】 ［分類］再現率（recall_score） | 
+		[/]from sklearn.metrics import recall_score
+	/E
+	【metrics】 ［分類］Ｆ１値（f1_score） | 
+		[/]from sklearn.metrics import f1_score
+	/E
+	【metrics】 ［分類］混同行列（confusion_matrix） | 
+		[/]from sklearn.metrics import confusion_matrix
+	/E
+	【metrics】 ［分類］分類リポート（classification_report） | 
+		[/]from sklearn.metrics import classification_report
+	/E
+	【metrics】 ［分類］PR曲線（precision_recall_curve） | 
+		[/]from sklearn.metrics import precision_recall_curve
+	/E
+	【metrics】 ［分類］ROC曲線（roc_curve） | 
+		[/]from sklearn.metrics import roc_curve
+	/E
+	--------------------------------------------------------------- | [$]
+	線形回帰（LinearRegression） | 
+		[/]from sklearn.linear_model import LinearRegression
+	/E
+	ラッソ回帰［L1正則化］（Lasso） | 
+		[/]from sklearn.linear_model import Lasso
+	/E
+	リッジ回帰［L2正則化］（Ridge） | 
+		[/]from sklearn.linear_model import Ridge
+	/E
+	サポートベクトルマシン［回帰］（SVR） | 
+		[/]from sklearn.svm import SVR
+	/E
+	決定木［回帰］（DecisionTreeRegressor） | 
+		[/]from sklearn.tree import DecisionTreeRegressor
+	/E
+	ランダムフォレスト［回帰］（RandomForestRegressor） | 
+		[/]from sklearn.ensemble import RandomForestRegressor
+	/E
+	--------------------------------------------------------------- | [$]
+	ロジスティック回帰（LogisticRegression） | 
+		[/]from sklearn.linear_model import LogisticRegression
+	/E
+	k最近傍法（KNeighborsClassifier） | 
+		[/]from sklearn.neighbors import KNeighborsClassifier
+	/E
+	ガウシアン・ナイーブベイズ（GaussianNB） | 
+		[/]from sklearn.naive_bayes import GaussianNB
+	/E
+	多項分布・ナイーブベイズ（MultinomialNB） | 
+		[/]from sklearn.naive_bayes import MultinomialNB
+	/E
+	サポートベクトルマシン［分類］（SVC） | 
+		[/]from sklearn.svm import SVC
+	/E
+	決定木［分類］（DecisionTreeClassifier） | 
+		[/]from sklearn.tree import DecisionTreeClassifier
+	/E
+	ランダムフォレスト［分類］（RandomForestClassifier） | 
+		[/]from sklearn.ensemble import RandomForestClassifier
+	/E
+	--------------------------------------------------------------- | [$]
+	k平均法［クラスタリング］（KMeans） | 
+		[/]from sklearn.cluster import KMeans
+	/E
+	カーネル化されたk平均法［クラスタリング］（SpectralClustering） | 
+		[/]from sklearn.cluster import SpectralClustering
+	/E
+	ガウス混合モデル［クラスタリング］（GaussianMixture） | 
+		[/]from sklearn.mixture import GaussianMixture
+	/E
+	変分ガウス混合モデル［クラスタリング］（BayesianGaussianMixture） | 
+		[/]from sklearn.mixture import BayesianGaussianMixture
+	/E
+	--------------------------------------------------------------- | [$]
+	主成分分析（PCA） | 
+		[/]from sklearn.decomposition import PCA
+	/E
+	--------------------------------------------------------------- | [$]
+	各種の分類器の決定境界の可視化（plot_decision_regions） | 
+		[/]from mlxtend.plotting import plot_decision_regions
+	/E
+..
+-
++データセットのロード／生成
+	アヤメの計測データ［load_iris］     | data = load_iris()
+	ボストン市の住宅価格［load_boston］ | data = load_boston()
+	手書き数字［load_digits］           | data = load_digits()
+	ワインのデータ［load_wine］         | data = load_wine()
+	糖尿病患者のデータ［load_diabetes］ | data = load_diabetes()
+	著名人の顔画像［fetch_lfw_people］ |
+		[/]# data_home: 'D:\\WorkShop\\scikit_learn_data\\'[!K "ENTER"]
+		[/]data = fetch_lfw_people(data_home=None, min_faces_per_person=60, color=False)
+	/E
+	-
+	分類データセットの生成［make_blobs］| `{Append-EnterKey}`
+		[/]X, y = make_blobs(n_samples=100, n_features=2,
+		[/]centers=2, cluster_std=2, random_state=None) `{Skip}`
+	/E
+	分類データセットの生成［make_classification］| `{Append-EnterKey}`
+		[/]X, y = make_classification(n_samples=100, n_features=10,
+		[/]n_informative=5, n_redundant=2,
+		[/]n_classes=3, n_clusters_per_class=1, random_state=None) `{Skip}`
+	/E
+	回帰データセットの生成［make_regression］| `{Append-EnterKey}`
+		[/]X, y = make_regression(n_samples=100, n_features=1,
+		[/]n_informative=1, n_targets=1, bias=0.0, 
+		[/]noise=15.0, random_state=None) `{Skip}`
+	/E
+	同心円データセットの生成［make_gaussian_quantiles］| `{Append-EnterKey}`
+		[/]X, y = make_gaussian_quantiles(n_samples=100, n_features=2,
+		[/]n_classes=3, mean=None, cov=1.0, random_state=None) `{Skip}`
+	/E
+	同心円データセットの生成［make_circles］| `{Append-EnterKey}`
+		[/]X, y = make_circles(n_samples=100, shuffle=True,
+		[/]noise=0.1, factor=0.8, random_state=None) `{Skip}`
+	/E
+	半円データセットの生成［make_moons］| `{Append-EnterKey}`
+		[/]X, y = make_moons(n_samples=100, shuffle=True,
+		[/]noise=0.1, random_state=None) `{Skip}`
+	/E
+	-
+	データセットの概要を表示 | print(data.DESCR)
+	データセットの属性を表示 | print(data.keys())
+	-
+	データセットからデータフレームを作成 |
+		[/]df = pd.DataFrame(data.data, columns=data.feature_names)
+	/E
+..
+-
++sklearn.model_selection
+	データの分割（train_test_split） | `{Append-EnterKey}`
+		[/]X_train, X_test, y_train, y_test = train_test_split(
+		[/]X, y, test_size=0.3, stratify=None, random_state=None) `{Skip}`
+	/E
+	-
+	交差検証１（cross_val_score） | `{Append-EnterKey}`
+		[/]# cv: None(use default 5), int(num of k-fold),
+		[/]#     cv splitter object(KFold, LeaveOneOut, ...)
+		[/]scores = cross_val_score(model, X, y, cv) `{Skip}`
+	/E
+	交差検証２（cross_validate） | `{Append-EnterKey}`
+		[/]# cv: None(use default 5), int(num of k-fold),
+		[/]#     cv splitter object(KFold, LeaveOneOut, ...)
+		[/]scores = cross_validate(model, X, y, cv) `{Skip}`
+	/E
+	-
+	分割クラス（KFold） |
+		[/]kf = KFold(n_splits=5, *, shuffle=False, random_state=None)
+	/E
+	分割クラス（LeaveOneOut） | loo = LeaveOneOut()
+	分割クラス（ShuffleSplit） |
+		[/]ss = ShuffleSplit(n_splits=10, *, test_size=None, train_size=None, random_state=None)
+	/E
+	-
+	グリッドサーチ（GridSearchCV） | `{Append-EnterKey}`
+		[/]param = {'C': [0.01, 0.1, 1, 10],
+		[/]'gamma': [0.01, 0.1, 1, 10],
+		[/]}
+		[/]
+		[/]# cv: None(use default 5), int(num of k-fold), 
+		[/]#     cv splitter object(KFold, LeaveOneOut, ...)
+		[/]gs_model = GridSearchCV(model, param, cv)
+		[/]gs_model.fit(X_train, y_train)
+		[/]gs_model.score(X_test, y_test)
+		[/]
+		[/]print(gs_model.best_params_)
+	/E
+..
++sklearn.metrics
+	［分類］正解率（accuracy_score） | accuracy_score(y_true, y_pred)
+	［分類］適合率（precision_score）| precision_score(y_true, y_pred)
+	［分類］再現率（recall_score）   | recall_score(y_true, y_pred)
+	［分類］Ｆ１値（f1_score）       | f1_score(y_true, y_pred)
+	-
+	［分類］混同行列（confusion_matrix） | 
+		[/]confusion_matrix(y_true, y_pred)
+	/E
+	［分類］混同行列「拡張版」（confusion_matrix_ex） | `{Append-EnterKey}`
+		[/]def display_confusion_matrix(y_true, y_pred, labels):
+	    [/]matrix = confusion_matrix(y_true, y_pred, labels=labels)
+	    [/]n = len(labels)
+		[/]
+	    [/]# 'True Class'をn回繰り返すリスト生成
+	    [/]act = [&1]'正解データ'[&2] * n
+	    [/]pred = [&1]'予測データ'[&2] * n
+		[/]
+	    [/]df = pd.DataFrame(matrix, columns=[&1]pred, labels[&2], index=[&1]act, labels[&2])
+	    [/]display(df)
+	/E
+	［分類］分類リポート（classification_report） | 
+		[/]classification_report(y_true, y_pred, labels=None, target_names=None)
+	/E
+	［分類］PR曲線（precision_recall_curve） | 
+		[/]precision_recall_curve(y_true, probas_pred)
+	/E
+	［分類］ROC曲線（roc_curve） | roc_curve(y_true, y_score)
+	-
+	［回帰］平均二乗誤差（mean_squared_error） | 
+		[/]mean_squared_error(y_true, y_pred)
+	/E
+	［回帰］平均絶対誤差（mean_absolute_error） | 
+		[/]mean_absolute_error(y_true, y_pred)
+	/E
+	［回帰］決定係数（r2_score） | 
+		[/]r2_score(y_true, y_pred)
+	/E
+..
++sklearn.preprocessing
+	多項式回帰（PolynomialFeatures） | `{Append-EnterKey}`
+		[/]poly = PolynomialFeatures(degree=2)
+		[/]poly.fit(X)
+		[/]X_poly = poly.transform(X)
+	/E
+	データの標準化（StandardScaler） | `{Append-EnterKey}`
+		[/]sc = StandardScaler() # Scale : mean -> 0, std -> 1
+		[/]sc.fit(X)
+		[/]X_std = sc.transform(X)
+	/E
+	データの正則化（MinMaxScaler） | `{Append-EnterKey}`
+		[/]sc = MinMaxScaler(feature_range=(0, 1)) # Scale : min <-> max
+		[/]sc.fit(X)
+		[/]X_std = sc.transform(X)
+	/E
+..
+-
++各種の回帰問題
+	線形回帰（LinearRegression） | `{Append-EnterKey}`
+		[/]model = LinearRegression()
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]print('回帰係数：\n{}'.format(pd.Series(model.coef_))) # index=data.feature_names
+		[/]print('切片： {:.4f}'.format(model.intercept_))
+		[/]
+		[/]# y_test_pred = model.predict(X_test)
+	/E
+	ラッソ回帰［L1正則化］（Lasso） | `{Append-EnterKey}`
+		[/]model = Lasso(alpha=1.0, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]print('回帰係数：\n{}'.format(pd.Series(model.coef_))) # index=data.feature_names
+		[/]print('切片： {:.4f}'.format(model.intercept_))
+		[/]
+		[/]# y_test_pred = model.predict(X_test)
+	/E
+	リッジ回帰［L2正則化］（Ridge） | `{Append-EnterKey}`
+		[/]model = Ridge(alpha=1.0, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]print('回帰係数：\n{}'.format(pd.Series(model.coef_))) # index=data.feature_names
+		[/]print('切片： {:.4f}'.format(model.intercept_))
+		[/]
+		[/]# y_test_pred = model.predict(X_test)
+	/E
+	サポートベクトルマシン（SVR） | `{Append-EnterKey}`
+		[/]# kernel: linear, poly, rbf, sigmoid, precomputed
+		[/]model = SVR(C=1.0, kernel='rbf', degree=3, gamma='scale')
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+	/E
+	決定木（DecisionTreeRegressor） | `{Append-EnterKey}`
+		[/]# criterion: mse, friedman_mse, mae
+		[/]model = DecisionTreeRegressor(criterion='mse', max_depth=None, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+	/E
+	ランダムフォレスト（RandomForestRegressor） | `{Append-EnterKey}`
+		[/]# criterion: mse, mae
+		[/]model = RandomForestRegressor(n_estimators=100, criterion='mse', max_depth=None, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('決定係数(train):{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('決定係数(test):{:.4f}\n'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# fti = model.feature_importances_
+	/E
+..
++各種の分類問題
+	ロジスティック回帰（LogisticRegression） | `{Append-EnterKey}`
+		[/]model = LogisticRegression(penalty='l2', C=1.0, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]print('オッズ比：',np.exp(model.coef_))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# P_pred = model.predict_proba(X_test)
+	/E
+	k最近傍法（KNeighborsClassifier） | `{Append-EnterKey}`
+		[/]model = KNeighborsClassifier(n_neighbors=5)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# P_pred = model.predict_proba(X_test)
+	/E
+	ガウシアン・ナイーブベイズ（GaussianNB） | `{Append-EnterKey}`
+		[/]model = GaussianNB()
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# P_pred = model.predict_proba(X_test)
+	/E
+	多項分布・ナイーブベイズ（MultinomialNB） | `{Append-EnterKey}`
+		[/]model = MultinomialNB(alpha=1.0)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# P_pred = model.predict_proba(X_test)
+	/E
+	サポートベクトルマシン（SVC） | `{Append-EnterKey}`
+		[/]# kernel: linear, poly, rbf, sigmoid, precomputed
+		[/]model = SVC(C=1.0, kernel='rbf', degree=3, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+	/E
+	決定木（DecisionTreeClassifier） | `{Append-EnterKey}`
+		[/]# criterion: gini, entropy
+		[/]model = DecisionTreeClassifier(criterion='gini', max_depth=None, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+	/E
+	ランダムフォレスト（RandomForestClassifier） | `{Append-EnterKey}`
+		[/]# criterion: gini, entropy
+		[/]model = RandomForestClassifier(n_estimators=100, criterion='gini', max_depth=None, random_state=None)
+		[/]model.fit(X_train, y_train)
+		[/]
+		[/]print('正解率(train)：{:.4f}'.format(model.score(X_train, y_train)))
+		[/]print('正解率(test)：{:.4f}'.format(model.score(X_test, y_test)))
+		[/]
+		[/]# y_pred = model.predict(X_test)
+		[/]# fti = model.feature_importances_
+	/E
+..
++各種のクラスタリング問題
+	k平均法（KMeans） | `{Append-EnterKey}`
+		[/]model = KMeans(n_clusters=3, random_state=None)
+		[/]model.fit(X)
+		[/]
+		[/]print(model.labels_)
+		[/]print(model.cluster_centers_)
+		[/]
+		[/]plt.figure(figsize=(8, 6))
+		[/]plt.scatter(X[:, 0], X[:, 1], c=model.labels_, s=50, cmap='viridis')
+		[/]centers = model.cluster_centers_
+		[/]plt.scatter(centers[:, 0], centers[:, 1], c='k', s=250,
+		[/]marker='*', alpha=0.5)
+	/E
+	カーネル化されたk平均法（SpectralClustering） | `{Append-EnterKey}`
+		[/]model = SpectralClustering(n_clusters=3, random_state=None,
+		[/]affinity='rbf', # nearest_neighbors, rbf, precomputed, precomputed_nearest_neighbors
+		[/]assign_labels='kmeans') # discretize
+		[/]model.fit(X)
+		[/]
+		[/]print(model.labels_)
+		[/]
+		[/]plt.figure(figsize=(8, 6))
+		[/]plt.scatter(X[:, 0], X[:, 1], c=model.labels_, s=50, cmap='viridis')
+	/E
+	ガウス混合モデル（GaussianMixture） | `{Append-EnterKey}`
+		[/]model = GaussianMixture(n_components=3,
+		[/]covariance_type='full', # full, tied, diag, spherical
+		[/]random_state=None)
+		[/]model.fit(X)
+		[/]
+		[/]pred = model.predict(X)
+		[/]print("clusters:", pred)
+		[/]
+		[/]x = np.linspace(X[&1]:, 0[&2].min(), X[&1]:, 0[&2].max(), 100)
+		[/]y = np.linspace(X[&1]:, 1[&2].min(), X[&1]:, 1[&2].max(), 100)
+		[/]XX, YY = np.meshgrid(x, y)
+		[/]
+		[/]temp = np.array([&1]XX.ravel(), YY.ravel()[&2]).T
+		[/]Z = -model.score_samples(temp)
+		[/]Z = Z.reshape(XX.shape)
+		[/]
+		[/]plt.figure(figsize=(8, 6))
+		[/]plt.contour(XX, YY, Z)
+		[/]
+		[/]plt.scatter(X[&1]:, 0[&2], X[&1]:, 1[&2], c=model.predict(X), s=50, cmap='viridis')
+		[/]means = model.means_
+		[/]plt.scatter(means[&1]:, 0[&2], means[&1]:, 1[&2], c='k', s=250,
+		[/]marker='*', alpha=0.5)
+	/E
+	変分ガウス混合モデル（BayesianGaussianMixture） | `{Append-EnterKey}`
+		[/]model = BayesianGaussianMixture(n_components=10,
+		[/]covariance_type='full', # full, tied, diag, spherical
+		[/]random_state=None)
+		[/]model.fit(X)
+		[/]
+		[/]pred = model.predict(X)
+		[/]print("clusters:", pred)
+		[/]pred_vals = np.unique(pred)
+		[/]print("numbers of clusters:", len(pred_vals))
+		[/]
+		[/]x = np.linspace(X[&1]:, 0[&2].min(), X[&1]:, 0[&2].max(), 100)
+		[/]y = np.linspace(X[&1]:, 1[&2].min(), X[&1]:, 1[&2].max(), 100)
+		[/]XX, YY = np.meshgrid(x, y)
+		[/]
+		[/]temp = np.array([&1]XX.ravel(), YY.ravel()[&2]).T
+		[/]Z = -model.score_samples(temp)
+		[/]Z = Z.reshape(XX.shape)
+		[/]
+		[/]plt.figure(figsize=(8, 6))
+		[/]plt.contour(XX, YY, Z)
+		[/]
+		[/]plt.scatter(X[&1]:, 0[&2], X[&1]:, 1[&2], c=model.predict(X), s=50, cmap='viridis')
+		[/]means = model.means_
+		[/]plt.scatter(means[&1]:, 0[&2], means[&1]:, 1[&2], c='k', s=250,
+		[/]marker='*', alpha=0.5)
+	/E
+..
+-
+主成分分析（PCA） | `{Append-EnterKey}`
+	[/]pca = PCA(n_components=None)
+	[/]pca.fit(X)
+	[/]
+	[/]# 対象データを主成分空間に投影
+	[/]feature = pca.transform(X)
+	[/]
+	[/]pc_names = [&1]'PC{}'.format(x + 1) for x in range(feature.shape[&1]1[&2])[&2]
+	[/]
+	[/]# 主成分得点
+	[/]df_pcs = pd.DataFrame(feature, columns=pc_names)
+	[/]
+	[/]# 寄与率と累積寄与率
+	[/]temp = np.vstack((pca.explained_variance_ratio_, 
+	[/]np.cumsum(pca.explained_variance_ratio_))).T
+	[/]df_evr = pd.DataFrame(temp, index=pc_names, columns=[&1]'寄与率', '累積寄与率'[&2])
+/E
+主成分分析（第一主成分と第二主成分の散布図） | `{Append-EnterKey}`
+	[/]plt.figure(figsize=(8, 6))
+	[/]plt.scatter(df_pcs[&1]'PC1'[&2], df_pcs[&1]'PC2'[&2], c=y)
+	[/]
+	[/]plt.xlabel('PC1')
+	[/]plt.ylabel('PC2')
+/E
+主成分分析（累積寄与率のグラフ） | `{Append-EnterKey}`
+	[/]plt.figure(figsize=(8, 6))
+	[/]plt.plot(np.cumsum(pca.explained_variance_ratio_), '-o')
+	[/]
+	[/]plt.ylim(0.0, 1.1)
+	[/]plt.gca().xaxis.set_major_locator(plt.MultipleLocator(1))
+	[/]plt.gca().yaxis.set_major_locator(plt.MultipleLocator(0.2))
+	[/]
+	[/]plt.xlabel('主成分')
+	[/]plt.ylabel('累積寄与率')
+	[/]plt.grid(ls='--')
+/E
+-
+混同行列の可視化 | `{Append-EnterKey}`
+	[/]cm = confusion_matrix(y_test, y_pred)
+	[/]df_temp = pd.DataFrame(cm, index=[0, 1, 2], columns=[0, 1, 2])
+	[/]
+	[/]plt.figure(figsize=(8, 6))
+	[/]sns.heatmap(df_temp, annot=True, fmt='d', cmap='Blues')
+	[/]plt.title('Confusion Matrix')
+	[/]plt.ylabel('正解クラス')
+	[/]plt.xlabel('予測クラス')
+/E
+決定木の可視化 | `{Append-EnterKey}`
+	[/]from sklearn.tree import export_graphviz
+	[/]
+	[/]# 出力された「test.dot」の内容を「www.webgraphviz.com」にペーストする。
+	[/]f = export_graphviz(model, # 決定木のモデル
+	[/]out_file = 'test.dot', # 作成するファイル名
+	[/]feature_names = xxx.feature_names, # 各説明変数の名前のリスト
+	[/]class_names = xxx.target_names, # 目的変数の名前のリスト
+	[/]filled = True, rounded = True)
+/E
+-
+ランダムフォレスト（各特徴量の重要度） | `{Append-EnterKey}`
+	[/]df = pd.DataFrame({'特徴量': df.feature_names,
+	[/]'重要度': model.feature_importances_})
+	[/]df.sort_values(by='重要度', axis='index', ascending=False, inplace=True, ignore_index=True)
+/E
+-
+各種の分類器の決定境界の可視化（plot_decision_regions） | `{Append-EnterKey}`
+	[/]#legend（凡例）: 0: None, 1: 右上, 2: 左上, 3: 左下, 4: 右下
+	[/]plot_decision_regions(X, y, clf=model, legend=2)
+/E
+-
+scikit-learnのバージョン確認 |
+	[/]import sklearn [!K "ENTER"]
+	[/]print(sklearn.__version__)
+/E

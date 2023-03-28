@@ -1,0 +1,91 @@
+; PythonのSymPyの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+SymPyのインポート| import sympy as sp
+定数のインポート | from sympy import pi, E, I, oo, nan
+-
+LaTeX形式で出力する | sp.latex(expr)
+-
++変数の定義
+	個別に定義［複数：symbols］ | x, y, z = sp.symbols('x y z')
+	範囲で定義［複数：symbols］ | a, b, c = sp.symbols('a:c')
+	添字付きで定義［複数：symbols］ | x1, x2, x3 = sp.symbols('x1:4')
+	-
+	#変数の型を指定...
+		［整数］integer | integer=True
+		［有理数］rational | rational=True
+		［実数］real | real=True
+		［複素数］complex | complex=True
+		［素数］prime | prime=True
+		［奇数］odd | odd=True
+		［偶数］even | even=True
+		［負の数］negative | negative=True
+		［正の数］positive | positive=True
+		［ゼロ］zero | zero=True
+	..
+	-
+	グローバル変数として定義［複数：var］ | sp.var('a b c')
+..
+
++数値型の定義
+	整数型の定義 | x = sp.Integer(10)
+	小数型の定義 | x = sp.Float('1.23')
+	有理数型（分数）の定義（数値から）   | x = sp.Rational(1, 2)
+	有理数型（分数）の定義（文字列から） | x = sp.Rational('1.23')
+..
+
+数式の表示（Jupyter） | display(expr)
+等式の作成 | sp.Eq(expr1, expr2)
+-
++数式の変形や整理
+	数式の簡素化 | sp.simplify(expr)
+	-
+	数式の展開 | sp.expand(expr)
+	数式の因数分解 | sp.factor(expr)
+	数値の素因数分解 | sp.factorint(num, visual=True)
+	べき乗ごとに整理 | sp.collect(expr, x)
+	有理表現 | sp.cancel(expr)
+..
+-
+変数に値を代入（dict） | expr.subs({x: 1, y: pi})
+変数に値を代入（list） | expr.subs([(x, 1), (y, pi)])
+-
++方程式を解く
+	単一の方程式 | sp.solve(expr, x)
+	連立方程式 | sp.solve([expr1, expr2, ...])
+..
+-
++微分／積分
+	普通の微分 | sp.diff(expr)
+	普通の微分（２階微分） | sp.diff(expr, x, 2)
+	偏微分 | sp.diff(expr, x)
+	-
+	不定積分 | sp.integrate(expr, x)
+	定積分   | sp.integrate(expr, (x, 0, 1))
+..
+-
++ 極限
+	極限（特定の値） | sp.limit(expr, x, 0, dir='+')
+	極限（無限大）   | sp.limit(expr, x, sp.oo)
+..
+-
++行列関連
+	行ベクトルの定義 | sp.Matrix([[a, b]])
+	列ベクトルの定義 | sp.Matrix([[a], [b]])
+	２×２の行列の定義 | sp.Matrix([[a, b], [c, d]])
+	単位行列 | sp.eye(2)
+	-
+	行列式 | A.det()
+	逆行列 | A.inv()
+	余因子行列 | A.adjugate()
+	転置行列 | A.transpose()
+	-
+	固有値 | A.eigenvals()
+	固有ベクトル | A.eigenvects()
+	対角行列 | A.diagonalize()
+..

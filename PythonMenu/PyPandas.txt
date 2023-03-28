@@ -1,0 +1,666 @@
+; Pythonのpandasの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+pandasのインポート| [/]import pandas as pd
+-
++[Pandas] Series関連の項目
+	テストデータ［インデックスなし：配列］を作成...|
+		[/][#|Seriesの行数を入力]
+		[/]s = pd.Series(np.arange(start=0, stop=[#1], step=1))
+	/E
+	テストデータ［インデックスなし：乱数］を作成...|
+		[/][#|Seriesの行数を入力]
+		[/]s = pd.Series(np.random.randint(low=0, high=100, size=[#1])) # [low, high)
+	/E
+	テストデータ［インデックス付き：乱数］を作成...| `{Append-EnterKey}`
+		[/][#|Seriesの行数を入力（27未満）]
+		[/]row_name = [&1]chr(ord('A') + i) for i in range([#1])[&2]
+		[/]s = pd.Series(np.random.randint(low=0, high=100, size=[#1]), index = row_name) # [&1]low, high)
+	/E
+	-
+	+各種の属性
+		データ型を取得［dtypes属性］ | s.dtypes
+		-
+		インデックスのリストを取得［index属性］ | s.index
+		データのリストを取得［values属性］      | s.values
+		-
+		データの次元数を取得［ndim属性］        | s.ndim
+		データの構造（行数）を取得［shape属性］ | s.shape
+	..
+	+データの入出力（read_xxx, to_xxx）
+		CSVの読み込み［pd.read_csv()］ |
+			[/]s = pd.read_csv('', usecols=[&1]''[&2], squeeze=True) # １列のみ指定する
+		/E
+		#CSVの書き込み［to_csv()］...
+			［メソッド名］s.to_csv( | s.to_csv(
+			［引数］filepath_or_buffer：ファイル名の指定 | '',[$ ]
+			［引数］sep：セパレータを指定 | sep=',',[$ ]
+		    ［引数］na_rep：欠損値を指定 | na_rep='',[$ ]
+		    ［引数］index：インデックスを出力するか | index=True,[$ ]
+		    ［引数］float_format：小数の表示設定 | float_format='%.4f',[$ ]
+		    ［引数］mode：出力モードを指定（'w', 'a'） | mode='w',[$ ]
+		    ［引数］encoding：エンコーディングを指定 | encoding='cp932',[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		#Excelファイルから読み込む［read_excel］...
+			［メソッド名］s = pd.read_excel( | s = pd.read_excel(
+			［引数］io：ファイル名の指定 | '',[$ ]
+		    ［引数］sheet_name：読み込むシートを指定 | sheet_name='',[$ ]
+			［引数］header：ヘッダー（列名）となる行を指定 | header=0,[$ ]
+			［引数］index_col：インデックス（行名）となる列を指定 | 
+				[/]index_col=0,[$ ]
+			/E
+			［引数］usecols：読み込む列名（列番号）を指定 | 
+				[/]usecols=[&1]''[&2],[$ ]
+			/E
+			［引数］skiprows：スキップする行番号のリストを指定 | 
+				[/]skiprows=[&1], [&2],[$ ]
+			/E
+			［引数］skipfooter：スキップする末尾の行数を指定 | 
+				[/]skipfooter=10,[$ ]
+			/E
+			［閉じカッコ］) | )
+		..
+		#Excelファイルに保存する［to_excel］...
+			［メソッド名］s.to_excel( | s.to_excel(
+			［引数］excel_writer：ファイル名の指定 | '',[$ ]
+		    ［引数］sheet_name：書き込むシート名を指定 | sheet_name='',[$ ]
+		    ［引数］na_rep：欠損値を指定 | na_rep='',[$ ]
+		    ［引数］header：ヘッダー（列名）を出力するか | header=True,[$ ]
+		    ［引数］index：インデックス（行名）を出力するか | index=True,[$ ]
+		    ［引数］columns：出力する列を指定 | columns=[&1]'', ''[&2],[$ ]
+		    ［引数］startrow：書き出すセルの左上の行番号を指定 | startrow=2[$ ]
+		    ［引数］startcol：書き出すセルの左上の列番号を指定 | startcol=2[$ ]
+		    ［引数］float_format：小数の表示設定 | float_format='%.4f',[$ ]
+		    ［引数］encoding：エンコーディングを指定 | encoding='cp932',[$ ]
+			［閉じカッコ］) | )
+		..
+	..
+	+基本的なメソッド
+		基本統計量を取得［describe()］ | s.describe()
+		-
+		ユニークな値のリストを取得［unique()］ | s.unique()
+		ユニークな値の個数を取得［nunique()］  | s.nunique()
+		ユニークな値の出現回数を取得［value_counts()］ | s.value_counts()
+		-
+		指定した列の値でソート［sort_values()］ |
+			[/]s.sort_values(ascending=True, inplace=False, ignore_index=False)
+		/E
+		大きい順でｎ個の値を取得［nlargest()］ | s.nlargest(n=3, keep='first')
+		小さい順でｎ個の値を取得［nsmallest()］| s.nsmallest(n=3, keep='first')
+		-
+		インデックスを振り直す［reset_index()］ |
+			[/]s.reset_index(drop=False, inplace=False)
+		/E
+		-
+		個々の要素に関数を適用［apply(func版)］ | `{Append-EnterKey}`
+			[/]def func(x):
+			[/]pass
+			[/]
+			[/]s.apply(func)
+		/E
+		個々の要素に関数を適用［apply(lambda版)］ | s.apply(lambda x: x)
+		-
+		個々の要素にマッピング（置換）を適用［map(dict)］ | s.map({'': '', '': ''})
+		-
+		条件にマッチしない要素を「NaN」に置き換える［where］ | s.where(cond)
+		条件にマッチしない要素を「x」に置き換える［where］   | s.where(cond, x)
+		条件にマッチする要素を「NaN」に置き換える［mask］    | s.mask(cond)
+		条件にマッチする要素を「x」に置き換える［mask］      | s.mask(cond, x)
+
+	..
+	-
+	+データ型のキャスト
+		指定の型にキャスト | s = s.astype('') # int, float, str, bool, object
+		文字型から日時型に変換 | s = pd.to_datetime(s)
+		文字型から日時型に変換（書式指定） | s = pd.to_datetime(s, format='%Y年%m月%d日 %H時%M分')
+	..
+	+Seriesの結合
+		縦方向に結合（外部結合） | pd.concat([&1]s1, s2[&2])
+		縦方向に結合（内部結合） | pd.concat([&1]s1, s2[&2], join='inner')
+		-
+		横方向に結合（外部結合） | pd.concat([&1]s1, s2[&2], axis=1)
+		横方向に結合（内部結合） | pd.concat([&1]s1, s2[&2], axis=1, join='inner')
+	..
+	-
+	+各種の集計／統計関連メソッド
+		総和（sum）   | s.sum(level=None)
+		総乗（prod）  | s.prod(level=None)
+		最小値（min） | s.min(level=None)
+		最大値（max） | s.max(level=None)
+		値が最小になっているインデックスの値（idxmin） | s.idxmin()
+		値が最大になっているインデックスの値（idxmax） | s.idxmax()
+		-
+		累積総和（cumsum）   | s.cumsum(level=None)
+		累積総乗（cumprod）  | s.cumprod(level=None)
+		累積最小値（cummin） | s.cummin(level=None)
+		累積最大値（cummax） | s.cummax(level=None)
+		-
+		標準偏差（std）  | s.std(level=None)
+		分散（var）      | s.var(level=None)
+		共分散（cov）    | s.cov(other)
+		相関係数（corr） | s.corr(other)
+	..
+..
+
+================================================================
++[Pandas] DataFrame関連の項目
+	+テストデータの作成
+		テストデータ［列名だけを定義］を作成 |
+			[/]df = pd.DataFrame(columns=[&1]'A', 'B', 'C'[&2])
+		/E
+		テストデータ［randint］を作成...| `{Append-EnterKey}`
+			[/][#|DataFrameの行数を入力|DataFrameの列数を入力（27未満）] `{Skip}`
+			[/]row, col = [#1], [#2]
+			[/]col_name = [&1]chr(ord('A') + i) for i in range(col)[&2]
+			[/]df = pd.DataFrame(np.random.randint(low=0, high=100, size=(row, col)),
+			[/]columns = col_name) # [&1]low, high)
+		/E
+		テストデータ［json］を作成| `{Append-EnterKey}`
+			[/]data = {
+			[/]'学生番号': [&1]'ST-001', 'ST-002', 'ST-003', 'ST-004', 'ST-005'[&2],
+			[/]'名前': [&1]'相原', '井上', '上原', '遠藤', '太田'[&2],
+			[/]'英語': np.random.randint(30, 101, size=5),
+			[/]'数学': np.random.randint(30, 101, size=5),
+			[/]'物理': np.random.randint(30, 101, size=5),
+			[/]'化学': np.random.randint(30, 101, size=5),
+			[/]'生物': np.random.randint(30, 101, size=5)
+			[/]}
+			[/]df = pd.DataFrame(data=data)
+		/E
+		テストデータ［seaborn］をロード| `{Append-EnterKey}`
+			[/]import seaborn as sns
+			[/]df = sns.load_dataset('') # iris, titanic, planets, tips, flights
+		/E
+	..
+	-
+	行の追加（indexがゼロベースの場合） | df.loc[&1]len(df), :[&2] = [1, 2, 3]
+	追加する領域を確保するコード（高速化）...|
+		[/][#|DataFrameの行数を入力|DataFrameの列数を入力|要素の初期値]
+		[/]df = pd.DataFrame([&1][&1][#3][&2] * [#2][&2] * [#1], columns=[&1]'A', 'B', 'C', ...[&2])
+	/E
+	-
+	+DataFrameの表示設定
+		「中略」表示に切り替わる行数［display.max_rows属性］ |
+			[/]pd.options.display.max_rows = 60
+		/E
+		「中略」表示の際に表示される行数［display.min_rows属性］ |
+			[/]pd.options.display.min_rows = 10
+		/E
+		「中略」表示に切り替わる列数［display.max_columns属性］ |
+			[/]pd.options.display.max_columns = 0
+		/E
+		-
+		小数点以下の表示桁数［precision属性］ | pd.options.display.precision = 4
+		-
+		+Stylerの設定（Jupyter Labでの表示）
+			基本設定（欠損値、小数点以下、３桁区切り） | 
+				[/]df.style.format(na_rep='-', precision=2, thousands=',')
+			/E
+			基本設定（フォーマッタ、適用する列） | 
+				[/]df.style.format(formatter='{:.2f}', subset=[0, 2])
+			/E
+			-
+			書式の設定（全列） | df.style.format('{:.0%}')
+			書式の設定（列ごとに設定） |
+				[/]format_dict = {'col_1': '{:.2f}', 'col_2': '{:04d}'}[!K "ENTER"]
+				[/]df.style.format(format_dict)
+			/E
+			-
+			欠損値を強調表示 | df.style.highlight_null('red')
+			最大値を強調表示（列ごと） | df.style.highlight_max('green')
+			最小値を強調表示（列ごと） | df.style.highlight_min('green')
+		..
+	..
+	-
+	+各種の属性
+		各列のデータ型を取得［dtypes属性］ | df.dtypes
+		-
+		インデックスのリストを取得［index属性］ | df.index
+		カラムのリストを取得［columns属性］     | df.columns
+		データのリストを取得［values属性］      | df.values
+		-
+		データの次元数を取得［ndim属性］              | df.ndim
+		データの構造［行数と列数］を取得［shape属性］ | df.shape
+	..
+	+データの入出力（read_xxx, to_xxx）
+		#CSVファイルから読み込む［read_csv］...
+			［メソッド名］df = pd.read_csv( | df = pd.read_csv(
+			［引数］filepath_or_buffer：ファイル名の指定 | '',[$ ]
+			［引数］sep：セパレータの指定 | sep=',',[$ ]
+			［引数］header_1：ヘッダー行を行番号（ゼロベース）で指定 | header=0,[$ ]
+			［引数］header_2：ヘッダー行がないことを指定 | header=None,[$ ]
+			［引数］names：ヘッダー行のないcsvの列名をリストで指定 |
+				[/]names=[&1]'', ''[&2],[$ ]
+			/E
+			［引数］index_col：インデックスとして使用する列番号（ゼロベース）の指定 |
+				[/]index_col=0,[$ ]
+			/E
+			［引数］usecols_1：読み込む列名（列番号）のリストを指定 | 
+				[/]usecols=[&1]'', ''[&2],[$ ]
+			/E
+			［引数］usecols_2：読み込む列名を関数で指定 | 
+				[/]usecols=lambda x: x not in [&1]'', ''[&2],[$ ]
+			/E
+			［引数］skiprows_1：先頭のｎ行をスキップして読み込む | skiprows=2,[$ ]
+			［引数］skiprows_2：スキップする行番号のリストを指定 | skiprows=[&1], [&2],[$ ]
+			［引数］skipfooter：末尾のｎ行をスキップして読み込む | skipfooter=3,[$ ]
+			［引数］skipinitialspace：コンマの後の空白記号をスキップする |
+				[/]skipinitialspace=True,[$ ]
+			/E
+			［引数］skip_blank_lines：空白行を読み飛ばす | skip_blank_lines=True,[$ ]
+			［引数］nrows：最初のｎ行だけを読み込む | nrows=5,[$ ]
+			［引数］dtype：特定の列のデータ型を指定 | dtype={'a': str, 'c': str},[$ ]
+			［引数］na_values：欠損値として扱う値をリストで指定 | na_values=[&1][&2],[$ ]
+			［引数］encoding：エンコーディングを指定 | encoding='cp932',[$ ]
+			［引数］parse_dates：日付型に変換する列を指定 | parse_dates=[&1]''[&2],[$ ]
+			［引数］date_parser：日付の書式を指定する（import datetime） | 
+				[/]date_parser=lambda x: pd.to_datetime(x, format='%Y年%m月%d日'),[$ ]
+			/E
+			［引数］squeeze：１列のcsvをSeriesに変換する | squeeze=True,[$ ]
+			［閉じカッコ］) | )
+		..
+		#CSVファイルに保存する［to_csv］...
+			［メソッド名］df.to_csv( | df.to_csv(
+			［引数］path_or_buf：ファイル名の指定 | '',[$ ]
+			［引数］sep：セパレータを指定 | sep=',',[$ ]
+		    ［引数］na_rep：欠損値を指定 | na_rep='',[$ ]
+		    ［引数］header：ヘッダー（列名）を出力するか | header=True,[$ ]
+		    ［引数］index：インデックス（行名）を出力するか | index=True,[$ ]
+		    ［引数］columns：出力する列を指定 | columns=[&1]'', ''[&2],[$ ]
+		    ［引数］float_format：小数の表示設定 | float_format='%.4f',[$ ]
+		    ［引数］mode：出力モードを指定（'w', 'a'） | mode='w',[$ ]
+		    ［引数］encoding：エンコーディングを指定 | encoding='cp932',[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		#Excelファイルから読み込む［read_excel］...
+			［メソッド名］df = pd.read_excel( | df = pd.read_excel(
+			［引数］io：ファイル名の指定 | '',[$ ]
+		    ［引数］sheet_name：読み込むシートを指定 | sheet_name='',[$ ]
+			［引数］header：ヘッダー（列名）となる行を指定 | header=0,[$ ]
+			［引数］index_col：インデックス（行名）となる列を指定 | 
+				[/]index_col=0,[$ ]
+			/E
+			［引数］usecols：読み込む列名（列番号）を指定 | 
+				[/]usecols=[&1]'', ''[&2],[$ ]
+			/E
+			［引数］skiprows：スキップする行番号のリストを指定 | 
+				[/]skiprows=[&1], [&2],[$ ]
+			/E
+			［引数］skipfooter：スキップする末尾の行数を指定 | 
+				[/]skipfooter=10,[$ ]
+			/E
+			［閉じカッコ］) | )
+		..
+		#Excelファイルに保存する［to_excel］...
+			［メソッド名］df.to_excel( | df.to_excel(
+			［引数］excel_writer：ファイル名の指定 | '',[$ ]
+		    ［引数］sheet_name：書き込むシート名を指定 | sheet_name='',[$ ]
+		    ［引数］na_rep：欠損値を指定 | na_rep='',[$ ]
+		    ［引数］header：ヘッダー（列名）を出力するか | header=True,[$ ]
+		    ［引数］index：インデックス（行名）を出力するか | index=True,[$ ]
+		    ［引数］columns：出力する列を指定 | columns=[&1]'', ''[&2],[$ ]
+		    ［引数］startrow：書き出すセルの左上の行番号を指定 | startrow=2[$ ]
+		    ［引数］startcol：書き出すセルの左上の列番号を指定 | startcol=2[$ ]
+		    ［引数］float_format：小数の表示設定 | float_format='%.4f',[$ ]
+		    ［引数］encoding：エンコーディングを指定 | encoding='cp932',[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		データをファイルに保存する［to_pickle］ |
+			[/]df.to_pickle('filename.pkl')
+		/E
+		データをファイルから読み込む［read_pickle］ |
+			[/]df = pd.read_pickle('filename.pkl')
+		/E
+	..
+	+基本的なメソッド
+		基本情報を取得［info()］       | df.info()
+		基本統計量を取得［describe()］ | df.describe()
+		-
+		指定した列の値でソート［sort_values()］ |
+			[/]df.sort_values(by='', axis='index', ascending=True, inplace=False, ignore_index=False)
+		/E
+		指定した列の値の大きい順でｎ個の行を取得［nlargest()］ |
+			[/]df.nlargest(n=3, columns='', keep='first')
+		/E
+		指定した列の値の小さい順でｎ個の行を取得［nsmallest()］ |
+			[/]df.nsmallest(n=3, columns='', keep='first')
+		/E
+		-
+		インデックスを振り直す［reset_index()］ |
+			[/]df.reset_index(drop=False, inplace=False)
+		/E
+		-
+		各行ごとに関数を適用［apply(func版)］ | `{Append-EnterKey}`
+			[/]def func(s, a):
+			[/]pass
+			[/]
+			[/]df.apply(func, axis=1, args=(a,))
+		/E
+		各行ごとに関数を適用［apply(lambda版)］ |
+			[/]df.apply(lambda s, a: s, axis=1, args=(a,))
+		/E
+		-
+		各列ごとに関数を適用［apply(func版)］ | `{Append-EnterKey}`
+			[/]def func(s, a):
+			[/]pass
+			[/]
+			[/]df.apply(func, axis=0, args=(a,))
+		/E
+		各列ごとに関数を適用［apply(lambda版)］ |
+			[/]df.apply(lambda s, a: s, axis=0, args=(a,))
+		/E
+		-
+		すべての要素に関数を適用［applymap(func版)］ | `{Append-EnterKey}`
+			[/]def func(x):
+			[/]pass
+			[/]
+			[/]df.applymap(func)
+		/E
+		すべての要素に関数を適用［applymap(lambda版)］ | df.applymap(lambda x: x)
+		-
+		条件にマッチしない要素を「NaN」に置き換える［where］ | df.where(cond)
+		条件にマッチしない要素を「x」に置き換える［where］   | df.where(cond, x)
+		条件にマッチする要素を「NaN」に置き換える［mask］    | df.mask(cond)
+		条件にマッチする要素を「x」に置き換える［mask］      | df.mask(cond, x)
+	..
+	-
+	+データ型のキャスト
+		指定の型にキャスト（特定の列のみ） |
+			[/]df[&1]'col1'[&2] = df[&1]'col1'[&2].astype('str')
+		/E
+		指定の型にキャスト（列ごとに指定） |
+			[/]df = df.astype({'col1': 'type1', 'col2': 'type2'}) # int, float, str, bool, object
+		/E
+	..
+	-
+	+各種の集計／統計関連メソッド
+		総和（sum）   | df.sum(axis=0, level=None) # 行方向は「axis=1」
+		総乗（prod）  | df.prod(axis=0, level=None) # 行方向は「axis=1」
+		最小値（min） | df.min(axis=0, level=None) # 行方向は「axis=1」
+		最大値（max） | df.max(axis=0, level=None) # 行方向は「axis=1」
+		値が最小になっているインデックスの値（idxmin） |
+			[/]df.idxmin(axis=0) # 行方向は「axis=1」
+		/E
+		値が最大になっているインデックスの値（idxmax） |
+			[/]df.idxmax(axis=0) # 行方向は「axis=1」
+		/E
+		-
+		累積総和（cumsum）   | df.cumsum(axis=0) # 行方向は「axis=1」
+		累積総乗（cumprod）  | df.cumprod(axis=0) # 行方向は「axis=1」
+		累積最小値（cummin） | df.cummin(axis=0) # 行方向は「axis=1」
+		累積最大値（cummax） | df.cummax(axis=0) # 行方向は「axis=1」
+		-
+		標準偏差（std） | df.std(axis=0, level=None) # 行方向は「axis=1」
+		分散（var）     | df.var(axis=0, level=None) # 行方向は「axis=1」
+		-
+		共分散（cov）    | df.cov()
+		相関係数（corr） | df.corr()
+	..
+	-
+	+指定した「列」を取得する
+		１列のみをSeriesとして取得 |
+			[/]df[&1]''[&2][!K2 "LEFT"]
+		/E
+		複数の列をDataFrameとして取得 |
+			[/]df[&1][&1]'', ''[&2][&2][!K7 "LEFT"]
+		/E
+		-
+		指定したデータ型の列を取得 |
+			[/]df.select_dtypes(include=[&1]'int'[&2]) # int, float, number, object
+		/E
+		指定したデータ型を除外した列を取得 |
+			[/]df.select_dtypes(exclude=[&1]'int'[&2]) # int, float, number, object
+		/E
+		特定の文字列を含んでいる列を取得     | df.filter(like='')[!K2 "LEFT"]
+		指定した正規表現にマッチする列を取得 | df.filter(regex='')[!K2 "LEFT"]
+	..
+	+指定した「行」を取得する
+		インデックス番号（スライス）で取得 | df.iloc[&1]0:5[&2]
+		インデックス番号（リスト）で取得   | df.iloc[&1][&1]1, 3, 5[&2][&2]
+		-
+		インデックスラベル（スライス）で取得 | df.loc[&1]:[&2]
+		インデックスラベル（リスト）で取得   | df.loc[&1][&1]'id-1', 'id-3', 'id-5'[&2][&2]
+		インデックスラベル（日付）で取得 | df.loc[&1]'2020-4'[&2]
+		-
+		Booleanインデックス法によるフィルタリング |
+			[/]mask = (df[&1]'col-1'[&2] > 0) & (df[&1]'col-2'[&2] == '東京都')[!K "ENTER"]
+			[/]df.loc[&1]mask[&2]
+		/E
+		queryメソッドによるフィルタリング | df.query('col-1 > 0 & col-2 == "東京都"')
+		-
+		各行をループ処理 |
+			[/]for row in df.itertuples():[!K "ENTER"]
+			[/]# row.Index, row.col-1, row.col2, ...
+		/E
+	..
+	+指定した「行と列」を取得する
+		インデックス番号（スライス）で取得 | df.iloc[&1]0:5, 0:3[&2]
+		インデックス番号（リスト）で取得   | df.iloc[&1][&1]1, 3, 5[&2], 0:3[&2]
+		-
+		インデックスラベル（スライス）で取得 | df.loc[&1]:, :[&2]
+		インデックスラベル（リスト）で取得   | df.loc[&1][&1]'id-1', 'id-3', 'id-5'[&2], :[&2]
+		インデックスラベル（日付）で取得 | df.loc[&1]'2020-4', :[&2]
+		-
+		Booleanインデックス法によるフィルタリング |
+			[/]mask = (df[&1]'col-1'[&2] > 0) & (df[&1]'col-2'[&2] == '東京都')[!K "ENTER"]
+			[/]df.loc[&1]mask, :[&2] # スライスやリストで列を指定
+		/E
+		queryメソッドによるフィルタリング | df.query('col-1 > 0 & col-2 == "東京都"')[&1][&1]'id-1', 'id-3'[&2][&2]
+	..
+	-
+	+欠損値の確認と削除
+		列ごとの欠損値の個数 | df.isnull().sum()
+		全要素の欠損値の個数 | df.isnull().sum().sum()
+		-
+		欠損値が１つでもある行     | df[&1]df.isnull().any(axis=1)[&2]
+		全要素が欠損値の行         | df[&1]df.isnull().all(axis=1)[&2]
+		指定した列に欠損値がある行 | df[&1]df[&1]'列名'[&2].isnull()[&2]
+		-
+		欠損値が１つでもある行を削除 | df.dropna(how='any', axis=0, inplace=False)
+		全要素が欠損値の行を削除 | df.dropna(how='all', axis=0, inplace=False)
+		指定した列に欠損値がある行を削除 | 
+			[/]df.dropna(subset=[&1]'', ''[&2], axis=0, inplace=False)
+		/E
+		指定した列の全要素が欠損値である行を削除 | 
+			[/]df.dropna(how='all', subset=[&1]'', ''[&2], axis=0, inplace=False)
+		/E
+		-
+		欠損値が１つでもある列を削除 | 
+			[/]df.dropna(how='any', axis=1, inplace=False)
+		/E
+		全要素が欠損値の列を削除 | df.dropna(how='all', axis=1, inplace=False)
+		指定した行に欠損値がある列を削除 | 
+			[/]df.dropna(subset=[&1], [&2], axis=1, inplace=False)
+		/E
+	..
+	+指定した「行や列」を削除する
+		指定した行（ラベル）を削除する | 
+			[/]df.drop(index=[&1]'', ''[&2], inplace=False)
+		/E
+		指定した行（行番号）を削除する | 
+			[/]df.drop(index=df.index[&1][&1]1, 2[&2][&2], inplace=False)
+		/E
+		-
+		指定した列（ラベル）を削除する | 
+			[/]df.drop(columns=[&1]'', ''[&2], inplace=False)
+		/E
+		指定した列（列番号）を削除する | 
+			[/]df.drop(columns=df.columns[&1][&1]1, 2[&2][&2], inplace=False)
+		/E
+	..
+	-
+	+「行や列」の入れ替え／リネーム
+		行の入れ替え | 
+			[/]df.reindex(index=[&1]'', '', ''[&2]) # 特定の行の選択や追加もＯＫ
+		/E
+		列の入れ替え１ | 
+			[/]df.reindex(columns=[&1]'', '', ''[&2]) # 特定の列の選択や追加もＯＫ
+		/E
+		列の入れ替え２ | 
+			[/]df[&1][&1]'', '', ''[&2][&2] # 特定の列の選択や追加もＯＫ
+		/E
+		-
+		行名のリネーム | 
+			[/]df.rename(index={'old1': 'new1', 'old2': 'new2'}, inplace=False)
+		/E
+		行名のリネーム（関数版） | df.rename(index=lambda x: x, inplace=False)
+		すべての行名を指定 | 
+			[/]df.index = [&1]'', '', ''[&2] # 行数が一致している必要がある
+		/E
+		-
+		列名のリネーム | 
+			[/]df.rename(columns={'old1': 'new1', 'old2': 'new2'}, inplace=False)
+		/E
+		列名のリネーム（関数版） | df.rename(columns=lambda x: x, inplace=False)
+		すべての列名を指定 | 
+			[/]df.columns = [&1]'', '', ''[&2] # 列数が一致している必要がある
+		/E
+	..
+	-
+	+指定した列の項目ごとに集計
+		列名（１つ）を指定して集計（１つ） |
+			[/]# size, count, nunique, sum, min, max, mean, median[!K "ENTER"]
+			[/]df.groupby('col-gr')[&1]'col-agg'[&2].sum()
+		/E
+		列名（複数）を指定して集計（複数） |
+			[/]# size, count, nunique, sum, min, max, mean, median[!K "ENTER"]
+			[/]df.groupby([&1]'col-gr1', 'col-gr2'[&2]).agg({'col-agg': [&1]'count', 'sum'[&2]})
+		/E
+		-
+		#ピボットテーブルで集計...
+			［メソッド名］df.pivot_table( | df.pivot_table(
+			［引数］index：インデックスに展開する列名（のリスト） | index='',[$ ]
+			［引数］columns：カラムに展開する列名（のリスト） | columns='',[$ ]
+			［引数］values：集計する列名 | values='',[$ ]
+			［引数］aggfunc：集計する関数名 | aggfunc='mean sum count',[$ ]
+			［引数］fill_value：集計後の欠損値の値 | fill_value='',[$ ]
+			［引数］margins：行と列の合計値を追加 | margins=True,[$ ]
+			［引数］margins_name：合計値の列名 | margins_name='Total',[$ ]
+			［引数］sort：結果をソートする | sort=True,[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		+pd.Grouper["列名"を指定]
+			指定時間集計（秒） | pd.Grouper(key="col-name", freq="1S")
+			指定時間集計（分） | pd.Grouper(key="col-name", freq="1T")
+			指定時間集計（時） | pd.Grouper(key="col-name", freq="1H")
+			-
+			日次集計 | pd.Grouper(key="col-name", freq="D")
+			週次集計（月～日：日曜表示） | pd.Grouper(key="col-name", freq="W")
+			週次集計（月～日：月曜表示） |
+				[/]pd.Grouper(key="col-name", freq="W-MON", closed="left", label="left")
+			/E
+			-
+			月次集計（月末日表示） | pd.Grouper(key="col-name", freq="M")
+			月次集計（月初日表示） | pd.Grouper(key="col-name", freq="MS")
+			-
+			年次集計（年末日表示） | pd.Grouper(key="col-name", freq="Y")
+			年次集計（年初日表示） | pd.Grouper(key="col-name", freq="YS")
+		..
+		+pd.Grouper["インデックス"を指定]
+			指定時間集計（秒） | pd.Grouper(level=0, freq="1S")
+			指定時間集計（分） | pd.Grouper(level=0, freq="1T")
+			指定時間集計（時） | pd.Grouper(level=0, freq="1H")
+			-
+			日次集計 | pd.Grouper(level=0, freq="D")
+			週次集計（月～日：日曜表示） | pd.Grouper(level=0, freq="W")
+			週次集計（月～日：月曜表示） |
+				[/]pd.Grouper(level=0, freq="W-MON", closed="left", label="left")
+			/E
+			-
+			月次集計（月末日表示） | pd.Grouper(level=0, freq="M")
+			月次集計（月初日表示） | pd.Grouper(level=0, freq="MS")
+			-
+			年次集計（年末日表示） | pd.Grouper(level=0, freq="Y")
+			年次集計（年初日表示） | pd.Grouper(level=0, freq="YS")
+		..
+	..
+	-
+	+DataFrameの組み換え（ピボット）
+		列から行へピボット（stack）   | df.stack(level=-1, dropna=True)
+		行から列へピボット（unstack） | df.unstack(level=-1, fill_value=None)
+		-
+		#列から行へピボット［melt()］...
+			［説明］データ列をid_vars, variable, valueの3つのグループに分ける。 | [$]
+			［メソッド名］df.melt( | df.melt(
+			［引数］id_vars：そのまま残す列名のリスト | id_vars=[&1]'',''[&2],[$ ]
+			［引数］value_vars：縦持ちに変える列名のリスト | value_vars=[&1]'',''[&2],[$ ]
+			［引数］var_name：variable列（縦持ちにした列）の名前 | var_name='variable',[$ ]
+			［引数］value_name：value列の名前 | value_name='value',[$ ]
+			［引数］col_level：meltするマルチインデックスのレベル | col_level=-1,[$ ]
+			［引数］ignore_index：元のインデックスを削除 | ignore_index='True',[$ ]
+			［閉じカッコ］) | )
+		..
+		-
+		ピボットテーブルで組み換え（pivot） |
+			[/]df.pivot(index='col-1', columns='col-2', values='col-3')
+		/E
+	..
+	-
+	+DataFrameの結合
+		縦方向に結合（concat：外部結合） | pd.concat([&1]df1, df2[&2])
+		縦方向に結合（concat：内部結合） | pd.concat([&1]df1, df2[&2], join='inner')
+		-
+		横方向に結合（concat：外部結合） | pd.concat([&1]df1, df2[&2], axis=1)
+		横方向に結合（concat：内部結合） | pd.concat([&1]df1, df2[&2], axis=1, join='inner')
+	-
+		指定した共通の列名を基準に結合（merge） |
+			[/]# how = <inner>, outer, left, right, [!K "ENTER"]
+			[/]pd.merge(df1, df2, on='col-1', how='')
+		/E
+		指定した別々の列名を基準に結合（merge） |
+			[/]# how = <inner>, outer, left, right, [!K "ENTER"]
+			[/]pd.merge(df1, df2, left_on='col-1', right_on='col-2', how='')
+		/E
+	-
+		インデックスを基準に結合（join） |
+			[/]# how = inner, outer, <left>, right, [!K "ENTER"]
+			[/]df.join(other, how='')
+		/E
+	..
+	-
+	#データの可視化［plot］...
+		［メソッド名］df.plot( | df.plot(
+		［引数］x：X座標にする列を指定 | x='label',[$ ]
+		［引数］y：Y座標にする列を指定 | y=[&1]'col_a' 'col_b'[&2],[$ ]
+		［引数］kind：グラフの種類の指定 | kind='line bar barh hist scatter',[$ ]
+		［引数］subplots：列ごとにグラフを作成 | subplots='True',[$ ]
+	    ［引数］sharex：x軸を共有する | sharex='True',[$ ]
+	    ［引数］sharey：y軸を共有する | sharey='True',[$ ]
+	    ［引数］layout：subplotsのレイアウト | layout=(rows, columns),[$ ]
+	    ［引数］figsize：グラフのサイズ | figsize=(width, height),[$ ]
+	    ［引数］use_index：x軸の目盛りにindexを使用 | use_index=True,[$ ]
+	    ［引数］title：グラフのタイトル | title='title',[$ ]
+	    ［引数］grid：グリッドを表示 | grid=True,[$ ]
+	    ［引数］legend：凡例を表示 | legend=True,[$ ]
+	    ［引数］style：ラインスタイルを指定 | style=[&1]'r--', 'b.-'[&2],[$ ]
+	    ［引数］xticks：x軸の目盛りを指定 | xticks=[&1]0, 10, 20[&2],[$ ]
+	    ［引数］yticks：y軸の目盛りを指定 | yticks=[&1]0, 50, 100[&2],[$ ]
+	    ［引数］xlim：x軸の範囲を指定 | xlim=[&1]0, 10[&2],[$ ]
+	    ［引数］ylim：y軸の範囲を指定 | ylim=[&1]0, 100[&2],[$ ]
+	    ［引数］xlabel：x軸の名前を指定 | xlabel='',[$ ]
+	    ［引数］ylabel：y軸の名前を指定 | ylabel='',[$ ]
+	    ［引数］rot：x軸の回転角を指定 | rot=40,[$ ]
+	    ［引数］fontsize：目盛りのサイズを指定 | fontsize=15,[$ ]
+	    ［引数］colormap：カラーマップを指定 | colormap='viridis',[$ ]
+	    ［引数］colorbar：カラーバーを表示（scatter or hexbin） | colorbar=True,[$ ]
+	    ［引数］secondary_y：y軸（右側）を指定 | secondary_y=[&1]'col_name'[&2],[$ ]
+		［閉じカッコ］) | )
+	..
+	グラフをファイルに保存 | `{Append-EnterKey}`
+		[/]ax = df.plot()
+		[/]fig = ax.get_figure()
+		[/]fig.savefig('figure.png')
+	/E
+..
+-
+pandasのバージョン確認 | print(pd.__version__)

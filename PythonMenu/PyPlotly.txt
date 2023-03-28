@@ -1,0 +1,792 @@
+; PythonのPlotlyの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+#Plotlyのインポート...
+	［上部の選択肢は「普通の改行」にチェックを入れてください］ | [$]
+	plotly                     | import plotly
+	plotly.express as px       | import plotly.express as px
+	plotly.graph_objects as go | import plotly.graph_objects as go
+	plotly.io                  | import plotly.io as pio
+	make_subplots              | from plotly.subplots import make_subplots
+..
++サンプルデータセット
+	carshare   | df = plotly.data.carshare()
+	experiment | df = plotly.data.experiment(indexed=False)
+	gapminder  | `{Append-EnterKey}`
+		[/] df = plotly.data.gapminder(datetimes=False,
+		[/]centroids=False, year=None,
+		[/]pretty_names=False)
+	/E
+	iris        | df = plotly.data.iris()
+	medals_long | df = plotly.data.medals_long(indexed=False)
+	medals_wide | df = plotly.data.medals_wide(indexed=False)
+	stocks      | df = plotly.data.stocks(indexed=False, datetimes=False)
+	tips        | df = plotly.data.tips(pretty_names=False)
+	wind        | df = plotly.data.wind()
+..
+-
++Plotly Express
+	#折れ線グラフ（line）...
+		［メソッド名］px.line( | fig = px.line(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］symbol：グループ化する列（マーク別） | symbol='',[$ ]
+		［引数］markers：ラインにマーカーを表示する | markers=True,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#散布図（scatter）...
+		［メソッド名］px.scatter( | fig = px.scatter(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］symbol：グループ化する列（マーク別） | symbol='',[$ ]
+		［引数］size：グループ化する列（サイズ別） | size='',[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］opacity：マークの透過度 | opacity=0.5,[$ ]
+		［引数］marginal_x：x軸の分布をsubplotに表示 | marginal_x='box, histogram',[$ ]
+		［引数］marginal_y：y軸の分布をsubplotに表示 | marginal_y='box, histogram',[$ ]
+		［引数］trendline：トレンドラインを表示 | trendline='ols',[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ペアプロット（scatter_matrix）...
+		［メソッド名］px.scatter_matrix( | fig = px.scatter_matrix(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］dimensions：対象の列のリスト | dimensions=[&1]'', '', ''[&2],[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］symbol：グループ化する列（マーク別） | symbol='',[$ ]
+		［引数］size：グループ化する列（サイズ別） | size='',[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］opacity：散布図の透過度 | opacity=0.8,[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#棒グラフ（bar）...
+		［メソッド名］px.bar( | fig = px.bar(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］pattern_shape：グループ化する列（模様別） | pattern_shape='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］base：barのベース値 | base='',[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］opacity：barの透過度 | opacity=0.5,[$ ]
+		［引数］barmode：barの描画モード | barmode='group, overlay, relative',[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ヒストグラム（histogram）...
+		［メソッド名］px.histogram( | fig = px.histogram(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］pattern_shape：グループ化する列（模様別） | pattern_shape='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］marginal：X(Y)軸の分布をsubplotに表示 | marginal='box, violin',[$ ]
+		［引数］opacity：barの透過度 | opacity=0.5,[$ ]
+		［引数］barmode：barの描画モード | barmode='group, overlay, relative',[$ ]
+		［引数］barnorm：各グループの内訳の割合を表示 | barnorm='fraction, percent',[$ ]
+		［引数］histnorm：各グループの正規化の方法 | 
+			[/]histnorm='percent, probability, density, probability density',[$ ]
+		/E
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］histfunc：値の集計方法 | histfunc='count, sum, avg, min, max',[$ ]
+		［引数］cumulative：累積ヒストグラムを作成 | cumulative=True,[$ ]
+		［引数］nbins：ビンの数を指定 | nbins=10,[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#箱ヒゲ図（box）...
+		［メソッド名］px.box( | fig = px.box(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］boxmode：boxの描画モード | boxmode='group, overlay',[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］points：外れ値の表示方法 | points='outliers, suspectedoutliers, all, False',[$ ]
+		［引数］notched：ノッチスタイルで表示 | notched=True,[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#円グラフ（pie）...
+		［メソッド名］px.pie( | fig = px.pie(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］names：各ラベルの名前を表す列 | names='',[$ ]
+		［引数］values：各ラベルの値を表す列 | values='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］hole：ドーナツ型の割合 | hole=0.2,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ヒートマップ（density_heatmap）...
+		［メソッド名］px.density_heatmap( | fig = px.density_heatmap(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］z：z軸に割り当てる列 | z='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］color_continuous_scale：カラーマップを指定 | color_continuous_scale='Viridis',[$ ]
+		［引数］marginal_x：x軸の分布をsubplotに表示 | marginal_x='box, histogram',[$ ]
+		［引数］marginal_y：y軸の分布をsubplotに表示 | marginal_y='box, histogram',[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］histfunc：値の集計方法 | histfunc='count, sum, avg, min, max',[$ ]
+		［引数］histnorm：正規化の指標 | histnorm='percent, probability, density, probability density',[$ ]
+		［引数］nbinsx：x軸のビンの数 | nbinsx=8,[$ ]
+		［引数］nbinsy：y軸のビンの数 | nbinsy=8,[$ ]
+		［引数］text_auto：マップ内に値を表示 | text_auto=True or '.2f',[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#密度等高線マップ（density_contour）...
+		［メソッド名］px.density_contour( | fig = px.density_contour(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］z：z軸に割り当てる列 | z='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］facet_row：subplotの行に割り当てる列 | facet_row='',[$ ]
+		［引数］facet_col：subplotの列に割り当てる列 | facet_col='',[$ ]
+		［引数］facet_col_wrap：subplotの列の最大値 | facet_col_wrap=6,[$ ]
+		［引数］facet_row_spacing：facet_rowの行間の値 | facet_row_spacing=0.03,[$ ]
+		［引数］facet_col_spacing：facet_rowの行間の値 | facet_col_spacing=0.02,[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'x軸', 'col2': 'y軸'},[$ ]
+		［引数］marginal_x：x軸の分布をsubplotに表示 | marginal_x='box, histogram',[$ ]
+		［引数］marginal_y：y軸の分布をsubplotに表示 | marginal_y='box, histogram',[$ ]
+		［引数］range_x：x軸の範囲 | range_x=[&1]0, 10[&2],[$ ]
+		［引数］range_y：y軸の範囲 | range_y=[&1]0, 10[&2],[$ ]
+		［引数］histfunc：値の集計方法 | histfunc='count, sum, avg, min, max',[$ ]
+		［引数］histnorm：正規化の指標 | histnorm='percent, probability, density, probability density',[$ ]
+		［引数］nbinsx：x軸のビンの数 | nbinsx=8,[$ ]
+		［引数］nbinsy：y軸のビンの数 | nbinsy=8,[$ ]
+		［引数］text_auto：マップ内に値を表示 | text_auto=True or '.2f',[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+	..
+	#レーダーチャート（line_polar）...
+		［メソッド名］px.line_polar( | fig = px.line_polar(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］theta：theta軸（円周上の項目）に割り当てる列 | theta='',[$ ]
+		［引数］r：r軸（中心からの距離）に割り当てる列 | r='',[$ ]
+		［引数］color：グループ化する列（色別） | color='',[$ ]
+		［引数］symbol：グループ化する列（マーク別） | symbol='',[$ ]
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］hover_name：ツールチップで強調する列 | hover_name='',[$ ]
+		［引数］animation_frame：アニメーション化する列 | animation_frame='',[$ ]
+		［引数］category_orders：カテゴリー列の順序 | category_orders={'col1': [&1]'', '', ''[&2], 'col2': [&1]'', '', ''[&2]},[$ ]
+		［引数］labels：各軸のラベル名 | labels={'col1': 'r軸', 'col2': 'theta軸'},[$ ]
+		［引数］markers：ライン上にマーカーを表示 | markers=True,[$ ]
+		［引数］direction：theta軸の向き | 
+			[/]direction='clockwise, counterclockwise',[$ ]
+		/E
+		［引数］start_angle：theta軸の開始位置 | start_angle=90,[$ ]
+		［引数］line_close：最後の点と最初の点を結合 | line_close=True,[$ ]
+		［引数］line_shape：線のスタイル | line_shape='linear, spline',[$ ]
+		［引数］range_r：r軸の範囲を指定 | range_r=[&1]0, 10[&2],[$ ]
+		［引数］range_theta：theta軸の範囲を指定 | range_theta=[&1]0, 360[&2],[$ ]
+		［引数］title：グラフのタイトル | title='',[$ ]
+		［引数］width：グラフの幅（pixel） | width=700,[$ ]
+		［引数］height：グラフの高さ（pixel） | height=500,[$ ]
+		［閉じカッコ］) | )
+		［メソッド］fig.update_traces：内部を塗りつぶす | 
+			[/]fig.update_traces(fill='toself')
+		/E
+	..
+..
+
++Graph Objects
+	グラフ描画の基本パターン | `{Append-EnterKey}`
+		[/]fig = go.Figure()
+		[/]trace = go.Scatter(x=..., y=...)
+		[/]fig.add_trace(trace)
+		[/]fig.show()
+	/E
+	サブプロット描画の基本パターン | `{Append-EnterKey}`
+		[/]fig = go.Figure()
+		[/]fig.set_subplots(rows=1, cols=2, 
+						[/]column_widths=(0.5, 0.5), 
+						[/]subplot_titles=('Title1', 'Title2'), 
+						[/]shared_xaxes=True, 
+						[/]shared_yaxes=True, 
+						[/]horizontal_spacing=0.15, 
+						[/]vertical_spacing=0.15, 
+						[/])
+		[/]trace1 = go.Scatter(x=..., y=...)
+		[/]fig.add_trace(trace1, row=1, col=1)
+		[/]trace2 = go.Scatter(x=..., y=...)
+		[/]fig.add_trace(trace2, row=1, col=2)
+		[/]fig.show()
+	/E
+	２軸のグラフ描画の基本パターン | `{Append-EnterKey}`
+		[/]fig = go.Figure()
+		[/]fig.set_subplots(specs=[&1][&1]{"secondary_y": True}[&2][&2])
+		[/]trace1 = go.Scatter(x=..., y=...)
+		[/]fig.add_trace(trace1, secondary_y=False)
+		[/]trace2 = go.Scatter(x=..., y=...)
+		[/]fig.add_trace(trace2, secondary_y=True)
+		[/]fig.show()
+	/E
+	-
+	#折れ線グラフ／散布図／その他（Scatter）...
+		［メソッド名］go.Scatter( | trace = go.Scatter(
+		［引数］x：x軸の値（Seeriesやlist） | x=df[&1]'col_x'[&2],[$ ]
+		［引数］y：y軸の値（Seeriesやlist） | y=df[&1]'col_y'[&2],[$ ]
+		［引数］text：グラフ上に表示するテキストの配列 | text=df[&1]''[&2],[$ ]
+		［引数］textposition：表示するテキストの位置 | 
+			[/]textposition='bottom right, bottom center',[$ ]
+		/E
+		［引数］textfont：テキストのフォント | 
+			[/]textfont=dict(size=10, color='blue'),[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{y:.2f}',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（日付） | 
+			[/]texttemplate='%{x|%Y-%m-%d}',[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］mode：グラフのスタイル | mode='lines+markers+text',[$ ]
+		［引数］line：線のプロパティ | 
+			[/]line=dict(color='#da70d6', width=3, dash='solid, dot, dash'),[$ ]
+		/E
+		［引数］marker：マークのプロパティ | 
+			[/]marker=dict(color='#da70d6', size=3, symbol='circle, square, diamond, triangle-up, star', opacity=0.8),[$ ]
+		/E
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［閉じカッコ］) | )
+	..
+	#棒グラフ（Bar）...
+		［メソッド名］go.Bar( | trace = go.Bar(
+		［引数］x：x軸の値（Seeriesやlist） | x=df[&1]'col_x'[&2],[$ ]
+		［引数］y：y軸の値（Seeriesやlist） | y=df[&1]'col_y'[&2],[$ ]
+		［引数］text：グラフ上に表示するテキストの配列 | text=df[&1]''[&2],[$ ]
+		［引数］textposition：表示するテキストの位置 | 
+			[/]textposition='bottom right, bottom center',[$ ]
+		/E
+		［引数］textfont：テキストのフォント | 
+			[/]textfont=dict(size=10, color='blue'),[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{y:.2f}',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（日付） | 
+			[/]texttemplate='%{x|%Y-%m-%d}',[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］width：棒の幅 | width=10,[$ ]
+		［引数］width：棒の幅（日付） | width=?*1000*3600*24,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ヒストグラム（Histogram）...
+		［メソッド名］go.Histogram( | trace = go.Histogram(
+		［引数］x：x軸の値（Seeriesやlist） | x=df[&1]'col_x'[&2],[$ ]
+		［引数］y：y軸の値（Seeriesやlist） | y=df[&1]'col_y'[&2],[$ ]
+		［引数］xbins：ビンのスタイル（x軸） | 
+			[/]xbins=dict(start=0, end=100, size=10),[$ ]
+		/E
+		［引数］ybins：ビンのスタイル（y軸） | 
+			[/]ybins=dict(start=0, end=100, size=10),[$ ]
+		/E
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］textposition：グラフ内に表示するテキストの位置 | 
+			[/]textposition='inside, outside',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{y:.2f}',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（日付） | 
+			[/]texttemplate='%{x|%Y-%m-%d}',[$ ]
+		/E
+		［引数］histfunc：値の集計方法 | histfunc='count, sum, avg, min, max',[$ ]
+		［引数］histnorm：各グループの正規化の方法 | 
+			[/]histnorm='percent, probability, density, probability density',[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］nbinsx：ビンの最大数（x軸） | nbinsx='',[$ ]
+		［引数］nbinsy：ビンの最大数（y軸） | nbinsy='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［閉じカッコ］) | )
+	..
+	#箱ヒゲ図（Box）...
+		［メソッド名］go.Box( | trace = go.Box(
+		［引数］x：x軸の値（Seeriesやlist） | x=df[&1]'col_x'[&2],[$ ]
+		［引数］y：y軸の値（Seeriesやlist） | y=df[&1]'col_y'[&2],[$ ]
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］boxpoints：外れ値の表示 | 
+			[/]boxpoints='outliers, suspectedoutliers, all' or False,[$ ]
+		/E
+		［引数］notched：切り欠きの表示 | notched=True,[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］width：箱の幅 | width=1,[$ ]
+		［閉じカッコ］) | )
+	..
+	#円グラフ（Pie）...
+		［メソッド名］go.Pie( | trace = go.Pie(
+		［引数］labels：ラベルの一覧（Seeriesやlist） | 
+			[/]labels=df[&1]'col_x'[&2],[$ ]
+		/E
+		［引数］values：ラベルの値（Seeriesやlist） | 
+			[/]values=df[&1]'col_y'[&2],[$ ]
+		/E
+		［引数］textinfo：グラフ内に表示する情報 | 
+			[/]textinfo='label+value+percent+text',[$ ]
+		/E
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］textposition：グラフ内に表示するテキストの位置 | 
+			[/]textposition='inside, outside',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{y:.2f}',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（日付） | 
+			[/]texttemplate='%{x|%Y-%m-%d}',[$ ]
+		/E
+		［引数］sort：ラベルを降順にソート | sort=False,[$ ]
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］direction：ラベルを時計回りに配置 | 
+			[/]direction='clockwise or counterclockwise',[$ ]
+		/E
+		［引数］rotation：回転させる角度 | rotation=90,[$ ]
+		［引数］pull：扇を引き出す割合 | pull=[&1]0.2, 0, 0, 0, 0[&2],[$ ]
+		［引数］hole：ドーナツ型の割合 | hole=0.3,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ヒートマップ（Heatmap）...
+		［メソッド名］go.Heatmap( | trace = go.Heatmap(
+		［引数］z：行列形式の値（DataFrame） | z=df,[$ ]
+		［引数］x：x軸の目盛りの値（Seeriesやlist） | x=df.columns,[$ ]
+		［引数］y：y軸の目盛りの値（Seeriesやlist） | y=df.index,[$ ]
+		［引数］colorscale：カラーマップの名前 | 
+			[/]colorscale='Blues, Greens, Jet, Viridis, Rainbow',[$ ]
+		/E
+		［引数］reversescale：カラーマップを反転 | reversescale=True,[$ ]
+		［引数］showscale：カラーマップの表示 | showscale=False,[$ ]
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{z:.2f}',[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］xgap：各セルの余白（x軸） | xgap=3,[$ ]
+		［引数］ygap：各セルの余白（y軸） | ygap=3,[$ ]
+		［引数］zmin, zmax：カラーマップの上下限値 | zmin=-1, zmax=1,[$ ]
+		［閉じカッコ］) | )
+	..
+	#等高線図（Contour）...
+		［メソッド名］go.Contour( | trace = go.Contour(
+		［引数］z：行列形式の値（DataFrame） | z=df,[$ ]
+		［引数］x：x軸の目盛りの値（Seeriesやlist） | x=df.columns,[$ ]
+		［引数］y：y軸の目盛りの値（Seeriesやlist） | y=df.index,[$ ]
+		［引数］colorscale：カラーマップの名前 | 
+			[/]colorscale='Blues, Greens, Jet, Viridis, Rainbow',[$ ]
+		/E
+		［引数］reversescale：カラーマップを反転 | reversescale=True,[$ ]
+		［引数］showscale：カラーマップの表示 | showscale=False,[$ ]
+		［引数］contours：等高線上のテキスト | 
+			[/]dict(showlabels=True, labelfont=dict(size=8)),[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］zmin, zmax：カラーマップの上下限値 | zmin=-1, zmax=1,[$ ]
+		［閉じカッコ］) | )
+	..
+	#レーダーチャート（Scatterpolar）...
+		［メソッド名］go.Scatterpolar( | trace = go.Scatterpolar(
+		［引数］data_frame：dfを指定 | data_frame=df,[$ ]
+		［引数］theta：theta軸（円周上の項目）に割り当てる列 | theta='',[$ ]
+		［引数］r：r軸（中心からの距離）に割り当てる列 | r='',[$ ]
+		［引数］mode：グラフのスタイル | mode='lines+markers+text',[$ ]
+		［引数］fill：塗りつぶしの設定 | fill='toself' or None,[$ ]
+		［引数］text：グラフ内に表示するテキストの列 | text='',[$ ]
+		［引数］textposition：グラフ内に表示するテキストの位置 | 
+			[/]textposition='top left, top center, top right, bottom left, ...',[$ ]
+		/E
+		［引数］texttemplate：テキストの書式（一般） | 
+			[/]texttemplate='%{y:.2f}',[$ ]
+		/E
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#ローソク足チャート（Candlestick）...
+		［メソッド名］go.Candlestick( | trace = go.Candlestick(
+		［引数］x：x軸の値（Seeriesやlist） | x=df[&1]'col_x'[&2],[$ ]
+		［引数］open：始値の値（Seeriesやlist） | open=df[&1]'col_open'[&2],[$ ]
+		［引数］high：高値の値（Seeriesやlist） | high=df[&1]'col_high'[&2],[$ ]
+		［引数］low：安値の値（Seeriesやlist） | low=df[&1]'col_low'[&2],[$ ]
+		［引数］close：終値の値（Seeriesやlist） | close=df[&1]'col_close'[&2],[$ ]
+		［引数］name：グラフのラベル名 | name='',[$ ]
+		［引数］opacity：グラフの透過度 | opacity=0.8,[$ ]
+		［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+		［引数］whiskerwidth：ヒゲの幅 | whiskerwidth=0.3,[$ ]
+		［引数］increasing：陽線の設定 | increasing=dict(
+			［┗ increasingの引数］fillcolor：内部の色 | fillcolor='crimson',[$ ]
+			［┗ increasingの引数］line：ヒゲと境界線 | 
+				[/]line=dict(color='crimson', width=2),[$ ]
+			/E
+			［┗ increasingの閉じカッコ］) | ),[$ ]
+		［引数］decreasing：陽線の設定 | decreasing=dict(
+			［┗ decreasingの引数］fillcolor：内部の色 | fillcolor='blue',[$ ]
+			［┗ decreasingの引数］line：ヒゲと境界線 | 
+				[/]line=dict(color='blue', width=2),[$ ]
+			/E
+			［┗ decreasingの閉じカッコ］) | ),[$ ]
+		［閉じカッコ］) | )
+	..
+..
+-
+#fig.set_subplots()...
+	［メソッド名］fig.set_subplots( | fig.set_subplots(
+	［引数］rows：行数の指定 | rows=2,[$ ]
+	［引数］cols：列数の指定 | cols=2,[$ ]
+	［引数］column_widths：列の幅の比率 | column_widths=(0.5, 0.5),[$ ]
+	［引数］subplot_titles：各グラフのタイトル | subplot_titles=('', ''),[$ ]
+	［引数］shared_xaxes：x軸を共有 | shared_xaxes=True,[$ ]
+	［引数］shared_yaxes：y軸を共有 | shared_yaxes=True,[$ ]
+	［引数］horizontal_spacing：各グラフの余白（横方向） | 
+		[/]horizontal_spacing=0.1,[$ ]
+	/E
+	［引数］vertical_spacing：各グラフの余白（縦報告） | 
+		[/]vertical_spacing=0.1,[$ ]
+	/E
+	［引数］specs：２軸のグラフ | 
+		[/]specs=[&1][&1]{"secondary_y": True}[&2][&2],[$ ]
+	/E
+	［閉じカッコ］) | )
+..
+#fig.add_trace()...
+	［メソッド名］fig.add_trace( | fig.add_trace(
+	［引数］trace：グラフの指定 | trace,[$ ]
+	［引数］row：サブプロットグラフの位置 | row=1,[$ ]
+	［引数］col：サブプロットグラフの位置 | col=1,[$ ]
+	［引数］secondary_y：２軸の設定 | secondary_y=False,[$ ]
+	［閉じカッコ］) | )
+..
+#fig.add_traces()...
+	［メソッド名］fig.add_traces( | fig.add_traces(
+	［引数］data：グラフの指定 | data=[&1]trace1, trace2, [&2],[$ ]
+	［引数］rows：サブプロットグラフの位置のリスト | rows=[&1]1, 1[&2][$ ]
+	［引数］cols：サブプロットグラフの位置のリスト | cols=[&1]1, 2[&2],[$ ]
+	［引数］secondary_ys：２軸の設定 | secondary_y=[&1]False, True[&2],[$ ]
+	［閉じカッコ］) | )
+..
+-
+#fig.update_layout()...
+	［メソッド名］fig.update_layout( | fig.update_layout(
+	［引数］title：タイトルの設定 | title=dict(
+		［┗ titleの引数］text：テキスト | text='<b>Graph Title</b>',[$ ]
+		［┗ titleの引数］font：フォント | font=dict(size=20, color='gray'),[$ ]
+		［┗ titleの引数］x：タイトルのx座標 | x=0.5,[$ ]
+		［┗ titleの引数］xref：x座標の基準点 | xref='container, paper',[$ ]
+		［┗ titleの引数］xanchor：文字列の基準点 | xanchor='auto, left, center, right',[$ ]
+		［┗ titleの引数］y：タイトルのx座標 | y=0.5,[$ ]
+		［┗ titleの引数］yref：y座標の基準点 | yref='container, paper',[$ ]
+		［┗ titleの引数］yanchor：文字列の基準点 | yanchor='auto, top, middle, bottom',[$ ]
+		［┗ titleの閉じカッコ］) | ),[$ ]
+	［引数］showlegend：凡例を表示する | showlegend=True,[$ ]
+	［引数］legend：凡例の設定 | legend=dict(
+		［┗ legendの引数］bgcolor：背景色 | bgcolor='#fff',[$ ]
+		［┗ legendの引数］bordercolor：枠の色 | bordercolor='#444',[$ ]
+		［┗ legendの引数］borderwidth：境界の幅 | borderwidth=1,[$ ]
+		［┗ legendの引数］font：フォント | font=dict(size=12, color='#444'),[$ ]
+		［┗ legendの引数］orientation：凡例の向き | orientation='v, h',[$ ]
+		［┗ legendの引数］title：凡例のタイトル | 
+			title=dict(text='凡例', side='top, left, top left'),[$ ]
+		/E
+		［┗ legendの引数］x：凡例のx座標 | x=1.02,[$ ]
+		［┗ legendの引数］xanchor：文字列の基準点 | 
+			[/]xanchor='auto, left, center, right',[$ ]
+		/E
+		［┗ legendの引数］y：凡例のy座標 | y=1,[$ ]
+		［┗ legendの引数］yanchor：文字列の基準点 | 
+			[/]yanchor='auto, top, middle, bottom',[$ ]
+		/E
+		［┗ legendの閉じカッコ］) | ),[$ ]
+	［引数］margin：グラフの余白 | 
+		[/]margin=dict(autoexpand=True, t=100, b=80, l=80, r=80),[$ ]
+	/E
+	［引数］width：グラフの幅 | width=700,[$ ]
+	［引数］height：グラフの高さ | height=450,[$ ]
+	［引数］font：グラフのフォント | font=dict(
+		［┗ fontの引数］size：サイズ | size=12,[$ ]
+		［┗ fontの引数］color：色 | color='#444"',[$ ]
+		［┗ fontの閉じカッコ］) | ),[$ ]
+	［引数］paper_bgcolor：グラフの背景色 | paper_bgcolor='#fff',[$ ]
+	［引数］plot_bgcolor：プロットの背景色 | plot_bgcolor='#fff',[$ ]
+	［引数］hovermode：ホバーモード | 
+		[/]hovermode='x, y, closest, x unified, y unified' or False,[$ ]
+	/E
+	［引数］bargap：棒グラフの棒の幅 | bargap=0.2,[$ ]
+	［引数］bargroupgap：棒グラフのグループ間の幅 | bargroupgap=0.3,[$ ]
+	［引数］barmode：棒グラフのモード | 
+		[/]barmode='stack, group, overlay, relative',[$ ]
+	/E
+	［引数］barnorm：棒グラフの標準化 | barnorm='fraction, percent',[$ ]
+	［引数］boxgap：箱ヒゲ図の箱の幅 | boxgap=0.3,[$ ]
+	［引数］boxgroupgap：箱ヒゲ図のグループ間の幅 | boxgroupgap=0.3,[$ ]
+	［引数］boxmode：箱ヒゲ図のモード | boxmode='group, overlay',[$ ]
+	［閉じカッコ］) | )
+..
+
+#fig.update_xaxes()...
+	［メソッド名］fig.update_xaxes( | fig.update_xaxes(
+	［引数］title：タイトルの設定 | title=dict(
+		［┗ titleの引数］text：テキスト | text='X Axis Title',[$ ]
+		［┗ titleの引数］font：フォント | font=dict(size=20, color='gray'),[$ ]
+		［┗ titleの引数］standoff：軸ラベルとタイトルの距離 | standoff=1,[$ ]
+		［┗ titleの閉じカッコ］) | ),[$ ]
+	［引数］showline：x軸の線の表示 | showline=True,[$ ]
+	［引数］linecolor：x軸の線の色 | linecolor='#444',[$ ]
+	［引数］linewidth：x軸の線の幅 | linewidth=0.5,[$ ]
+	［引数］zeroline：ゼロ位置の表示 | zeroline=True,[$ ]
+	［引数］zerolinecolor：ゼロ位置の線の色 | zerolinecolor='#444',[$ ]
+	［引数］zerolinewidth：ゼロ位置の線の幅 | zerolinewidth=0.5,[$ ]
+	［引数］side：x軸の位置 | side='top, bottom',[$ ]
+	［引数］showgrid：グリッドの表示 | showgrid=True,[$ ]
+	［引数］gridcolor：グリッドの色 | gridcolor='#eee',[$ ]
+	［引数］griddash：グリッドの線スタイル | 
+		[/]griddash='solid, dot, dash, longdash, dashdot, longdashdot',[$ ]
+	/E
+	［引数］gridwidth：グリッドの幅 | gridwidth=1,[$ ]
+	［引数］ticks：x軸の目盛り線（内側、外側） | ticks='inside, outside',[$ ]
+	［引数］ticklen：x軸の目盛り線の長さ | ticklen=5,[$ ]
+	［引数］tickwidth：x軸の目盛り線の幅 | tickwidth=2,[$ ]
+	［引数］tickcolor：x軸の目盛り線の色 | tickcolor='#444',[$ ]
+	［引数］tickson：ラベルと目盛り線の対応 | tickson='labels, boundaries',[$ ]
+	［引数］dtick：x軸の目盛り線の間隔（数値） | dtick=5,[$ ]
+	［引数］dtick：x軸の目盛り線の間隔（日付：月） | dtick='M1',[$ ]
+	［引数］dtick：x軸の目盛り線の間隔（日付：日） | dtick='1000*60*60*24*?',[$ ]
+	［引数］tick0：x軸の目盛り線の開始値（数値） | tick0=0,[$ ]
+	［引数］tickvals：x軸の目盛り線のリスト（数値） | tickvals=[0, 50, 100],[$ ]
+	［引数］range：x軸の範囲 | range=(0, 50),[$ ]
+	［引数］tickformat：x軸の書式設定 | tickformat='%Y %m, .2f, .0%',[$ ]
+	［引数］rangeslider：レンジスライダーの設定 | rangeslider=dict(
+		［┗ rangesliderの引数］visible：表示設定 | visible=True,[$ ]
+		［┗ rangesliderの引数］thickness：スライダーの高さ | thickness=0.1,[$ ]
+		［┗ rangesliderの閉じカッコ］) | ),[$ ]
+	［閉じカッコ］) | )
+..
+#fig.update_yaxes()...
+	［メソッド名］fig.update_yaxes( | fig.update_yaxes(
+	［引数］title：タイトルの設定 | title=dict(
+		［┗ titleの引数］text：テキスト | text='Y Axis Title',[$ ]
+		［┗ titleの引数］font：フォント | font=dict(size=20, color='gray'),[$ ]
+		［┗ titleの引数］standoff：軸ラベルとタイトルの距離 | standoff=1,[$ ]
+		［┗ titleの閉じカッコ］) | ),[$ ]
+	［引数］showline：y軸の線の表示 | showline=True,[$ ]
+	［引数］linecolor：y軸の線の色 | linecolor='#444',[$ ]
+	［引数］linewidth：y軸の線の幅 | linewidth=0.5,[$ ]
+	［引数］zeroline：ゼロ位置の表示 | zeroline=True,[$ ]
+	［引数］zerolinecolor：ゼロ位置の線の色 | zerolinecolor='#444',[$ ]
+	［引数］zerolinewidth：ゼロ位置の線の幅 | zerolinewidth=0.5,[$ ]
+	［引数］side：y軸の位置 | side='top, bottom',[$ ]
+	［引数］showgrid：グリッドの表示 | showgrid=True,[$ ]
+	［引数］gridcolor：グリッドの色 | gridcolor='#eee',[$ ]
+	［引数］griddash：グリッドの線スタイル | 
+		[/]griddash='solid, dot, dash, longdash, dashdot, longdashdot',[$ ]
+	/E
+	［引数］gridwidth：グリッドの幅 | gridwidth=1,[$ ]
+	［引数］ticks：y軸の目盛り線（内側、外側） | ticks='inside, outside',[$ ]
+	［引数］ticklen：y軸の目盛り線の長さ | ticklen=5,[$ ]
+	［引数］tickwidth：y軸の目盛り線の幅 | tickwidth=2,[$ ]
+	［引数］tickcolor：y軸の目盛り線の色 | tickcolor='#444',[$ ]
+	［引数］tickson：ラベルと目盛り線の対応 | tickson='labels, boundaries',[$ ]
+	［引数］dtick：y軸の目盛り線の間隔（数値） | dtick=5,[$ ]
+	［引数］dtick：y軸の目盛り線の間隔（日付：月） | dtick='M1',[$ ]
+	［引数］dtick：y軸の目盛り線の間隔（日付：日） | dtick='1000*60*60*24*?',[$ ]
+	［引数］tick0：y軸の目盛り線の開始値（数値） | tick0=0,[$ ]
+	［引数］tickvals：y軸の目盛り線のリスト（数値） | tickvals=[0, 50, 100],[$ ]
+	［引数］range：y軸の範囲 | range=(0, 50),[$ ]
+	［引数］tickformat：y軸の書式設定 | tickformat='%Y %m, .2f, .0%',[$ ]
+	［引数］secondary_y：２軸（左右の軸）の指定 | secondary_y=False,[$ ]
+	［閉じカッコ］) | )
+..
+#fig.update_polars()...
+	［メソッド名］fig.update_polars( | fig.update_polars(
+	［引数］angularaxis：theta軸の設定 | angularaxis=dict(
+		［┗ angularaxisの引数］categoryorder：theta軸の順番 | 
+			[/]categoryorder='trace, array, category ascending, category descending',[$ ]
+		/E
+		［┗ angularaxisの引数］categoryarray：theta軸の配列 | 
+			[/]categoryarray=[&1]cat1, cat2, cat3, cat4, cat5[&2],[$ ]
+		/E
+		［┗ angularaxisの引数］color：theta軸（目盛り）の色 | color='#444',[$ ]
+		［┗ angularaxisの引数］rotation：theta軸の開始位置 | rotation=90,[$ ]
+		［┗ angularaxisの引数］direction：theta軸の向き | 
+			[/]direction='clockwise, counterclockwise',[$ ]
+		/E
+		［┗ angularaxisの引数］linecolor：線の色 | linecolor='#fff',[$ ]
+		［┗ angularaxisの引数］linewidth：線の幅 | linewidth=1,[$ ]
+		［┗ angularaxisの閉じカッコ］) | ),[$ ]
+	［引数］radialaxis：r軸の設定 | radialaxis=dict(
+		［┗ radialaxisの引数］angle：r軸を描画する角度 | angle=0,[$ ]
+		［┗ radialaxisの引数］categoryorder：r軸の順番 | 
+			[/]categoryorder='trace, array, category ascending, category descending',[$ ]
+		/E
+		［┗ radialaxisの引数］categoryarray：r軸の配列 | 
+			[/]categoryarray=[&1]val1, val2, val3[&2],[$ ]
+		/E
+		［┗ radialaxisの引数］color：r軸（目盛り）の色 | color='#444',[$ ]
+		［┗ radialaxisの引数］linecolor：線の色 | linecolor='#fff',[$ ]
+		［┗ radialaxisの引数］linewidth：線の幅 | linewidth=1,[$ ]
+		［┗ radialaxisの引数］range：r軸の範囲 | range=[&1]0, 5[&2],[$ ]
+		［┗ radialaxisの引数］title：タイトルの設定 | title=dict(
+			［┗┗ titleの引数］text：r軸のラベル | text='r-axis title',[$ ]
+			［┗┗ titleの引数］font：フォント | font=dict(size=20, color='gray'),[$ ]
+			［┗┗ titleの閉じカッコ］) | ),[$ ]
+		［┗ radialaxisの閉じカッコ］) | ),[$ ]
+	［引数］bgcolor：背景色の設定 | bgcolor='lavender',[$ ]
+	［引数］sector：theta軸の範囲を指定 | sector=[&1]0, 360[&2],[$ ]
+	［閉じカッコ］) | )
+..
+-
+#fig.write_image()...
+	［メソッド名］fig.write_image( | fig.write_image(
+	［引数］file：保存するファイル名 | file='plotly_img.png',[$ ]
+	［引数］format：ファイル形式 | format='png, jpg, svg, pdf',[$ ]
+	［引数］width：画像の幅 | width=800,[$ ]
+	［引数］height：画像の高さ | height=700,[$ ]
+	［引数］scale：画像のスケール | scale=10,[$ ]
+	［引数］engine：変換エンジン | engine='auto, kaleido, orca',[$ ]
+	［閉じカッコ］) | )
+..
+-
+#コンフィギュレーション（modebar）の設定...
+	［config：modebarの設定］config = dict( | config = dict(
+	［configの引数］displayModeBar：モードバーの表示 | displayModeBar=True,[$ ]
+	［configの引数］scrollZoom：ホイールボタンでズーム | scrollZoom=True,[$ ]
+	［configの引数］responsive：レスポンシブなグラフ | responsive=True,[$ ]
+	［configの引数］staticPlot：スタティックプロット | staticPlot=True,[$ ]
+	［configの引数］displaylogo：Plotlyのロゴ表示 | displaylogo=False,[$ ]
+	［configの引数］toImageButtonOptions：画像を保存 | toImageButtonOptions=dict(
+		［┗ toImage~の引数］format：画像形式 | format='png, svg, jpg',[$ ]
+		［┗ toImage~の引数］filename：ファイル名 | filename='plotly_image',[$ ]
+		［┗ toImage~の引数］width：画像の幅 | width=800,[$ ]
+		［┗ toImage~の引数］height：画像の高さ | height=600,[$ ]
+		［┗ toImage~の引数］scale：使い方が分かりません | scale=1,[$ ]
+		［┗ toImage~の閉じカッコ］) | ),[$ ]
+	［configの引数］modeBarButtonsToRemove：削除するボタン | 
+		[/]modeBarButtonsToRemove=[&1]'select2d', 'lasso2d'[&2],[$ ]
+	/E
+	［configの引数］modeBarButtonsToAdd：追加するボタン | 
+		[/]modeBarButtonsToAdd=[&1]'drawline', 'drawcircle', 'drawrect', 'eraseshape'[&2],[$ ]
+	/E
+	［閉じカッコ］) | )
+	［メソッド呼び出し］fig.show(config=config) | fig.show(config=config)
+..
+-
+Plotlyのバージョン確認 | print(plotly.__version__)

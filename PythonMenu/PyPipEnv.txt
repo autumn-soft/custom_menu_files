@@ -1,0 +1,73 @@
+; Pythonのpipenvのコマンドを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+仮想環境の作成 |
+	[/][#|Pythonのバージョンを入力]
+	[/]pipenv --python [#1]
+/E
+仮想環境の削除 | pipenv --rm
+-
+pipenvのシェルを起動 | pipenv shell
+仮想環境のパッケージの一覧表示 | pipenv lock -r
+仮想環境のパッケージの依存関係の一覧表示 | pipenv graph
+仮想環境のパス情報を表示 | pipenv --venv
+pipenvのシェルを終了 | exit
+-
+パッケージのインストール... |
+	[/][#|インストールするパッケージの名前を入力]
+	[/]pipenv install [#1]
+/E
+パッケージのインストール（開発時のみ使用）... |
+	[/][#|パッケージの名前を入力（複数指定可：スペース区切り）]
+	[/]pipenv install --dev [#1]
+/E
+-
+パッケージのインストール（バージョン指定）... |
+	[/][#|インストールするパッケージの名前を入力 | バージョンを入力]
+	[/]pipenv install [#1]==[#2]
+/E
+パッケージのインストール（開発時のみ使用、バージョン指定）... |
+	[/][#|パッケージの名前を入力（複数指定可：スペース区切り） | バージョンを入力]
+	[/]pipenv install --dev [#1]==[#2]
+/E
+-
+パッケージを更新する... | 
+	[/][#|更新するパッケージの名前を入力]
+	[/]pipenv update [#1]
+/E
+すべてのパッケージを更新する | pipenv update
+更新できるパッケージの一覧を表示する | pipenv update --outdated
+-
+パッケージをアンインストール... | 
+	[/][#|アンインストールするパッケージの名前を入力]
+	[/]pipenv uninstall [#1]
+/E
+Pipfile.lockに記述されていないパッケージをアンインストール | pipenv clean
+-
+「Pipfile」を使用してパッケージセットをインストール |
+	[/]pipenv install
+/E
+「Pipfile」を使用してパッケージセットをインストール（--dev付き） |
+	[/]pipenv install --dev
+/E
+「Pipfile.lock」を使用してパッケージセットをインストール |
+	[/]pipenv sync
+/E
+「Pipfile.lock」を使用してパッケージセットをインストール（--dev付き） |
+	[/]pipenv sync --dev
+/E
+-
+「requirements.txt」を使用してパッケージセットをインストール |
+	[/]pipenv install -r ./requirements.txt
+/E
+「requirements.txt」を生成 |
+	[/]pipenv lock -r > requirements.txt
+/E
+「requirements.txt」を生成（--dev付き） |
+	[/]pipenv lock -r --dev > requirements.txt
+/E

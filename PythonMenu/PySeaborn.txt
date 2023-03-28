@@ -1,0 +1,605 @@
+; Pythonのseabornの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+seabornのインポート| 
+	[/]import seaborn as sns; sns.set(font=[&1]'IPAexGothic'[&2])
+/E
+-
+#データセットのロード...
+	［メソッド名］sns.load_dataset( | sns.load_dataset(
+	［引数］anagrams | 'anagrams'
+	［引数］fmri | 'fmri'
+	［引数］anscombe | 'anscombe'
+	［引数］gammas | 'gammas'
+	［引数］attention | 'attention'
+	［引数］geyser | 'geyser'
+	［引数］brain_networks | 'brain_networks'
+	［引数］iris | 'iris'
+	［引数］car_crashes | 'car_crashes'
+	［引数］mpg | 'mpg'
+	［引数］diamonds | 'diamonds'
+	［引数］penguins | 'penguins'
+	［引数］dots | 'dots'
+	［引数］planets | 'planets'
+	［引数］exercise | 'exercise'
+	［引数］tips | 'tips'
+	［引数］flights | 'flights'
+	［引数］titanic | 'titanic'
+	［閉じカッコ］) | )
+..
+-
++スタイルとカラーパレットの設定
+	１つのグラフを作成（サイズを指定） | plt.figure(figsize=(10, 8))
+	-
+	基本スタイルをクリアしてデフォルトに設定 | sns.set()
+	-
+	基本スタイル（背景やグリッド）の設定 |
+		[/]# style = darkgrid, whitegrid, dark, white, ticks[!K "ENTER"]
+		[/]sns.set_style(style='darkgrid')
+	/E
+	基本スタイル（背景やグリッド）のカスタマイズ | `{Append-EnterKey}`
+		[/]# style = darkgrid, whitegrid, dark, white, ticks
+		[/]# sns.axes_style()で基本設定の辞書を取得できる
+		[/]sns.set_style(style='darkgrid', rc={'legend.frameon': 'True'}) `{Skip}`
+	/E
+	-
+	各種の表示設定を辞書形式で取得 |
+		[/]# style = darkgrid, whitegrid, dark, white, ticks[!K "ENTER"]
+		[/]st = sns.axes_style(style='darkgrid')
+	/E
+	-
+	カラーパレットの設定１ |
+		[/]# palette = deep, muted, pastel, bright, dark, colorblind[!K "ENTER"]
+		[/]sns.set_palette(palette='deep', n_colors=None, desat=None)
+	/E
+	カラーパレットの設定２（hls, husl） |
+		[/]sns.set_palette(palette='hls', n_colors=10, desat=None) # 'hls' or 'husl'
+	/E
+	カラーパレットの設定３（matplotlib） |
+		[/]# matplotlibのカラーマップから指定する[!K "ENTER"]
+		[/]sns.set_palette(palette='Set1', n_colors=10, desat=None)
+	/E
+	-
+	カラーパレットの取得１ |
+		[/]# style = deep, muted, pastel, bright, dark, colorblind[!K "ENTER"]
+		[/]sns.color_palette(palette='deep', n_colors=None, desat=None)
+	/E
+	カラーパレットの取得２（matplotlib） |
+		[/]# matplotlibのカラーマップから指定する[!K "ENTER"]
+		[/]sns.color_palette(palette='Set1', n_colors=None, desat=None)
+	/E
+	カラーパレットの取得３（husl） |
+		[/]# hue, saturation, lightness: 0 <= h, s, l <= 1[!K "ENTER"]
+		[/]sns.husl_palette(n_colors=6, h=0.01, s=0.9, l=0.65, as_cmap=False)
+	/E
+	カラーパレットの取得４（hls） |
+		[/]# hue, lightness, saturation: 0 <= h, l, s <= 1[!K "ENTER"]
+		[/]sns.hls_palette(n_colors=6, h=0.01, l=0.6, s=0.65, as_cmap=False)
+	/E
+	-
+	カラーパレットの作成１（cubehelix） | `{Append-EnterKey}`
+		[/]# 0 <= start <= 3, 0 <= gamma, 0 <= hue, dark, light <= 1
+		[/]sns.cubehelix_palette(n_colors=6, start=0, rot=0.4, 
+		[/]gamma=1.0, hue=0.8, light=0.85, dark=0.15, 
+		[/]reverse=False, as_cmap=False) `{Skip}`
+	/E
+	カラーパレットの作成２（dark） | `{Append-EnterKey}`
+		[/]# input: 'rgb', 'hls', 'husl', 'xkcd'
+		[/]sns.dark_palette(color='green', n_colors=6, reverse=False,
+		[/]as_cmap=False, input='rgb') `{Skip}`
+	/E
+	カラーパレットの作成３（light） | `{Append-EnterKey}`
+		[/]# input: 'rgb', 'hls', 'husl', 'xkcd'
+		[/]sns.light_palette(color='green', n_colors=6, reverse=False,
+		[/]as_cmap=False, input='rgb') `{Skip}`
+	/E
+	-
+	パレットを表示する | sns.palplot(sns.hls_palette(n_colors=24), size=1.0)
+	tickスタイルで上と右の枠線を非表示にする | sns.despine()
+..
+-
++リレーショナル・プロット
+	#relplot(FacetGrid)...
+		［メソッド名］sns.relplot( | sns.relplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］size：グループ化する列（サイズ別） | size='',[$ ]
+		［引数］style：グループ化する列（スタイル別） | style='',[$ ]
+		［引数］col：列方向のファセットを定義する列（FacetGrid） | col='',[$ ]
+		［引数］row：行方向のファセットを定義する列（FacetGrid） | row='',[$ ]
+		［引数］col_wrap：FacetGridの１行の個数（FacetGrid） | col_wrap=,[$ ]
+		［引数］col_order：列方向のファセットの表示順序を指定（FacetGrid） |
+			[/]col_order=['', ''],[$ ]
+		/E
+		［引数］row_order：行方向のファセットの表示順序を指定（FacetGrid） |
+			[/]row_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］sizes：size引数を指定した場合のサイズ幅を指定 |
+			[/]sizes=(, )[$ ]
+		/E
+		［引数］legend：凡例を指定（auto, brief, full, False） | legend='',[$ ]
+		［引数］kind：プロットの種類を指定（scatter or line） | kind='',[$ ]
+		［引数］height：各ファセットの高さ（インチ）を指定 | height=,[$ ]
+		［引数］aspect：各ファセットのアスペクト比を指定 | aspect=,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#scatterplot...
+		［メソッド名］sns.scatterplot( | sns.scatterplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］size：グループ化する列（サイズ別） | size='',[$ ]
+		［引数］style：グループ化する列（スタイル別） | style='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］sizes：size引数を指定した場合のサイズ幅を指定 |
+			[/]sizes=(, )[$ ]
+		/E
+		［引数］alpha：プロットの透明度を指定 | alpha=,[$ ]
+		［引数］legend：凡例を指定（auto, brief, full, False） | legend='',[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#lineplot...
+		［メソッド名］sns.lineplot( | sns.lineplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］size：グループ化する列（サイズ別） | size='',[$ ]
+		［引数］style：グループ化する列（スタイル別） | style='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］sizes：size引数を指定した場合のサイズ幅を指定 |
+			[/]sizes=(, )[$ ]
+		/E
+		［引数］dashes：ダッシュの描画方法を指定（True, False） | dashes=,[$ ]
+		［引数］markers：マーカーの描画方法を指定（True, False） | markers=,[$ ]
+		［引数］estimator：「複数のY値／同じX値」の集計方法を指定 | estimator='',[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=,[$ ]
+		［引数］legend：凡例を指定（auto, brief, full, False） | legend='',[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
++カテゴリカル・プロット
+	#catplot(FacetGrid)...
+		［メソッド名］sns.catplot( | g = sns.catplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］col：列方向のファセットを定義する列（FacetGrid） | col='',[$ ]
+		［引数］row：行方向のファセットを定義する列（FacetGrid） | row='',[$ ]
+		［引数］col_wrap：FacetGridの１行の個数（FacetGrid） | col_wrap=,[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=,[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］col_order：列方向のファセットの表示順序を指定（FacetGrid） |
+			[/]col_order=['', ''],[$ ]
+		/E
+		［引数］row_order：行方向のファセットの表示順序を指定（FacetGrid） |
+			[/]row_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］kind：プロットの種類を指定 |
+			[/]kind='strip, swarm, box, violin, boxen, point, bar, count',[$ ]
+		/E
+		［引数］height：各ファセットの高さ（インチ）を指定 | height=,[$ ]
+		［引数］aspect：各ファセットのアスペクト比を指定 | aspect=,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］legend：hueを指定している場合に凡例を表示 | legend=,[$ ]
+		［引数］legend_out：Figureを拡大してプロットの外側に凡例を表示 | legend_out=,[$ ]
+		［引数］sharex：各ファセットにおいてx軸を共有する | sharex=True,[$ ]
+		［引数］sharey：各ファセットにおいてy軸を共有する | sharey=True,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#stripplot...
+		［メソッド名］sns.stripplot( | sns.stripplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］jitter：ジッター（ばらつき）の指定（小数 or bool） | jitter=True,[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=True,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］size：マーカーのサイズを指定 | size=,[$ ]
+		［引数］edgecolor：マーカーのエッジカラーを指定 | edgecolor='',[$ ]
+		［引数］linewidth：マーカーのエッジ幅を指定 | linewidth=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#swarmplot...
+		［メソッド名］sns.swarmplot( | sns.swarmplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=True,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］size：マーカーのサイズを指定 | size=,[$ ]
+		［引数］edgecolor：マーカーのエッジカラーを指定 | edgecolor='',[$ ]
+		［引数］linewidth：マーカーのエッジ幅を指定 | linewidth=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#boxplot...
+		［メソッド名］sns.boxplot( | sns.boxplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］saturation：彩度の割合を指定 | saturation=,[$ ]
+		［引数］width：ボックスの幅を指定 | width=,[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=True,[$ ]
+		［引数］fliersize：外れ値のサイズを指定 | fliersize=,[$ ]
+		［引数］linewidth：ボックスの枠線の幅を指定 | linewidth=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#violinplot...
+		［メソッド名］sns.violinplot( | sns.violinplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］bw：各バンド幅の計算方法（'scott', 'silverman', float） |
+			[/]bw='scott, silverman' or float,[$ ]
+		/E
+		［引数］scale：各バンド幅の調整方法（'area', 'count', 'width'） |
+			[/]scale='area, count, width',[$ ]
+		/E
+		［引数］width：バンド全体のサイズを指定 | width=,[$ ]
+		［引数］inner：バンド内部の表示方法を指定 |
+			[/]inner='box, quartile, point, stick' or None,[$ ]
+		/E
+		［引数］split：hueを指定した場合にバンドを左右に分割して表示 | split=,[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=True,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］linewidth：バンドの枠線の幅を指定 | linewidth=,[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］saturation：彩度の割合を指定 | saturation=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#pointplot...
+		［メソッド名］sns.pointplot( | sns.pointplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］estimator：各ビンの集約関数を指定 | estimator=mean,[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=,[$ ]
+		［引数］markers：hueの各層を表すマーカーを指定 | markers=[&1]'', ''[&2],[$ ]
+		［引数］linestyle：hueの各層を表すラインスタイルを指定 | linestyle='',[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=False,[$ ]
+		［引数］join：同じhueの各ビンをラインで結合する | join=True,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］errwidth：エラーバーの幅を指定 | errwidth=,[$ ]
+		［引数］capsize：エラーバーの先端の幅を指定 | capsize=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#barplot...
+		［メソッド名］sns.barplot( | sns.barplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］estimator：各ビンの集約関数を指定 | estimator=mean,[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=,[$ ]
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］saturation：彩度の割合を指定 | saturation=,[$ ]
+		［引数］errcolor：エラーバーの色を指定 | errcolor='',[$ ]
+		［引数］errwidth：エラーバーの幅を指定 | errwidth=,[$ ]
+		［引数］capsize：エラーバーの先端の幅を指定 | capsize=,[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=False,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#countplot...
+		［メソッド名］sns.countplot( | sns.countplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］order：x(or y)引数で指定した列の表示順序 |
+			[/]order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］orient：プロットの向き（水平、垂直）を指定 | orient='v or h',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］saturation：彩度の割合を指定 | saturation=,[$ ]
+		［引数］dodge：hueを指定した場合に各層を分離して表示 | dodge=False,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
++ディストリビューション・プロット
+	#displot(FacetGrid)...
+		［メソッド名］sns.displot( | g = sns.displot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］col：列方向のファセットを定義する列（FacetGrid） | col='',[$ ]
+		［引数］row：行方向のファセットを定義する列（FacetGrid） | row='',[$ ]
+		［引数］col_wrap：FacetGridの１行の個数（FacetGrid） | col_wrap=,[$ ]
+		［引数］col_order：列方向のファセットの表示順序を指定（FacetGrid） |
+			[/]col_order=['', ''],[$ ]
+		/E
+		［引数］row_order：行方向のファセットの表示順序を指定（FacetGrid） |
+			[/]row_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］kind：プロットの種類を指定 | kind='hist, kde, ecdf',[$ ]
+		［引数］rug：周辺分布を表示 | rug=False,[$ ]
+		［引数］kde：カーネル密度推定を表示 | kde=False,[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］height：各ファセットの高さ（インチ）を指定 | height=,[$ ]
+		［引数］aspect：各ファセットのアスペクト比を指定 | aspect=,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#histplot...
+		［メソッド名］sns.histplot( | sns.histplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］stat：各ビンの値を集計する方法 | 
+			[/]stat='count, frequency, density, probability',[$ ]
+		/E
+		［引数］bins：ビンの数（名前や数値）を指定 | bins=,[$ ]
+		［引数］binwidth：各ビンの幅を指定 | binwidth=,[$ ]
+		［引数］binrange：ビンの範囲（最小値、最大値）を指定 | binrange=(, ),[$ ]
+		［引数］discrete：各ビンをデータポイントの中心に配置 | discrete=,[$ ]
+		［引数］multiple：hueの各層をどのように配置するか |
+			[/]multiple='layer, dodge, stack, fill',[$ ]
+		/E
+		［引数］element：各ビンの表示方法を指定 | element='bars, step, poly',[$ ]
+		［引数］shrink：各ビンの幅の縮小率を指定 | shrink=,[$ ]
+		［引数］kde：カーネル密度推定を表示 | kde=,[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］legend：凡例を表示 | legend=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+	#kdeplot...
+		［メソッド名］sns.kdeplot( | sns.kdeplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］multiple：hueの各層をどのように配置するか |
+			[/]multiple='layer, stack, fill',[$ ]
+		/E
+		［引数］bw_adjust：平滑化のためのスケーリング値を指定 | bw_adjust=,[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］legend：凡例を表示 | legend=,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
++リグレッション・プロット
+	#lmplot(FacetGrid)...
+		［メソッド名］sns.lmplot( | g = sns.lmplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］col：列方向のファセットを定義する列（FacetGrid） | col='',[$ ]
+		［引数］row：行方向のファセットを定義する列（FacetGrid） | row='',[$ ]
+		［引数］col_wrap：FacetGridの１行の個数（FacetGrid） | col_wrap=,[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］col_order：列方向のファセットの表示順序を指定（FacetGrid） |
+			[/]col_order=['', ''],[$ ]
+		/E
+		［引数］row_order：行方向のファセットの表示順序を指定（FacetGrid） |
+			[/]row_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］markers：散布図のマーカーを指定 | markers=[&1]'o'[&2],[$ ]
+		［引数］x_estimator：x軸の各値に関数を適用してプロット | x_estimator=,[$ ]
+		［引数］sharex：各ファセットにおいてx軸を共有する | sharex=True,[$ ]
+		［引数］sharey：各ファセットにおいてy軸を共有する | sharey=True,[$ ]
+		［引数］legend：hueを指定している場合に凡例を表示 | legend=,[$ ]
+		［引数］legend_out：Figureを拡大してプロットの外側に凡例を表示 | legend_out=,[$ ]
+		［引数］scatter：散布図を描画 | scatter=True,[$ ]
+		［引数］fit_reg：回帰直線を描画 | fit_reg=True,[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=95,[$ ]
+		［引数］order：多項式回帰を行う（次数を指定） | order=1,[$ ]
+		［引数］logistic：ロジスティック式回帰を行う（ci=Noneを推奨） | logistic=False,[$ ]
+		［引数］robust：ロバスト回帰モデルを適用（外れ値の重み軽減） | robust=False,[$ ]
+		［引数］truncate：データの存在する範囲内で回帰直線をプロット | truncate=True,[$ ]
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］height：各ファセットの高さ（インチ）を指定 | height=,[$ ]
+		［引数］aspect：各ファセットのアスペクト比を指定 | aspect=,[$ ]
+		［閉じカッコ］) | )
+	..
+	-
+	#regplot...
+		［メソッド名］sns.regplot( | sns.regplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］x_estimator：x軸の各値に関数を適用してプロット | x_estimator=,[$ ]
+		［引数］scatter：散布図を描画 | scatter=True,[$ ]
+		［引数］fit_reg：回帰直線を描画 | fit_reg=True,[$ ]
+		［引数］ci：信頼区間（％ or None）を指定 | ci=95,[$ ]
+		［引数］order：多項式回帰を行う（次数を指定） | order=1,[$ ]
+		［引数］logistic：ロジスティック式回帰を行う（ci=Noneを推奨） | logistic=False,[$ ]
+		［引数］robust：ロバスト回帰モデルを適用（外れ値の重み軽減） | robust=False,[$ ]
+		［引数］truncate：データの存在する範囲内で回帰直線をプロット | truncate=True,[$ ]
+		［引数］label：散布図または回帰直線の凡例を指定 | label='',[$ ]
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］markers：散布図のマーカーを指定 | markers=[&1]'o'[&2],[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
++マトリクス・プロット
+	#heatmap...
+		［メソッド名］sns.heatmap( | sns.heatmap(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］vmin：指定した値をカラーマップの始点にセット | vmin=None,[$ ]
+		［引数］vmax：指定した値をカラーマップの終点にセット | vmax=None,[$ ]
+		［引数］cmap：カラーマップを指定 | cmap=None,[$ ]
+		［引数］center：指定した値をカラーマップの中心にセット | center=None,[$ ]
+		［引数］robust：色選択においてロバストな推定を行う（外れ値の影響を軽減） | robust=False,[$ ]
+		［引数］annot：各セルに値を表示する | annot=None,[$ ]
+		［引数］fmt：各セルに表示する値の書式を指定 | fmt='.2g',[$ ]
+		［引数］linewidths：各セル間の線幅を指定 | linewidths=0,[$ ]
+		［引数］linecolor：各セル間の線幅を指定 | linecolor='white',[$ ]
+		［引数］cbar：カラーバーを表示 | cbar=True,[$ ]
+		［引数］square：各セルを正方形にする | square=False,[$ ]
+		［引数］xticklabels：列名をx軸に表示／整数値の場合はｎごと | xticklabels='auto'or 5,[$ ]
+		［引数］yticklabels：列名をy軸に表示／整数値の場合はｎごと | yticklabels='auto'or 5,[$ ]
+		［引数］ax：既存の座標軸（ax）を指定 | ax=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
+-
++ペア・プロット
+	#pairplot...
+		［メソッド名］sns.pairplot( | sns.pairplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［引数］vars：プロット（両軸）に使用する列を指定 | vars=[&1]'', ''[&2],[$ ]
+		［引数］x_vars：プロット（x軸）に使用する列を指定 | x_vars=[&1]'', ''[&2],[$ ]
+		［引数］y_vars：プロット（y軸）に使用する列を指定 | y_vars=[&1]'', ''[&2],[$ ]
+		［引数］kind：プロットの種類を指定 |
+			[/]kind='scatter, kde, hist, reg',[$ ]
+		/E
+		［引数］diag_kind：対角成分のプロットの種類を指定 |
+			[/]diag_kind='auto, hist, kde' or None,[$ ]
+		/E
+		［引数］markers：散布図で使用するマーカーを指定 |
+			[/]markers=[&1]'o', 's', 'D'[&2],[$ ]
+		/E
+		［引数］height：各ファセットの高さ（インチ）を指定 | height=,[$ ]
+		［引数］aspect：各ファセットのアスペクト比を指定 | aspect=,[$ ]
+		［引数］corner：ファセット・グリッドの右上側を描画しない | corner=,[$ ]
+		［引数］dropna：描画前にデータフレームの欠損値を削除する | dropna=,[$ ]
+		［閉じカッコ］) | )
+	..
+..
++ジョイント・プロット
+	#jointplot...
+		［メソッド名］sns.jointplot( | sns.jointplot(
+		［引数］data：可視化するdfを指定 | data=df,[$ ]
+		［引数］x：x軸に割り当てる列 | x='',[$ ]
+		［引数］y：y軸に割り当てる列 | y='',[$ ]
+		［引数］kind：プロットの種類を指定 |
+			[/]kind='scatter, kde, hist, hex, reg, resid',[$ ]
+		/E
+		［引数］color：すべてのプロットの色を指定 | color='',[$ ]
+		［引数］height：プロットの高さ（インチ）を指定 | height=6,[$ ]
+		［引数］ratio：メインプロットと周辺プロットの比率を指定 | ratio=5,[$ ]
+		［引数］space：メインプロットと周辺プロットの間隔を指定 | space=0.2,[$ ]
+		［引数］dropna：x軸とy軸の欠損値を削除する | dropna=,[$ ]
+		［引数］xlim：x軸の描画範囲を指定 | xlim=(, ),[$ ]
+		［引数］ylim：y軸の描画範囲を指定 | ylim=(, ),[$ ]
+		［引数］marginal_ticks：周辺プロットの目盛りを表示 | marginal_ticks=,[$ ]
+		［引数］hue：グループ化する列（色別） | hue='',[$ ]
+		［引数］hue_order：hueで指定した列の表示順序 |
+			[/]hue_order=[&1]'', ''[&2],[$ ]
+		/E
+		［引数］palette：hueで使用するパレットを指定 | palette='',[$ ]
+		［閉じカッコ］) | )
+	..
+..
+-
+seabornのバージョン確認 | print(sns.__version__)

@@ -1,0 +1,435 @@
+; BeautifulSoup4の定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
++スクレイピング関連のインポート
+	urlparse, urljoin, urldefrag関数のインポート |
+		[/]from urllib.parse import urlparse, urljoin, urldefrag
+	/E
+	-
+	Requestsのインポート | import requests
+..
+-
++BeautifulSoup
+	BeautifulSoupのインポート| from bs4 import BeautifulSoup
+	-
+	WebPageの取得のテンプレート | `{Append-EnterKey}`
+		[/]url = 'https://www.sample.com'
+		[/]r = requests.get(url)
+		[/]soup = BeautifulSoup(r.content, 'lxml') # html.parser
+	/E
+	WebPageの取得のテンプレート（エンコード指定） | `{Append-EnterKey}`
+		[/]url = 'https://www.sample.com'
+		[/]r = requests.get(url)
+		[/]soup = BeautifulSoup(r.content, 'lxml', from_encoding='shift_jis') # html.parser
+	/E
+	-
+	指定されたタグを検索［find：最初の１つ］ | `{Append-EnterKey}`
+		[/]# find(name, attrs, recursive, string, **kwargs)
+		[/]tag = soup.find('tag-name', class_='', id='') `{Skip}`
+	/E
+	指定されたタグを検索［find_all：すべて取得］ | `{Append-EnterKey}`
+		[/]# find_all(name, attrs, recursive, string, limit, **kwargs)
+		[/]tags = soup.find_all('tag-name', class_='', id='') `{Skip}`
+	/E
+	指定されたタグを検索［find_all：すべて取得（ループ処理）］ | `{Append-EnterKey}`
+		[/]# find_all(name, attrs, recursive, string, limit, **kwargs)
+		[/]for tag in soup.find_all('tag-name', class_='', id=''): `{Skip}`
+	/E
+	-
+	CSSセレクタを使用して検索［select_one：最初の１つ］ |
+		[/]tag = soup.select_one('css-selector')
+	/E
+	CSSセレクタを使用して検索［select：すべて取得］ |
+		[/]tag = soup.select('css-selector')
+	/E
+	CSSセレクタを使用して検索［select：すべて取得（ループ処理）］ |
+		[/]for tag in soup.select('css-selector'):
+	/E
+	-
+	#CSSセレクターを入力...
+		［tag］ タグの名前を指定 | tag
+		［.cls］ クラス名（単独）を指定 | .cls
+		［.cls1.cls2］ クラス名（複数：AND条件）を指定 | .cls1.cls2
+		［#id］ IDを指定 | #id
+		--------------------------------------------------------------- | [$]
+		［sel1, sel2］ 複数のセレクターを指定（OR条件）    | ,[$ ]
+		［sel1 sel2］ 「子孫」関係にあるセレクターの指定   | [$ ]
+		［sel1 > sel2］ 「親子」関係にあるセレクターの指定 | [$ ]>[$ ]
+		［sel1 + sel2］ 「隣接」関係にあるセレクターの指定 | [$ ]+[$ ]
+		［sel1 ~ sel2］ 「隣接（間に別要素も可）」関係にあるセレクターの指定 | [$ ]~[$ ]
+		--------------------------------------------------------------- | [$]
+		［tag[属性］］ タグが指定された属性を持っているか |
+			[/]a[&1]target[&2]
+		/E
+		［tag[属性~=値］］ 属性値が空白区切りのリストで、かつ要素が一致 |
+			[/]p[&1]class~="apple"[&2]
+		/E
+		［tag[属性~|=値］］ 属性値がハイフン区切りのリストで、かつ要素が先頭一致 |
+			[/]p[&1]lang|="en"[&2]
+		/E
+		--------------------------------------------------------------- | [$]
+		［tag[属性=値］］ タグの属性と値を指定（完全一致） |
+			[/]a[&1]href="https://sample.com"[&2]
+		/E
+		［tag[属性^=値］］ タグの属性と値を指定（先頭が一致） |
+			[/]a[&1]href^="https://sample.com"[&2]
+		/E
+		［tag[属性$=値］］ タグの属性と値を指定（末尾が一致） |
+			[/]a[&1]href$=".pdf"[&2]
+		/E
+		［tag[属性*=値］］ タグの属性と値を指定（部分一致） |
+			[/]a[&1]href*="images"[&2]
+		/E
+		--------------------------------------------------------------- | [$]
+		［:nth-of-type］ その要素のｎ番目の要素 | :nth-of-type(3)
+	..
+	-
+	［text］ その要素に含まれるテキストを取得 | .text
+	［text.strip()］ 同上（トリミング） | .text.strip()
+	-
+	ネット上のバイナリファイルを保存する（一括） | `{Append-EnterKey}`
+		[/]import requests
+		[/]
+		[/]url = 'https://sample.com/test.pdf'
+		[/]res = requests.get(url)
+		[/]
+		[/]with open('file-name.pdf', 'wb') as f:
+		[/]f.write(res.content)
+	/E
+	ネット上のバイナリファイルを保存する（分割） | `{Append-EnterKey}`
+		[/]import requests
+		[/]
+		[/]url = 'https://sample.com/test.pdf'
+		[/]res = requests.get(url, stream=True)
+		[/]
+		[/]with open('file-name.pdf', 'wb') as f:
+		[/]for chunk in res.iter_content(chunk_size=1024000):
+		[/]f.write(chunk)
+	/E
+	-
+	BeautifulSoupのバージョン確認 | 
+		[/]import bs4[!K "ENTER"]
+		[/]print(bs4.__version__)
+	/E
+..
+-
++Selenium
+	#Selenium関連のモジュールのインポート...
+		Chrome, ChromeOptions | 
+			[/]from selenium.webdriver import Chrome, ChromeOptions
+		/E
+		Firefox, FirefoxOptions | 
+			[/]from selenium.webdriver import Firefox, FirefoxOptions
+		/E
+		TimeoutException | 
+			[/]from selenium.common.exceptions import TimeoutException
+		/E
+		ActionChains | 
+			[/]from selenium.webdriver.common.action_chains import ActionChains
+		/E
+		By | from selenium.webdriver.common.by import By
+		Keys | from selenium.webdriver.common.keys import Keys
+		expected_conditions as EC | 
+			[/]from selenium.webdriver.support import expected_conditions as EC
+		/E
+		Select | from selenium.webdriver.support.select import Select
+		WebDriverWait | from selenium.webdriver.support.ui import WebDriverWait
+	..
+	-
+	#「Keys.XXX」の一覧...
+		Keys.ENTER | Keys.ENTER
+		Keys.TAB   | Keys.TAB
+		--------------------------------------------------------------- | [$]
+		Keys.HOME      | Keys.HOME
+		Keys.END       | Keys.END
+		Keys.PAGE_DOWN | Keys.PAGE_DOWN
+		Keys.PAGE_UP   | Keys.PAGE_UP
+		--------------------------------------------------------------- | [$]
+		Keys.ARROW_DOWN  | Keys.ARROW_DOWN
+		Keys.ARROW_LEFT  | Keys.ARROW_LEFT
+		Keys.ARROW_RIGHT | Keys.ARROW_RIGHT
+		Keys.ARROW_UP    | Keys.ARROW_UP
+		Keys.DOWN        | Keys.DOWN
+		Keys.LEFT        | Keys.LEFT
+		Keys.RIGHT       | Keys.RIGHT
+		Keys.UP          | Keys.UP
+		--------------------------------------------------------------- | [$]
+		Keys.DELETE     | Keys.DELETE
+		Keys.BACKSPACE  | Keys.BACKSPACE
+		Keys.BACK_SPACE | Keys.BACK_SPACE
+		--------------------------------------------------------------- | [$]
+		Keys.SPACE   | Keys.SPACE
+		Keys.CANCEL  | Keys.CANCEL
+		Keys.CLEAR   | Keys.CLEAR
+		Keys.COMMAND | Keys.COMMAND
+		Keys.ESCAPE  | Keys.ESCAPE
+		--------------------------------------------------------------- | [$]
+		Keys.ADD      | Keys.ADD
+		Keys.SUBTRACT | Keys.SUBTRACT
+		Keys.DIVIDE   | Keys.DIVIDE
+		Keys.MULTIPLY | Keys.MULTIPLY
+		--------------------------------------------------------------- | [$]
+		Keys.DECIMAL | Keys.DECIMAL
+		Keys.EQUALS  | Keys.EQUALS
+		--------------------------------------------------------------- | [$]
+		Keys.INSERT    | Keys.INSERT
+		Keys.HELP      | Keys.HELP
+		Keys.META      | Keys.META
+		Keys.NULL      | Keys.NULL
+		Keys.PAUSE     | Keys.PAUSE
+		Keys.RETURN    | Keys.RETURN
+		Keys.SEMICOLON | Keys.SEMICOLON
+		Keys.SEPARATOR | Keys.SEPARATOR
+		--------------------------------------------------------------- | [$]
+		Keys.SHIFT   | Keys.SHIFT
+		Keys.CONTROL | Keys.CONTROL
+		Keys.ALT     | Keys.ALT
+		--------------------------------------------------------------- | [$]
+		Keys.F1 | Keys.F1
+		Keys.F2 | Keys.F2
+		Keys.F3 | Keys.F3
+		Keys.F4 | Keys.F4
+		Keys.F5 | Keys.F5
+		Keys.F6 | Keys.F6
+		Keys.F7 | Keys.F7
+		Keys.F8 | Keys.F8
+		Keys.F9 | Keys.F9
+		Keys.F10 | Keys.F10
+		Keys.F11 | Keys.F11
+		Keys.F12 | Keys.F12
+		--------------------------------------------------------------- | [$]
+		Keys.NUMPAD0 | Keys.NUMPAD0
+		Keys.NUMPAD1 | Keys.NUMPAD1
+		Keys.NUMPAD2 | Keys.NUMPAD2
+		Keys.NUMPAD3 | Keys.NUMPAD3
+		Keys.NUMPAD4 | Keys.NUMPAD4
+		Keys.NUMPAD5 | Keys.NUMPAD5
+		Keys.NUMPAD6 | Keys.NUMPAD6
+		Keys.NUMPAD7 | Keys.NUMPAD7
+		Keys.NUMPAD8 | Keys.NUMPAD8
+		Keys.NUMPAD9 | Keys.NUMPAD9
+	..
+	#「EC.XXX」の一覧...
+		［テキスト（str）を指定］-------------------------------------- | [$]
+		EC.title_is | EC.title_is('')
+		EC.title_contains | EC.title_contains('')
+
+		［ロケーター（locator）を指定］-------------------------------- | [$]
+		EC.presence_of_element_located |
+			[/]EC.presence_of_element_located((By.XXX, ''))
+		/E
+		EC.presence_of_all_elements_located |
+			[/]EC.presence_of_all_elements_located((By.XXX, ''))
+		/E
+		EC.visibility_of_all_elements_located |
+			[/]EC.visibility_of_all_elements_located((By.XXX, ''))
+		/E
+		EC.visibility_of_any_elements_located |
+			[/]EC.visibility_of_any_elements_located((By.XXX, ''))
+		/E
+		EC.visibility_of_element_located |
+			[/]EC.visibility_of_element_located((By.XXX, ''))
+		/E
+		EC.element_located_to_be_selected |
+			[/]EC.element_located_to_be_selected((By.XXX, ''))
+		/E
+		EC.element_to_be_clickable |
+			[/]EC.element_to_be_clickable((By.XXX, ''))
+		/E
+		EC.frame_to_be_available_and_switch_to_it |
+			[/]EC.frame_to_be_available_and_switch_to_it((By.XXX, ''))
+		/E
+		EC.invisibility_of_element |
+			[/]EC.invisibility_of_element((By.XXX, ''))
+		/E
+		EC.invisibility_of_element_located |
+			[/]EC.invisibility_of_element_located((By.XXX, ''))
+		/E
+
+		［ロケーター（locator）とテキスト（str）を指定］--------------- | [$]
+		EC.text_to_be_present_in_element |
+			[/]EC.text_to_be_present_in_element((By.XXX, ''), '')
+		/E
+		EC.text_to_be_present_in_element_value |
+			[/]EC.text_to_be_present_in_element_value((By.XXX, ''), '')
+		/E
+
+		［ロケーター（locator）とフラグ（bool）を指定］---------------- | [$]
+		EC.element_located_selection_state_to_be |
+			[/]EC.element_located_selection_state_to_be((By.XXX, ''), True)
+		/E
+
+		［要素（element）を指定］-------------------------------------- | [$]
+		EC.element_to_be_selected | EC.element_to_be_selected(elem)
+		EC.staleness_of | EC.staleness_of(elem)
+		EC.visibility_of | EC.visibility_of()
+
+		［要素（element）とフラグ（bool）を指定］---------------------- | [$]
+		EC.element_selection_state_to_be |
+			[/]EC.element_selection_state_to_be(elem, True)
+		/E
+
+		［URL（str or regex）を指定］---------------------------------- | [$]
+		EC.url_changes | EC.url_changes(url)
+		EC.url_contains | EC.url_contains(url)
+		EC.url_to_be | EC.url_to_be()
+		EC.url_matches | EC.url_matches(pattern)
+
+		［その他］----------------------------------------------------- | [$]
+		EC.new_window_is_opened | EC.new_window_is_opened()
+		EC.number_of_windows_to_be | EC.number_of_windows_to_be()
+
+		［引数なし］--------------------------------------------------- | [$]
+		EC.alert_is_present | EC.alert_is_present()
+	..
+	#「By.XXX」の一覧...
+		By.CLASS_NAME        | By.CLASS_NAME
+		By.CSS_SELECTOR      | By.CSS_SELECTOR
+		By.ID                | By.ID
+		By.LINK_TEXT         | By.LINK_TEXT
+		By.NAME              | By.NAME
+		By.PARTIAL_LINK_TEXT | By.PARTIAL_LINK_TEXT
+		By.TAG_NAME          | By.TAG_NAME
+		By.XPATH             | By.XPATH
+	..
+	-
+	WebPageの取得のテンプレート（Chrome版） | `{Append-EnterKey}`
+		[/]options = ChromeOptions()
+		[/]# options.headless = True
+		[/]
+		[/]driver = Chrome(options=options)
+		[/]driver.implicitly_wait(5)
+		[/]url = 'https://www.sample.com'
+		[/]driver.get(url)
+		[/]
+		[/]print(driver.page_source[:2048]) # ソースの先頭部分を表示。
+		[/]# driver.save_screenshot('sample.png') # スクリーンショットを撮る。
+		[/]
+		[/]driver.quit() # ブラウザーを終了する。
+	/E
+	WebPageの取得のテンプレート（Firefox版） | `{Append-EnterKey}`
+		[/]options = FirefoxOptions()
+		[/]# options.headless = True
+		[/]
+		[/]driver = Firefox(options=options)
+		[/]driver.implicitly_wait(5)
+		[/]url = 'https://www.sample.com'
+		[/]driver.get(url)
+		[/]
+		[/]print(driver.page_source[:2048]) # ソースの先頭部分を表示。
+		[/]# driver.save_screenshot('sample.png') # スクリーンショットを撮る。
+		[/]
+		[/]driver.quit() # ブラウザーを終了する。
+	/E
+-
+	暗黙的な待機条件の指定［implicitly_wait］ |
+		[/]driver.implicitly_wait(10)[!K "ENTER"]
+	/E
+	明示的な待機条件の指定［WebDriverWait］ |
+		[/]wait = WebDriverWait(driver, 10)[!K "ENTER"]
+	/E
+	明示的な待機条件の指定［wait.until］ |
+		[/]elem = wait.until(EC.XXX())[!K "ENTER"]
+	/E
+-
++find_element系（単数）のメソッド
+	CLASS_NAME    | driver.find_element(by=By.CLASS_NAME, value='')[!K2 "LEFT"]
+	CSS_SELECTOR  | driver.find_element(by=By.CSS_SELECTOR, value='')[!K2 "LEFT"]
+	ID            | driver.find_element(by=By.ID, value='')[!K2 "LEFT"]
+	LINK_TEXT     | driver.find_element(by=By.LINK_TEXT, value='')[!K2 "LEFT"]
+	NAME          | driver.find_element(by=By.NAME, value='')[!K2 "LEFT"]
+	PARTIAL_LINK_TEXT | driver.find_element(by=By.PARTIAL_LINK_TEXT, value='')[!K2 "LEFT"]
+	TAG_NAME      | driver.find_element(by=By.TAG_NAME, value='')[!K2 "LEFT"]
+	XPATH         | driver.find_element(by=By.XPATH, value='')[!K2 "LEFT"]
+..
++find_elements系（複数）のメソッド
+	CLASS_NAME    | driver.find_elements(by=By.CLASS_NAME, value='')[!K2 "LEFT"]
+	CSS_SELECTOR  | driver.find_elements(by=By.CSS_SELECTOR, value='')[!K2 "LEFT"]
+	ID            | driver.find_elements(by=By.ID, value='')[!K2 "LEFT"]
+	LINK_TEXT     | driver.find_elements(by=By.LINK_TEXT, value='')[!K2 "LEFT"]
+	NAME          | driver.find_elements(by=By.NAME, value='')[!K2 "LEFT"]
+	PARTIAL_LINK_TEXT | driver.find_elements(by=By.PARTIAL_LINK_TEXT, value='')[!K2 "LEFT"]
+	TAG_NAME      | driver.find_elements(by=By.TAG_NAME, value='')[!K2 "LEFT"]
+	XPATH         | driver.find_elements(by=By.XPATH, value='')[!K2 "LEFT"]
+..
+-
++要素のテキストや属性値を取得
+	要素のテキストを取得する   | elem.text
+	要素のタグ名を取得する     | elem.tag_name
+	属性名から属性値を取得する | elem.get_attribute('')[!K2 "LEFT"]
+	CSSプロパティ値を取得する  | elem.value_of_css_property('')[!K2 "LEFT"]
+..
+-
++要素を操作する（クリック、キー入力など）
+	テキストボックスなどの内容をクリアする | elem.clear()
+	指定された要素をクリックする | elem.click()
+	指定された要素をクリックする（修飾キー付き） | `{Append-EnterKey}`
+		[/]actions = ActionChains(driver)
+		[/]actions.key_down(Keys.CONTROL)
+		[/]actions.click(element)
+		[/]actions.key_up(Keys.CONTROL)
+		[/]actions.perform()
+	/E
+	-
+	キー入力を行う | elem.send_keys('')[!K2 "LEFT"]
+	キー入力を行う（修飾キー付き：Shift） | elem.send_keys(Keys.SHIFT, '')[!K2 "LEFT"]
+	キー入力を行う（修飾キー付き：Cntl） | elem.send_keys(Keys.CONTROL, '')[!K2 "LEFT"]
+	キー入力を行う（修飾キー付き：Alt） | elem.send_keys(Keys.ALT, '')[!K2 "LEFT"]
+	-
+	コンボ（リスト）ボックスの項目を選択する（by インデックス） | `{Append-EnterKey}`
+		[/]elem = driver.find_element_by_id('')
+		[/]select = Select(elem)
+		[/]select.select_by_index(index)
+	/E
+	コンボ（リスト）ボックスの項目を選択する（by テキスト） | `{Append-EnterKey}`
+		[/]elem = driver.find_element_by_id('')
+		[/]select = Select(elem)
+		[/]select.select_by_visible_text('')
+	/E
+	コンボ（リスト）ボックスの項目をすべて未選択にする | `{Append-EnterKey}`
+		[/]elem = driver.find_element_by_id('')
+		[/]select = Select(elem)
+		[/]select.deselect_all('')
+	/E
+..
+-
++ウインドウを操作する
+	指定したページへ遷移する           | driver.get('')[!K2 "LEFT"]
+	１つ前のページに戻す（履歴の移動） | driver.back()
+	１つ後のページに戻す（履歴の移動） | driver.forward()
+	-
+	ウィンドウの位置を設定する   | driver.set_window_position(100, 100)
+	ウィンドウのサイズを設定する | driver.set_window_size(1200, 800)
+	ウィンドウを最大化する       | driver.maximize_window()
+	-
+	ブラウザを更新する | driver.refresh()
+	ブラウザを終了する | driver.quit()
+..
+-
++ウインドウ情報を取得する
+	スクリーンショットを取得する | driver.get_screenshot_as_file('sample.png')
+	-
+	ソースコードを取得する | driver.page_source
+	URLを取得する          | driver.current_url
+	タイトルを取得する     | driver.title
+	-
+	ウィンドウの位置を取得する   | driver.get_window_position()
+	ウィンドウのサイズを取得する | driver.get_window_size()
+..
+-
++各ブラウザ用のWebDriverのURL
+	Chrome | https://sites.google.com/chromium.org/driver/
+	Edge | https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
+	Firefox | https://github.com/mozilla/geckodriver/releases
+..
+-
+Seleniumのバージョン確認 | 
+	[/]import selenium[!K "ENTER"]
+	[/]print(selenium.__version__)
+/E
+..

@@ -1,0 +1,668 @@
+; Pythonの各種の基本パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+; 行数が多いので不要なものはコメントアウト（>>>> xxx <<<<）しています。
+#パッケージやモジュールのインポート...
+	［上部の選択肢は「普通の改行」にチェックを入れてください］ | [$]
+
+	［標準ライブラリ以外のパッケージ］------------------------------------- | [$]
+	import joblib | import joblib
+	import tweepy | import tweepy
+	import openpyxl | import openpyxl
+	import tqdm［in Jupyter］ | from tqdm.notebook import tqdm
+	import tqdm［in Terminal］ | from tqdm import tqdm
+	［テキスト処理サービス］----------------------------------------------- | [$]
+	import string | import string
+	import re | import re
+	import difflib | import difflib
+	import textwrap | import textwrap
+	import unicodedata | import unicodedata
+	import stringprep | import stringprep
+	import readline | import readline
+	［データ型］----------------------------------------------------------- | [$]
+	import datetime | import datetime
+	import calendar | import calendar
+	import collections | import collections
+	import array | import array
+	import types | import types
+	import copy | import copy
+	import pprint | import pprint
+	import reprlib | import reprlib
+	import enum | import enum
+
+	［数値と数学モジュール］----------------------------------------------- | [$]
+	import math | import math
+	import cmath | import cmath
+	import decimal | import decimal
+	import fractions | import fractions
+	import random | import random
+	import statistics | import statistics
+
+	［関数型プログラミング用モジュール］----------------------------------- | [$]
+	import itertools | import itertools
+	import functools | import functools
+	import operator | import operator
+
+	［ファイルとディレクトリへのアクセス］--------------------------------- | [$]
+	import pathlib | import pathlib
+	import os.path | import os.path
+	import fileinput | import fileinput
+	import stat | import stat
+	import filecmp | import filecmp
+	import tempfile | import tempfile
+	import glob | import glob
+	import fnmatch | import fnmatch
+	import shutil | import shutil
+
+	［データの永続化］----------------------------------------------------- | [$]
+	import pickle | import pickle
+	import shelve | import shelve
+	import sqlite3 | import sqlite3
+
+	［データ圧縮とアーカイブ］--------------------------------------------- | [$]
+	import zlib | import zlib
+	import gzip | import gzip
+	import bz2 | import bz2
+	import zipfile | import zipfile
+	import tarfile | import tarfile
+
+	［ファイルフォーマット］----------------------------------------------- | [$]
+	import csv | import csv
+	import configparser | import configparser
+
+	［暗号関連のサービス］------------------------------------------------- | [$]
+	import hashlib | import hashlib
+	import hmac | import hmac
+
+	［汎用オペレーティングシステムサービス］------------------------------- | [$]
+	import os | import os
+	import io | import io
+	import time | import time
+	import argparse | import argparse
+	import getopt | import getopt
+	import logging | import logging
+	import logging.config | import logging.config
+	import logging.handlers | import logging.handlers
+	import getpass | import getpass
+	import platform | import platform
+	import errno | import errno
+	import ctypes | import ctypes
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［並列実行］----------------------------------------------------------- | [$]
+	import threading | import threading
+	import multiprocessing | import multiprocessing
+	import multiprocessing.shared_memory | import multiprocessing.shared_memory
+	import subprocess | import subprocess
+	import sched | import sched
+<<<<
+
+	［ネットワーク通信とプロセス間通信］----------------------------------- | [$]
+	import asyncio | import asyncio
+	import socket | import socket
+	import ssl | import ssl
+	import select | import select
+	import selectors | import selectors
+	import asyncore | import asyncore
+	import asynchat | import asynchat
+	import signal | import signal
+	import mmap | import mmap
+
+	［インターネット上のデータの操作］------------------------------------- | [$]
+	import email | import email
+	import json | import json
+	import mimetypes | import mimetypes
+	import base64 | import base64
+	import binhex | import binhex
+	import binascii | import binascii
+	import quopri | import quopri
+	import uu | import uu
+
+	［構造化マークアップツール］------------------------------------------- | [$]
+	import html | import html
+	import html.parser | import html.parser
+	import html.entities | import html.entities
+	import xml.etree.ElementTree | import xml.etree.ElementTree
+	import xml.dom | import xml.dom
+	import xml.dom.minidom | import xml.dom.minidom
+	import xml.dom.pulldom | import xml.dom.pulldom
+
+	［インターネットプロトコルとサポート］--------------------------------- | [$]
+	import webbrowser | import webbrowser
+	import cgi | import cgi
+	import urllib | import urllib
+	import urllib.request | import urllib.request
+	import urllib.response | import urllib.response
+	import urllib.parse | import urllib.parse
+	import urllib.error | import urllib.error
+	import urllib.robotparser | import urllib.robotparser
+	import http.client | import http.client
+	import ftplib | import ftplib
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	import poplib | import poplib
+	import imaplib | import imaplib
+	import nntplib | import nntplib
+	import smtplib | import smtplib
+	import smtpd | import smtpd
+	import telnetlib | import telnetlib
+	import uuid | import uuid
+	import socketserver | import socketserver
+	import http.server | import http.server
+	import http.cookies | import http.cookies
+	import http.cookiejar | import http.cookiejar
+	import xmlrpc | import xmlrpc
+	import xmlrpc.client | import xmlrpc.client
+	import xmlrpc.server | import xmlrpc.server
+	import ipaddress | import ipaddress
+<<<<
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［マルチメディアサービス］--------------------------------------------- | [$]
+	import audioop | import audioop
+	import aifc | import aifc
+	import wave | import wave
+	import chunk | import chunk
+	import colorsys | import colorsys
+	import imghdr | import imghdr
+	import sndhdr | import sndhdr
+<<<<
+
+	［国際化］------------------------------------------------------------- | [$]
+	import gettext | import gettext
+	import locale | import locale
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［Tkを用いたグラフィカルユーザインターフェイス］----------------------- | [$]
+	import tkinter | import tkinter
+	import tkinter.ttk | import tkinter.ttk
+	import tkinter.tix | import tkinter.tix
+	import tkinter.scrolledtext | import tkinter.scrolledtext
+<<<<
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［開発ツール］--------------------------------------------------------- | [$]
+	import typing | import typing
+	import pydoc | import pydoc
+	import doctest | import doctest
+	import unittest | import unittest
+	import unittest.mock | import unittest.mock
+	import test | import test
+	import test.support | import test.support
+	import test.support.script_helper | import test.support.script_helper
+<<<<
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［デバッグとプロファイル］--------------------------------------------- | [$]
+	import bdb | import bdb
+	import pdb | import pdb
+	import timeit | import timeit
+	import trace | import trace
+	import tracemalloc | import tracemalloc
+<<<<
+
+>>>> （使用頻度の低そうなものはコメントにしています）
+	［ソフトウェア・パッケージと配布］------------------------------------- | [$]
+	import distutils | import distutils
+	import ensurepip | import ensurepip
+	import venv | import venv
+	import zipapp | import zipapp
+<<<<
+
+	［Pythonランタイムサービス］------------------------------------------- | [$]
+	import sys | import sys
+	import sysconfig | import sysconfig
+	import builtins | import builtins
+	import warnings | import warnings; warnings.filterwarnings('ignore')
+	import dataclasses | import dataclasses
+	import contextlib | import contextlib
+	import abc | import abc
+	import atexit | import atexit
+	import traceback | import traceback
+	import gc | import gc
+	import inspect | import inspect
+	import site | import site
+
+	［各種サービス］------------------------------------------------------- | [$]
+	import formatter | import formatter
+
+	［Windows固有のサービス］---------------------------------------------- | [$]
+	import msilib | import msilib
+	import msvcrt | import msvcrt
+	import winreg | import winreg
+	import winsound | import winsound
+..
+import文のソート... |
+	[/][#|ファイル名（フォルダ名）を入力してください]
+	[/]isort [#1]
+/E
+import文のソート（カレントフォルダ）| isort .
+-
++Docstring (Google style)
+	モジュール |  `{Append-EnterKey}`
+		[/]"""モジュールの説明タイトル
+		[/]
+		[/]ソースコードの一番始めに記載すること
+		[/]
+		[/]"""
+	/E
+	クラス | `{Append-EnterKey}`
+		[/]"""クラスの説明タイトル
+		[/]
+		[/]クラスについての説明文
+		[/]
+		[/]Attributes:
+		[/]    属性の名前 (属性の型): 属性の説明
+		[/]    属性の名前 (属性の型): 属性の説明
+		[/]
+		[/]"""
+	/E
+	関数（メソッド） | `{Append-EnterKey}`
+		[/]"""関数の説明タイトル
+		[/]
+		[/]関数についての説明文
+		[/]
+		[/]Args:
+		[/]    引数の名前 (引数の型): 引数の説明
+		[/]    引数の名前 (引数の型): 引数の説明
+		[/]
+		[/]Returns:
+		[/]    戻り値の型: 戻り値の説明
+		[/]
+		[/]Raises:
+		[/]    例外の名前: 例外の説明
+		[/]
+		[/]Yields:
+		[/]    戻り値の型: 戻り値についての説明
+		[/]
+		[/]Note:
+		[/]    注意事項などを記載
+		[/]
+		[/]"""
+	/E
+..
+-
++コマンドライン引数
+	位置引数のテンプレート | `{Append-EnterKey}`
+		[/]#import argparse
+		[/]
+		[/]parser = argparse.ArgumentParser()
+		[/]parser.add_argument('arg1')
+		[/]parser.add_argument('arg2', type=int, nargs=3) # 型や個数
+		[/]parser.add_argument('arg3', choices=[&1]'Yes', 'No'[&2], nargs='*', default='Yes') # 選択肢
+		[/]args = parser.parse_args()
+		[/]#print(args.arg1, args.arg2, args.arg3)
+	/E
+	オプション引数のテンプレート | `{Append-EnterKey}`
+		[/]#import argparse
+		[/]
+		[/]parser = argparse.ArgumentParser()
+		[/]parser.add_argument('-n', '--name', default='Tom')
+		[/]parser.add_argument('-t', '--lst', type=int, nargs=3) # 型や個数
+		[/]parser.add_argument('-a', '--ans', choices=[&1]'Yes', 'No'[&2], default='Yes') # 選択肢
+		[/]args = parser.parse_args()
+		[/]#print(args.name, args.lst, args.ans)
+	/E
+..
+-
++基本的な組み込み関数
+	ヘルプを表示［help関数］                  | help()[!K "LEFT"]
+	オブジェクトを表示［print関数］           | print(, sep=' ', end='\n')
+	コンソールから入力を取得［input関数］     | input('')[!K2 "LEFT"]
+	オブジェクトの型を表示［type関数］        | type()[!K "LEFT"]
+	オブジェクトの属性の一覧を取得［dir関数］ | dir()[!K "LEFT"]
+	オブジェクトの属性の一覧を取得［dir関数（'_'を除外）］ |
+		[/][#|オブジェクトの名前を入力]
+		[/][&1]x for x in dir([#1]) if not x.startswith('_')[&2]
+	/E
+	オブジェクトの要素数を取得［len関数］ | len()[!K "LEFT"]
+	-
+	'obj'が'cls'のインスタンスか？［isinstance関数］ | isinstance(obj, cls)
+	'cls1'が'cls2'の派生クラスか？［issubclass関数］ | issubclass(cls1, cls2)
+	-
+	リストをソートする［sorted関数］ | sorted(lst, key=None, reverse=False)[!K "LEFT"]
+	ソートのキーの設定（dict版）［sorted, max, min関数］ | 
+		[/]key=operator.itemgetter('k1')
+	/E
+	ソートのキーの設定（obj版）［sorted, max, min関数］ | 
+		[/]key=operator.attrgetter('day')
+	/E
+	-
+	リストをフィルタリングする［filter関数］ | filter(func, lst)
+	リストをマッピングする［map関数］        | map(func, lst)
+	-
+	すべての要素がTrueか？［all関数］ | all()[!K "LEFT"]
+	Trueの要素があるか？［any関数］   | any()[!K "LEFT"]
+	-
+	四捨五入する（偶数丸め）［round関数］ | round(x, 0)
+	四捨五入する（一般的なもの）［my_round関数］ |  `{Append-EnterKey}`
+		[/]def my_round(val, digit=0):
+		[/]p = 10 ** digit
+		[/]s = math.copysign(1, val)
+		[/]return (s * val * p * 2 + 1) // 2 / p * s
+	/E
+..
+
+================================================================
++ファイル関連の項目
+	ファイルをオープンする（withスタイル）［open関数］... | 
+		[/][#|ファイル名を入力 | モード（r, w, x, a, b,...）を入力 | エンコーディングを入力（utf-8, cp932, euc-jp,...）]
+		[/]with open('[#1]', mode='[#2]', encoding='[#3]',) as f:[!K "ENTER"]
+	/E
+	-
+	ファイル全体を文字列として取得［read関数］         | f.read()[!K "LEFT"]
+	ファイル全体をリストとして取得［readlines関数］    | f.readlines()
+	ファイル全体をリストとして取得（行末の改行を削除） | 
+		[/][&1]s.rstrip() for s in f.readlines()[&2]
+	/E
+	ファイルを１行ずつループ処理 | for line in f:[!K "ENTER"]
+	-
+	ファイルに文字列を書き込む［write関数］        | f.write()[!K "LEFT"]
+	ファイルにリストを書き込む［writelines関数］   | f.writelines()[!K "LEFT"]
+	ファイルにリストを書き込む（行末に改行を追加） |
+		[/]f.write('\n'.join(line))
+	/E
+	-
+	フォルダ内の特定の拡張子のファイルを取得 | 
+		[/]import glob [!K "ENTER"]
+		[/]file_list = sorted(glob.glob("c:/dir_a/**/*.csv", recursive=True))
+	/E
+	-
+	+「pathlib」関連の項目
+		パスの生成１［Path］ | path = Path('.')[!K2 "LEFT"]
+		パスの生成２［Path］ | path = Path(__file__)
+		-
+		「path」内のすべての項目を取得 | list(path.iterdir())
+		「path」内のディレクトリを取得 |
+			[/][&1]x for x in path.iterdir() if x.is_dir()[&2]
+		/E
+		「path」内のファイルを取得 |
+			[/][&1]x for x in path.iterdir() if x.is_file()[&2]
+		/E
+		「path」内の特定の拡張子のファイルを取得 | list(path.glob('**/*.csv'))
+		-
+		「path」のファイルを開く（withスタイル）［open関数］... | 
+			[/][#|モード（r, w, x, a, b,...）を入力 | エンコーディングを入力（utf-8, cp932, euc-jp,...）]
+			[/]with path.open(mode='[#1]', encoding='[#2]',) as f:[!K "ENTER"]
+		/E
+		-
+		パスの存在確認［existsメソッド］       | path.exists()
+		ファイルかどうか［is_fileメソッド］    | path.is_file()
+		ディレクトリかどうか［is_dirメソッド］ | path.is_dir()
+		-
+		絶対パスに変換［resolveメソッド］    | path.resolve()
+		ファイルの状態を取得［statメソッド］ | path.stat()
+		-
+		ファイル名を取得［name属性］               | path.name
+		拡張子を取得［suffix属性］                 | path.suffix
+		親ディレクトリを取得［parent属性］         | path.parent
+		親の親ディレクトリなどを取得［parents属性］| path.parents[0]
+		パス名とファイル名を結合［join関数］  | path.joinpath(path, filename)
+		-
+		自分がいるフォルダのパス名 | pathlib.Path(__file__).parent
+		自分がいるフォルダの任意のファイル名 | 
+			[/]filename = pathlib.Path(__file__).parent / 'foo.txt'
+		/E
+	..
+	+「os.path」関連の項目
+		パスの存在確認［exists関数］      | os.path.exists(path)
+		ファイルかどうか［isfile関数］    | os.path.isfile(path)
+		ディレクトリかどうか［isdir関数］ | os.path.isdir(path)
+		-
+		絶対パスに変換［abspath関数］    | os.path.abspath(path)
+		ファイルの状態を取得［stat関数］ | os.path.stat(path)
+		-
+		ファイル名を取得［basename関数］     | os.path.basename(path)
+		拡張子を取得［splitext関数］         | os.path.splitext(path)
+		親ディレクトリを取得［dirname関数］  | os.path.dirname(path)
+		パス名とファイル名を結合［join関数］ | os.path.join(path, filename)
+		-
+		自分がいるフォルダのフルパス名 | os.path.dirname(__file__)
+		自分がいるフォルダの任意のファイル名 | 
+			[/]filename = os.path.join(os.path.dirname(__file__), 'foo.txt')
+		/E
+	..	
+..
+================================================================
++日付関連の項目
+	日付関連のモジュールのインポート |
+		[/]from datetime import datetime, date, time, timedelta, timezone
+	/E
+	基本的なタイムゾーン情報の作成（JST, UTC） | `{Append-EnterKey}`
+		[/]JST = timezone(timedelta(hours=9), name='JST') 
+		[/]UTC = timezone.utc
+	/E
+	-
+	現在のJSTの日時（JST or UTCに変換）を作成 |
+		[/]dt_now = datetime.now(JST or UTC)
+	/E
+	現在のUTCの日時（JST or UTCに変換）を作成 |
+		[/]dt_now = datetime.utcnow(JST or UTC)
+	/E
+	指定の日時（JST or UTC）を作成 |
+		[/]dt = datetime(2022, 01, 10, 09, 00, 00, tzinfo=JST or UTC)
+	/E
+	-
+	文字列からdatetimeを作成 |
+		[/]s = '2022/01/20 09:00:00+0900'[!K "ENTER"]
+		[/]dt = datetime.strptime(s, '%Y/%m/%d %H:%M:%S%z')
+	/E
+	文字列（ISO 8601）からdatetimeを作成 |
+		[/]s = '2022/01/20T09:00:00+09:00'[!K "ENTER"]
+		[/]dt = datetime.fromisoformat(s)
+	/E
+	-
+	datetimeから文字列に変換 |
+		[/]dt.strftime('%Y/%m/%d %H:%M:%S')
+	/E
+	文字列の中でdatetimeを書式化（print(f'{dt:---}')） |
+		[/]f'{dt:%Y/%m/%d %H:%M:%S}'
+	/E
+	-
+	Unixタイム（timestamp）からdatetimeを作成 | 
+		[/]dt = datetime.fromtimestamp(unix_time, tz=None)
+	/E
+	datetimeからUnixタイム（timestamp）への変換 | 
+		[/]unix_time = dt.timestamp()
+	/E
+	-
+	タイムゾーンの変換（Awareから） | dt_utc = dt_jst.astimezone(UTC)
+	タイムゾーンの変換（Naiveから：Pyton3.6->） | dt_jst = dt_naive.astimezone(JST)
+	タイムゾーンの書き換え | dt_jst = dt_naive.replace(tzinfo=JST)
+	タイムゾーンの削除     | dt_jst = dt_naive.replace(tzinfo=None)
+	-
+	#日時の書式化コード（%Y, /%m, ）...
+		テンプレート１ (2022-04-01) | %Y-%m-%d
+		テンプレート２ (2022-04-01 10:20:30) | %Y-%m-%d %H:%M:%S
+		----------------------------------------------- | [$]
+		西暦（4桁表記、0埋め、例：2022）| %Y
+		西暦（2桁表記、0埋め、例：22） | %y
+		----------------------------------------------- | [$]
+		月（2桁表記、0埋め、例：07） | %m
+		月名を短縮形、例：Jan | %b
+		月名、例：January | %B
+		日（2桁表記、0埋め、例：15） | %d
+		----------------------------------------------- | [$]
+		時（24時間制、2桁表記、0埋め、例：17） | %H
+		時 (12時間制、2桁表記、0埋め)、例：01 | %I
+		分（2桁表記、0埋め、例：30） | %M
+		秒（2桁表記。0埋め、例：20） | %S
+		----------------------------------------------- | [$]
+		AM / PM、例：PM | %l
+		----------------------------------------------- | [$]
+		曜日の短縮形、例：Sun | %a
+		曜日、例：Sunday | %A
+		----------------------------------------------- | [$]
+		日付（MM/DD/YY形式）、例：02/12/22 | %x
+		時刻（hh:mm:ss形式）、例：10:48:18 | %X
+		----------------------------------------------- | [$]
+		UTCとのオフセット、例：+0900 | %z
+		現在のタイムゾーン、例：JST | %Z
+	..
+..
+================================================================
++データのシリアライズ
+	データをファイルに保存する［joblib］ | `{Append-EnterKey}`
+		[/]# import joblib
+		[/]joblib.dump(obj, 'filename.jb', compress=3) `{Skip}`
+	/E
+	データをファイルから読み込む［joblib］ | `{Append-EnterKey}`
+		[/]# import joblib
+		[/]obj = joblib.load('filename.jb') `{Skip}`
+	/E
+	-
+	データをファイルに保存する［pickle］ | `{Append-EnterKey}`
+		[/]# import pickle
+		[/]with open('filename.pkl', 'wb') as f:
+		[/]pickle.dump(obj, f) `{Skip}`
+	/E
+	データをファイルから読み込む［pickle］ | `{Append-EnterKey}`
+		[/]# import pickle
+		[/]with open('filename.pkl', 'rb') as f:
+		[/]obj = pickle.load(f) `{Skip}`
+	/E
+	-
+	データをファイルに保存する［pandas, to_pickle］ | `{Append-EnterKey}`
+		[/]# import pandas as pd
+		[/]pd.to_pickle(obj, 'filename.pkl') `{Skip}`
+	/E
+	データをファイルから読み込む［pandas, read_pickle］ | `{Append-EnterKey}`
+		[/]# import pandas as pd
+		[/]obj = pd.read_pickle('filename.pkl') `{Skip}`
+	/E
+..
+-
+================================================================
++リストや辞書関連の項目
+	リスト（値が数値）のテンプレート   | [&1], , , , [&2]
+	リスト（値が文字列）のテンプレート | [&1]'', '', '', '', ''[&2]
+	-
+	辞書（値が数値）のテンプレート   | {'': , '': , '': , '': , '': }
+	辞書（値が文字列）のテンプレート | {'': '', '': '', '': '', '': '', '': ''}
+	-
+	集合（値が数値）のテンプレート   | {, , , , }
+	集合（値が文字列）のテンプレート | {'', '', '', '', ''}
+	-
+	辞書の値（value）でソートする | 
+		[/]ret = dict(sorted(x.items(), key=lambda item: item[1]))
+	/E
+..
+================================================================
++文字列関連の項目
+	書式付き文字列［format］   | '{:}, {:}'.format(a, b)
+	書式付き文字列［f-string］ | f'{}, {}'
+	-
+	書式指定文字列の定義 | `{Append-EnterKey}`
+		[/]# format_spec ::=  [&1][&1]fill[&2]align[&2][&1]sign[&2][&1]#[&2][&1]0[&2][&1]width[&2][&1]group[&2][&1].prec[&2]type[&2]
+		[/]# fill        ::=  <any character>
+		[/]# align       ::=  < | > | = | ^
+		[/]# sign        ::=  + | - | " "
+		[/]# width       ::=  digit+
+		[/]# group       ::=  _ | ,
+		[/]# prec        ::=  digit+
+		[/]# type        ::=  b | c | d | e | E | f | F | g | G | n | o | s | x | X | %
+	/E
+	-
+	文字列を区切り文字で分割してリストに変換（空白やタブ記号） | s.split()
+	文字列を区切り文字で分割してリストに変換１（指定の記号）   | s.split(sep='')
+	文字列を区切り文字で分割してリストに変換２（同上＋空白削除） |
+		[/][x.strip() for x in s.split(',') if not s == ''] # ','の前後の空白を削除
+	/E
+	-
+	指定の記号でリストの要素を結合して文字列に変換 | ','.join(lst)
+..
+
+================================================================
++内包表記、多重ループ関連の項目
+	リスト内包表記［for］     | [&1]i for i in xxx[&2]
+	リスト内包表記［for, if］ | [&1]i for i in xxx if [&2]
+	-
+	辞書内包表記［for］     | {i:i for i in xxx}
+	辞書内包表記［for, if］ | {i:i for i in xxx if }
+	-
+	集合内包表記［for］     | {i for i in xxx}
+	集合内包表記［for, if］ | {i for i in xxx if }
+	-
+	ジェネレータ内包表記［for］     | (i for i in xxx)
+	ジェネレータ内包表記［for, if］ | (i for i in xxx if )
+	-
+	itertools.productを使用した多重ループ | `{Append-EnterKey}`
+		[/]# import itertools
+		[/]i = range(3)
+		[/]j = range(5)
+		[/]for v in itertools.product(i, j):
+			[/]# v: (0, 0), (0, 1), ...
+			[/]print(v) `{Skip}`
+	/E
+..
+-
+================================================================
++正規表現関連の項目
+	正規表現をコンパイルする | p = re.compile(r'')
+	-
+	文字列の先頭が正規表現にマッチするか       | m = re.match(r'', str)
+	文字列全体が正規表現にマッチするか         | m = re.fullmatch(r'', str)
+	文字列の任意の部分が正規表現にマッチするか | m = re.search(r'', str)
+	-
+	マッチオブジェクト（全体）             | m[0]
+	マッチオブジェクト（ｎ番目のグループ） | m[n]
+	-
+	正規表現にマッチする部分すべてをリストで取得 | 
+		[/]res = re.findall(r'', str) # resは文字列のリスト
+	/E
+	正規表現にマッチする部分すべてをイテレータで取得 | 
+		[/]res = re.finditer(r'', str) # resはマッチオブジェクトのイテレータ
+	/E
+	-
+	正規表現にマッチする部分を他の文字列に置換 | 
+		[/]res = re.sub(r'', 'repl: \1, \2', str, count=0) # resは置換後の文字列
+	/E
+	-
+	正規表現で文字列を分割 | 
+		[/]res = re.split(r'', str, maxsplit=0) # resは文字列のリスト
+	/E
+..
+-
+================================================================
++logging関連の項目
+	各ファイルでの初期化 | `{Append-EnterKey}`
+		[/]from setuplog import get_app_logger
+		[/]logger = get_app_logger()
+	/E
+..
+-
+================================================================
++Jupyter Lab関連
+	時間の計測（関数単位） | %timeit -r 3 -n 1000 func(x)
+	時間の計測（セル単位） | %%timeit -r 3 -n 1000
+	-
+	Jupyter Labの警告を抑制する | `{Append-EnterKey}`
+		[/]import warnings
+		[/]# Warning, FutureWarning, DeprecationWarning, SyntaxWarning, ...
+		[/]warnings.simplefilter(action='ignore', category=Warning)
+	/E
+	ipynbファイルをpythonファイルへの変換... |
+		[/][#|ファイル名（拡張子"ipynb"は省略）を入力]
+		[/]jupyter nbconvert --to python [#1].ipynb
+	/E
+	すべてのipynbファイルをpythonファイルへの変換 |
+		[/]jupyter nbconvert --to python *.ipynb
+	/E
+..
+================================================================
+-
+SSL認証に関するエラーの対処方法 | `{Append-EnterKey}`
+	[/]import ssl
+	[/]ssl._create_default_https_context = ssl._create_unverified_context
+/E
+-
+Pythonのバージョン確認 | `{Append-EnterKey}`
+	[/]import sys
+	[/]print(sys.version)
+	[/]print(sys.executable)
+/E

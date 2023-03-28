@@ -1,0 +1,489 @@
+; PythonのNumPyの定型パターンを入力するためのカスタムメニューです。
+; 作者：オータム西野
+; 
+; 空白行や行頭に「;(セミコロン)」や「=(イコール)」のある行はコメント行です。
+; 詳しい書式は、オンラインヘルプの「メニュー作成用ファイルの説明」を
+; 参照してください。
+============================================================================
+
+numpyのインポート| import numpy as np
+-
++各種の属性
+	データ型を取得［dtype属性］ | x.dtype
+	-
+	データの次元数を取得［ndim属性］ | x.ndim
+	データの各次元のサイズを取得［shape属性］ | x.shape
+	データの全要素数を取得［size属性］ | x.size
+	-
+	データの各要素のサイズ［itemsize属性］ | x.itemsize
+	データの全要素の合計サイズを取得［nbytes属性］ | x.nbytes
+..
++各種の表示形式
+	#表示形式を設定...
+		［メソッド名］np.set_printoptions( | np.set_printoptions(
+		［引数］precision：小数点以下の桁数 | precision=4,[$ ]
+		［引数］floatmode：小数点以下の表示形式（末尾を０埋め） | floatmode='fixed',[$ ]
+		［引数］suppress：指数表記をしない | suppress=False,[$ ]
+		［閉じカッコ］) | )
+	..
+	#ブロック内の表示形式を設定...
+		［メソッド名］with np.printoptions( | with np.printoptions(
+		［引数］precision：小数点以下の桁数 | precision=4,[$ ]
+		［引数］floatmode：小数点以下の表示形式（末尾を０埋め） | floatmode='fixed',[$ ]
+		［引数］suppress：指数表記をしない | suppress=False,[$ ]
+		［閉じカッコ］) | ):
+	..
+	-
+	現在の表示形式を表示 | np.get_printoptions()
+..
+-
++各種のデータ配列の作成
+	一次元の配列［array：開始値～終了値］を作成... |
+		[/][#|開始値を入力|終了値（未満）を入力]
+		[/]x = np.array(list(range([#1], [#2])))
+	/E
+	-	
+	+arange系（公差を指定）のメソッド
+		一次元の配列［arange：０～終了値］を作成...|
+			[/][#|終了値（未満）を入力]
+			[/]x = np.arange([#1])
+		/E
+		一次元の配列［arange：開始値～終了値］を作成...|
+			[/][#|開始値を入力|終了値（未満）を入力]
+			[/]x = np.arange([#1], [#2])
+		/E
+		一次元の配列［arange：開始値～終了値、ステップ間隔］を作成...|
+			[/][#|開始値を入力|終了値（未満）を入力|ステップ間隔を入力]
+			[/]x = np.arange([#1], [#2], step=[#3])
+		/E
+		二次元の配列［arange, reshape：開始値～終了値］を作成...|
+			[/][#|開始値を入力|終了値（未満）を入力|行数を入力|列数を入力]
+			[/]x = np.arange([#1], [#2]).reshape(([#3], [#4]))
+		/E
+	..
+	-
+	一次元の配列［linspace：開始値～終了値、生成個数］を作成...|
+		[/][#|開始値を入力|終了値を入力|生成個数を入力]
+		[/]x = np.linspace([#1], [#2], num=[#3])
+	/E
+	-
+	+一様分布系のメソッド
+		一様分布（０～１未満の小数）の乱数［１つ］ | x = np.random.rand()
+		一様分布（０～１未満の小数）の乱数［一次元］... |
+			[/][#|生成する乱数の個数を入力]
+			[/]x = np.random.rand(10)
+		/E
+		一様分布（０～１未満の小数）の乱数［二次元］... |
+			[/][#|行数を入力|列数を入力]
+			[/]x = np.random.rand([#1], [#2])
+		/E
+		-
+		一様分布（任意の範囲の小数）の乱数［二次元］... | `{Append-EnterKey}`
+			[/][#|最小値を入力|最大値（未満）を入力|行数を入力|列数を入力]`{Skip}`
+			[/]rng = np.random.default_rng()
+			[/]x = rng.uniform([#1], [#2], size=([#3], [#4]))
+		/E
+		一様分布（任意の範囲の整数）の乱数［二次元］... | `{Append-EnterKey}`
+			[/][#|最小値を入力|最大値を入力|最大値を含む（True or False）`{Skip}`
+                 |行数を入力|列数を入力|] `{Skip}`
+			[/]rng = np.random.default_rng()
+			[/]x = rng.integers([#1], [#2], size=([#4], [#5]), endpoint=[#3])
+		/E
+	..
+	-
+	標準正規分布（平均０と標準偏差１）の乱数［一次元］... |
+		[/][#|個数を入力]
+		[/]x = np.random.randn([#1])
+	/E
+	標準正規分布（平均０と標準偏差１）の乱数［二次元］... |
+		[/][#|行数を入力|列数を入力]
+		[/]x = np.random.randn([#1], [#2])
+	/E
+	-
+	正規分布（平均と標準偏差を指定）の乱数［一次元］... |
+		[/][#|平均値を入力|標準偏差を入力|個数を入力]
+		[/]x = np.random.normal([#1], [#2], [#3])
+	/E
+	正規分布（平均と標準偏差を指定）の乱数［二次元］... |
+		[/][#|平均値を入力|標準偏差を入力|行数を入力|列数を入力]
+		[/]x = np.random.normal([#1], [#2], ([#3], [#4]))
+	/E
+	-
+	多変量正規分布（平均と分散と共分散を指定）の乱数［二次元］... | `{Append-EnterKey}`
+		[/][#|平均値１を入力|平均値２を入力|分散１を入力 `{Skip}`
+             |分散２を入力|共分散を入力|個数を入力] `{Skip}`
+		[/]mean = np.array([&1][#1], [#2][&2])
+		[/]cov = np.array([&1][&1][#3], [#5][&2], [&1][#5], [#4][&2][&2])
+		[/]x = np.random.multivariate_normal(mean, cov, size = [#6])
+	/E
+	-
+	+全要素が０または１またはｎの配列
+		全要素が０の配列［一次元］... |
+			[/][#|個数を入力]
+			[/]x = np.zeros([#1], dtype='float')
+		/E
+		全要素が０の配列［二次元］... |
+			[/][#|行数を入力|列数を入力]
+			[/]x = np.zeros(([#1], [#2]), dtype='float')
+		/E
+		全要素が０の配列［指定した配列と同じ形状］... |
+			[/][#|配列を入力]
+			[/]x = np.zeros_like([#1])
+		/E
+		-
+		全要素が１の配列［一次元］... |
+			[/][#|個数を入力]
+			[/]x = np.ones([#1], dtype='float')
+		/E
+		全要素が１の配列［二次元］... |
+			[/][#|行数を入力|列数を入力]
+			[/]x = np.ones(([#1], [#2]), dtype='float')
+		/E
+		全要素が０の配列［指定した配列と同じ形状］... |
+			[/][#|配列を入力]
+			[/]x = np.zeros_like([#1])
+		/E
+		-
+		全要素がｎの配列［一次元］... |
+			[/][#|個数を入力|ｎの値]
+			[/]x = np.full([#1], [#2])
+		/E
+		全要素がｎの配列［二次元］... |
+			[/][#|行数を入力|列数を入力|ｎの値]
+			[/]x = np.full(([#1], [#2]), [#3])
+		/E
+		全要素がｎの配列［指定した配列と同じ形状］... |
+			[/][#|配列を入力|ｎの値]
+			[/]x = np.full_like([#1], [#2])
+		/E
+	..
+	+内容が未定義の配列
+		内容が未定義の配列［一次元］... |
+			[/][#|個数を入力]
+			[/]x = np.empty([#1], dtype='float')
+		/E
+		内容が未定義の配列［二次元］... |
+			[/][#|行数を入力|列数を入力]
+			[/]x = np.empty(([#1], [#2]), dtype='float')
+		/E
+		内容が未定義の配列［指定した配列と同じ形状］... |
+			[/][#|配列を入力]
+			[/]x = np.empty_like([#1], dtype='float')
+		/E
+	..
+	-
+	単位行列［ｎ次元］... |
+		[/][#|ｎの値（次元数）]
+		[/]x = np.eye([#1])
+	/E
+..
+
++要素の追加・削除／配列の結合・分割など
+	配列の要素の追加［append］| np.append(arr, val)
+	配列の要素の挿入［insert］|
+		[/]# axis -> None:要素単位, axis -> 0:行挿入, 1:列挿入[!K "ENTER"]
+		[/]np.insert(arr, pos, val, axis=None)
+	/E
+	配列の要素の削除［delete］|
+		[/]# axis -> None:要素単位, axis -> 0:行削除, 1:列削除[!K "ENTER"]
+		[/]np.delete(arr, pos, axis=None)
+	/E
+	配列の要素の分割［split］|
+		[/]# pos -> 5 or [&1]3, 6, ...[&2][!K "ENTER"]
+		[/]np.split(arr, pos)
+	/E
+	-
+	配列の結合［concatenate］|
+		[/]# axis -> 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.concatenate([&1]a1, a2[&2], axis=0)
+	/E
+	-
+	新しい軸を作成することで結合［stack］|
+		[/]# axis -> 新しい軸を作成する位置（0, 1, ...）[!K "ENTER"]
+		[/]np.stack([&1]a1, a2[&2], axis=0)
+	/E
+	配列を縦（上下）に結合［vstack］| np.vstack([&1]a1, a2[&2])
+	配列を横（左右）に結合［hstack］| np.hstack([&1]a1, a2[&2])
+	-
+	配列を縦（上下）に分割［vsplit］|
+		[/]# n -> 整数:分割数, 配列:分割位置のリスト[!K "ENTER"]
+		[/]np.vsplit(a, n) # n or  [&1]n1, n2[&2]
+	/E
+	配列を横（左右）に分割［hsplit］|
+		[/]# n -> 整数:分割数, 配列:分割位置のリスト[!K "ENTER"]
+		[/]np.hsplit(a, n) # n or  [&1]n1, n2[&2]
+	/E
+	-
+	配列の各要素を繰り返して配置［repeat］ | np.repeat(a, reps, axis=None)
+	配列全体を繰り返して配置［tile］ | np.tile(a, reps)
+..
+-
++データの入出力
+	#テキストファイルから読み込む［loadtxt］...
+		［メソッド名］data = np.loadtxt( | data = np.loadtxt(
+		［引数］fname：ファイル名の指定 | '',[$ ]
+		［引数］delimiter：区切り文字の指定 | delimiter=',',[$ ]
+		［引数］dtype：データ型の指定 | dtype='int64',[$ ]
+		［引数］comments：コメントの開始文字の指定 | comments='#',[$ ]
+		［引数］skiprows：先頭からスキップする行数を指定 | skiprows=2,[$ ]
+		［引数］usecols：読み込む列番号を指定 | usecols=[&1]1, 2, 3[&2],[$ ]
+		［引数］max_rows：読み込む行数の最大値を指定 | max_rows=1000,[$ ]
+		［閉じカッコ］) | )
+	..
+	#テキストファイルに保存する［savetxt］...
+		［メソッド名］np.savetxt( | np.savetxt(
+		［引数］fname：ファイル名の指定 | '',[$ ]
+		［引数］X：保存するデータの指定 | data,[$ ]
+		［引数］delimiter：区切り文字の指定 | delimiter=',',[$ ]
+		［引数］fmt：小数の書式の指定 | fmt='%.4f',[$ ]
+		［引数］newline：改行記号の指定 | newline='\r\n',[$ ]
+		［引数］header：先頭に書き出すテキストの指定 | header='',[$ ]
+		［引数］footer：末尾に書き出すテキストの指定 | footer='',[$ ]
+		［閉じカッコ］) | )
+	..
+..
+-
++基本的なメソッド
+	配列の形状を変更する［reshape］    | a.reshape(ax0, ax1)
+	新しい軸を追加する１［expand_dims］| np.expand_dims(a, axis=0)
+	新しい軸を追加する２［Noneでスライス］       | a[None, :]
+	新しい軸を追加する３［np.newaxisでスライス］ | a[np.newaxis, :]
+	-
+	明示的なブロードキャスト［broadcast_to］| np.broadcast_to(a, (ax0, ax1))
+	-
+	値がTrueの要素が１つでもあるか［any］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.any(a, axis=None)
+	/E
+	すべての要素の値がTrueかどうか［all］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.all(a, axis=None)
+	/E
+..
++基本的な数学関数
+	絶対値を計算する［absolute］ | np.absolute(x)
+	平方根を計算する［sqrt］     | np.sqrt(x)
+	立方根を計算する［cbrt］     | np.cbrt(x)
+	逆数を計算する［reciprocal］ | np.reciprocal(x)
+	-
+	整数除算を計算する［floor_divide］ | np.floor_divide(x, y) # x // y
+	剰余（余り）を計算する［mod］| np.mod(x, y) # x % y
+	商と余りを計算する［divmod］ | np.divmod(x, y)
+	-
+	床関数（小さい方の整数に丸める）［floor］  | np.floor(x)
+	天井関数（大きい方の整数に丸める）［ceil］ | np.ceil(x)
+	小数部分の切り捨て関数［trunc］ | np.trunc(x)
+	-
+	最大公約数を計算する［gcd］ | np.gcd(x, y)
+	最小公倍数を計算する［lcm］ | np.lcm(x, y)
+	-
+	行列積を計算する［matmul］ | np.matmul(x, y) # x @ y
+	-
+	四捨五入する（偶数丸め）［round］| np.round(x, n)
+	四捨五入する（一般的なもの）［my_round関数］ |  `{Append-EnterKey}`
+		[/]def my_round(val, digit=0):
+		[/]p = 10 ** digit
+		[/]s = np.copysign(1, val)
+		[/]return (s * val * p * 2 + 1) // 2 / p * s
+	/E
+	-
+	欠損値かどうか［isnan］           | np.isnan(x)
+	無限大（＋、－）かどうか［isinf］ | np.isinf(x)
+..
++指数関数／対数関数／三角関数など
+	指数関数［e^x］| np.exp(x)
+	指数関数［2^x］| np.exp2(x)
+	指数関数［n^x］| np.power(n, x)
+	-
+	対数関数［log_e(x)］| np.log(x)
+	対数関数［log_2(x)］| np.log2(x)
+	対数関数［log_10(x)］| np.log10(x)
+	-
+	三角関数［sin(x)］| np.sin(x)
+	三角関数［cos(x)］| np.cos(x)
+	三角関数［tan(x)］| np.tan(x)
+	-
+	逆三角関数［arcsin(x)］| np.arcsin(x)
+	逆三角関数［arccos(x)］| np.arccos(x)
+	逆三角関数［arctan(x)］| np.arctan(x)
+	-
+	角度からラジアンへ変換 | np.deg2rad(x)
+	ラジアンから角度へ変換 | np.rad2deg(x)
+..
++各種の統計計算
+	+総和／総乗などのメソッド
+		総和［sum / nansum］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.sum(a, axis=None) # np.nansum (NaN safe)
+		/E
+		総乗［prod / nanprod］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.prod(a, axis=None) # np.nanprod (NaN safe)
+		/E
+		累積和［cumsum / nancumsum］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.cumsum(a, axis=None) # np.nancumsum (NaN safe)
+		/E
+		累積積［cumprod / nancumprod］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.cumprod(a, axis=None) # np.nancumprod (NaN safe)
+		/E
+	..
+	+平均／中央値／分散／標準偏差などのメソッド
+		平均［mean / nanmean］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.mean(a, axis=None) # np.nanmean (NaN safe)
+		/E
+		中央値［median / nanmedian］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.median(a, axis=None) # np.nanmedian (NaN safe)
+		/E
+		標準偏差［std / nanstd］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.std(a, axis=None) # np.nanstd (NaN safe)
+		/E
+		分散［var / nanvar］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.var(a, axis=None) # np.nanvar (NaN safe)
+		/E
+	..
+	+最小値／最大値などのメソッド
+		最小値［min / nanmin］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.min(a, axis=None) # np.nanmin (NaN safe)
+		/E
+		最大値［max / nanmax］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.max(a, axis=None) # np.nanmax (NaN safe)
+		/E
+		最小値のインデックス［argmin / nanargmin］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.argmin(a, axis=None) # np.nanargmin (NaN safe)
+		/E
+		最大値のインデックス［argmax / nanargmax］ |
+			[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+			[/]np.argmax(a, axis=None) # np.nanargmax (NaN safe)
+		/E
+	..
+	-
+	共分散［cov］ | `{Append-EnterKey}`
+		[/]# m -> 配列、y -> 追加配列
+		[/]# rowvar -> True:各行が１連のデータ, False:各列が１連のデータ
+		[/]# 分散共分散行列が欲しい場合には、最後の[0, 1]を削除
+		[/]np.cov(m, y=None, rowvar=True)[0, 1] `{Skip}`
+	/E
+	相関係数［corrcoef］ | `{Append-EnterKey}`
+		[/]# x -> 配列、y -> 追加配列
+		[/]# rowvar -> True:行ごとの相関係数, False:列ごとの相関係数
+		[/]# 相関係数行列が欲しい場合には、最後の[0, 1]を削除
+		[/]np.corrcoef(x, y=None, rowvar=True)[0, 1] `{Skip}`
+	/E
+	-
+	クォンタイル［quantile / nanquantile］ | `{Append-EnterKey}`
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）
+		[/]# q -> 0 <= q <= 1
+		[/]np.quantile(a, q, axis=None) # np.nanquantile (NaN safe) `{Skip}`
+	/E
+	パーセンタイル［percentile / nanpercentile］ | `{Append-EnterKey}`
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）
+		[/]# q -> 0 <= q <= 100
+		[/]np.percentile(a, q, axis=None) # np.nanpercentile (NaN safe) `{Skip}`
+	/E
+..
++ufunc.xxx系のメソッド
+	指定のufuncで集約演算を行う［reduce］ |
+		[/]# axis -> 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.ufunc.reduce(a, axis=0)
+	/E
+	指定のufuncで累積演算を行う［accumulate］ |
+		[/]# axis -> 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.ufunc.accumulate(a, axis=0)
+	/E
+	指定のufuncで全ペアの演算を行う［outer］ |
+		[/]np.ufunc.outer(a, b)
+	/E
+	指定のufuncで指定のインデックスに演算を行う［at］ |
+		[/]np.ufunc.at(a, indices, b)
+	/E
+..
++その他のメソッド
+	多次元配列を平坦化する（可能ならビューを返す）［ravel］ |
+		[/]# a.ravel(order='C or F') # C, F: row , col[!K "ENTER"]
+		[/]a.ravel()
+	/E
+	多次元配列を平坦化する（コピーを返す）［flatten］ |
+		[/]# a.flatten(order='C or F') # C, F: row , col[!K "ENTER"]
+		[/]a.flatten()
+	/E
+	-
+	条件式によって値をセットする［where］ |
+		[/]# np.where(a < 10, 0, a)[!K "ENTER"]
+		[/]np.where(cond, x, y)
+	/E
+	-
+	値ゼロではない要素の個数［count_nonzero］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）[!K "ENTER"]
+		[/]np.count_nonzero(a, axis=None)
+	/E
+	値がゼロではない要素のインデックス（平坦化）［flatnonzero］ |
+		[/]# ret -> [&1]ndx0, ndx1, ...[&2]: 平坦化したaのインデックス配列[!K "ENTER"]
+		[/]np.flatnonzero(a)
+	/E
+	値がゼロではない要素のインデックス（座標ごと）［nonzero］ |
+		[/]# ret -> (nd_x, nd_y): インデックスのx座標の配列とy座標の配列[!K "ENTER"]
+		[/]np.nonzero(a)
+	/E
+	値がゼロではない要素のインデックス（要素ごと）［argwhere］ |
+		[/]# ret -> [&1][&1]x0, y0[&2], [&1]x1, y1[&2][&2]: インデックスのx座標とy座標の配列[!K "ENTER"]
+		[/]np.argwhere(a)
+	/E
+	-
+	メッシュグリッドの作成［meshgrid］ |
+		[/]X, Y = np.meshgrid(np.linspace(0, 10, 20), np.linspace(0, 10, 20), indexing='xy')
+	/E
+	グリッドのインデックスを作成［indices］ |
+		[/]row_ndx, col_ndx = np.indices((rows, cols))
+	/E
+	配列の値を指定の範囲にクリップ［clip］ | 
+		[/]np.clip(a, a_min, a_max) # Noneの場合はクリップしない
+	/E
+..
+-
++データのソート
+	ソートした配列を返す［np.sort］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]np.sort(a, axis=None)
+	/E
+	配列自身をソートする［a.sort］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]a.sort(axis=None)
+	/E
+	ソートした配列を返す（インデックス版）［np.argsort］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]np.argsort(a, axis=None)
+	/E
+	配列自身をソートする（インデックス版）［a.argsort］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]a.argsort(axis=None)
+	/E
+	-
+	部分ソートした配列を返す［np.partition］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]np.partition(a, kth, axis=None)
+	/E
+	配列自身を部分ソートする［a.partition］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]a.partition(kth, axis=None)
+	/E
+	部分ソートした配列を返す（インデックス版）［np.argpartition］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]np.argpartition(a, kth, axis=None)
+	/E
+	部分ソートした配列を返す（インデックス版）［a.argpartition］ |
+		[/]# axis -> None:全要素, 0:各列（縦方向）, 1:各行（横方向）, -1:最後の軸[!K "ENTER"]
+		[/]a.argpartition(kth, axis=None)
+	/E
+
+..
+-
+numpyのバージョン確認 | print(np.__version__)
