@@ -118,8 +118,6 @@ pandasのインポート| [/]import pandas as pd
 	-
 	+データ型のキャスト
 		指定の型にキャスト | s = s.astype('') # int, float, str, bool, object
-		文字型から日時型に変換 | s = pd.to_datetime(s)
-		文字型から日時型に変換（書式指定） | s = pd.to_datetime(s, format='%Y年%m月%d日 %H時%M分')
 	..
 	+Seriesの結合
 		縦方向に結合（外部結合） | pd.concat([&1]s1, s2[&2])
@@ -661,6 +659,85 @@ pandasのインポート| [/]import pandas as pd
 		[/]fig = ax.get_figure()
 		[/]fig.savefig('figure.png')
 	/E
+..
+-
++日付／時刻関連の項目
+	Timestamp型変数のタイムゾーンを表示 | ts.tz
+	-
+	現在時刻からTimestamp型を作成 | ts = pd.to_datetime(datetime.now())
+	文字型からTimestamp型を作成（Naiveとして） | ts = pd.to_datetime(s)
+	文字型からTimestamp型を作成（UTCとして）   | ts = pd.to_datetime(s, utc=True)
+	文字型からTimestamp型を作成（書式指定） | 
+		[/]ts = pd.to_datetime(s, format='%Y年%m月%d日 %H時%M分')
+	/E
+	-
+	+Timestamp型の変換
+		タイムゾーンの変換（Awareの状態から） | 
+			[/]ts.tz_convert('Asia/Tokyo') # 'UTC'
+		/E
+		タイムゾーンの設定（Naiveの状態から） | 
+			[/]ts.tz_localize('Asia/Tokyo') # 'UTC'
+		/E
+		タイムゾーンの削除（UTCに変換してから） | ts.tz_convert(None)
+		タイムゾーンの削除（UTCに変換せずに）   | ts.tz_localize(None)
+	..
+	+Series型の変換
+		Series：タイムゾーンの変換（Awareの状態から） |
+			[/]sr.dt.tz_convert('Asia/Tokyo') # 'UTC'
+		/E
+		Series：タイムゾーンの変換（Naiveの状態から） |
+			[/]sr.dt.tz_localize('Asia/Tokyo') # 'UTC'
+		/E
+		Series：タイムゾーンの削除（UTCに変換してから） |
+			[/]sr.dt.tz_convert(None)
+		/E
+		Series：タイムゾーンの削除（UTCに変換せずに） |
+			[/]sr.dt.tz_localize(None)
+		/E
+	..
+	+DatetimeIndex型の変換
+		DatetimeIndex：タイムゾーンの変換（Awareの状態から） |
+			[/]df.index.tz_convert('Asia/Tokyo') # 'UTC'
+		/E
+		DatetimeIndex：タイムゾーンの変換（Naiveの状態から） |
+			[/]df.index.tz_localize('Asia/Tokyo') # 'UTC'
+		/E
+		DatetimeIndex：タイムゾーンの削除（UTCに変換してから） |
+			[/]df.index.tz_convert(None)
+		/E
+		DatetimeIndex：タイムゾーンの削除（UTCに変換せずに） |
+			[/]df.index.tz_localize(None)
+		/E
+	..
+	-
+	#日時の書式化コード（%Y, /%m, ）...
+		テンプレート１ (2022-04-01) | %Y-%m-%d
+		テンプレート２ (2022-04-01 10:20:30) | %Y-%m-%d %H:%M:%S
+		----------------------------------------------- | [$]
+		西暦（4桁表記、0埋め、例：2022）| %Y
+		西暦（2桁表記、0埋め、例：22） | %y
+		----------------------------------------------- | [$]
+		月（2桁表記、0埋め、例：07） | %m
+		月名を短縮形、例：Jan | %b
+		月名、例：January | %B
+		日（2桁表記、0埋め、例：15） | %d
+		----------------------------------------------- | [$]
+		時（24時間制、2桁表記、0埋め、例：17） | %H
+		時 (12時間制、2桁表記、0埋め)、例：01 | %I
+		分（2桁表記、0埋め、例：30） | %M
+		秒（2桁表記。0埋め、例：20） | %S
+		----------------------------------------------- | [$]
+		AM / PM、例：PM | %l
+		----------------------------------------------- | [$]
+		曜日の短縮形、例：Sun | %a
+		曜日、例：Sunday | %A
+		----------------------------------------------- | [$]
+		日付（MM/DD/YY形式）、例：02/12/22 | %x
+		時刻（hh:mm:ss形式）、例：10:48:18 | %X
+		----------------------------------------------- | [$]
+		UTCとのオフセット、例：+0900 | %z
+		現在のタイムゾーン、例：JST | %Z
+	..
 ..
 -
 pandasのバージョン確認 | print(pd.__version__)

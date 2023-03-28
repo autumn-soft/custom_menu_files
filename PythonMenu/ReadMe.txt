@@ -2,7 +2,7 @@
 Pythonのコードを簡単に入力するためのカスタムメニュー
                                                        Ver1.04
                                      2023/02/08   オータム西野
-                            [E-Mail] hiroshi24@autumn-soft.com
+                            [E-Mail] boji_sowaka_715@nifty.com
                       [Web Site] https://autumn-soft.github.io
 ==============================================================
 

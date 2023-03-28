@@ -2,8 +2,8 @@
 マークダウン形式のファイルを作成するためのカスタムメニュー
                                                        Ver1.00
                                      2020/02/13   オータム西野
-                            [E-Mail] hiroshi24@autumn-soft.com
-                       [Web Site] https://www.autumn-soft.com/
+                            [E-Mail] boji_sowaka_715@nifty.com
+                      [Web Site] https://autumn-soft.github.io
 ==============================================================
 
 ● インストール
@@ -39,6 +39,6 @@ ReadMe.txt : このファイル
 ただ、もしペースターの開発を支援して頂ける方は、
 寄付という形でサポートして頂けると大変嬉しく思います。
 
-https://www.autumn-soft.com/paster.htm#donation
+https://autumn-soft.github.io/paster.htm#donation
 
 --- 以上 ---

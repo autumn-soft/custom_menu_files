@@ -429,11 +429,19 @@ import文のソート（カレントフォルダ）| isort .
 	..	
 ..
 ================================================================
-+日付関連の項目
++日付／時刻関連の項目
 	日付関連のモジュールのインポート |
 		[/]from datetime import datetime, date, time, timedelta, timezone
+		[/]from zoneinfo import ZoneInfo
 	/E
-	基本的なタイムゾーン情報の作成（JST, UTC） | `{Append-EnterKey}`
+	-
+	datetime型変数のタイムゾーンを表示 | dt.tzinfo
+	-
+	基本的なタイムゾーン情報の作成（ZoneInfo: JST, UTC） | `{Append-EnterKey}`
+		[/]JST = ZoneInfo("Asia/Tokyo")
+		[/]UTC = ZoneInfo("UTC")
+	/E
+	基本的なタイムゾーン情報の作成（timezone: JST, UTC） | `{Append-EnterKey}`
 		[/]JST = timezone(timedelta(hours=9), name='JST') 
 		[/]UTC = timezone.utc
 	/E
@@ -460,7 +468,7 @@ import文のソート（カレントフォルダ）| isort .
 	datetimeから文字列に変換 |
 		[/]dt.strftime('%Y/%m/%d %H:%M:%S')
 	/E
-	文字列の中でdatetimeを書式化（print(f'{dt:---}')） |
+	f-stringsの中でdatetimeを書式化（print(f'{dt:---}')） |
 		[/]f'{dt:%Y/%m/%d %H:%M:%S}'
 	/E
 	-
@@ -472,9 +480,9 @@ import文のソート（カレントフォルダ）| isort .
 	/E
 	-
 	タイムゾーンの変換（Awareから） | dt_utc = dt_jst.astimezone(UTC)
-	タイムゾーンの変換（Naiveから：Pyton3.6->） | dt_jst = dt_naive.astimezone(JST)
-	タイムゾーンの書き換え | dt_jst = dt_naive.replace(tzinfo=JST)
-	タイムゾーンの削除     | dt_jst = dt_naive.replace(tzinfo=None)
+	タイムゾーンの変換（Naiveから） | dt_jst = dt_naive.astimezone(JST)
+	タイムゾーンの設定 | dt_jst = dt_naive.replace(tzinfo=JST)
+	タイムゾーンの削除 | dt_jst = dt_naive.replace(tzinfo=None)
 	-
 	#日時の書式化コード（%Y, /%m, ）...
 		テンプレート１ (2022-04-01) | %Y-%m-%d
